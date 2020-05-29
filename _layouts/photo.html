@@ -1,0 +1,13 @@
+---
+layout: default
+---
+
+<post>
+  <h3> {{ page.date | date_to_string | downcase }} </h3>
+
+  {% assign stripped_name = page.path | remove: "_posts/" | remove: ".md" %}
+  <img src="/assets/photos/{{ stripped_name }}.jpg" alt="4th_of_July-4" style="width: 50%;">
+
+  {{ content }}
+</post>
+

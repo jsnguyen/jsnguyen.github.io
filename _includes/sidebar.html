@@ -1,0 +1,13 @@
+<div class="sidebar">
+  <a href="/">
+    <img src="/assets/logos/jsn_initials_logo.png" alt="jsn_initials_logo">
+  </a>
+  {% for item in site.data.navigation %}
+    {% if item != site.data.navigation.first %}
+      <hr/>
+    {% endif %}
+    <links>
+      <a href="{{ item.link }}" {% if page.url == item.link %} class="current color-current" {% endif %}>{{ item.name }}</a>
+    </links>
+  {% endfor %}
+</div>

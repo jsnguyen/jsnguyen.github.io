@@ -1,0 +1,18 @@
+---
+title: Projects 
+---
+<div class="projects">
+
+  <h2> {{ "Finished" | downcase }} </h2>
+
+  {% for item in site.data.projects %}
+    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a> </h3>
+  {% endfor %}
+
+  <h2> {{ "Active Development" | downcase }} </h2>
+
+  {% for item in site.data.projects %}
+    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a> </h3>
+  {% endfor %}
+
+</div>
