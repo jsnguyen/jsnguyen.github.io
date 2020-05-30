@@ -1,4 +1,7 @@
 - name: stellar searcher
   link: https://github.com/jsnguyen/stellar_searcher
+  summary: A motorized laser pointer that can accurately point at stars.
+
 - name: orrery 
   link: https://github.com/jsnguyen/orrery
+  summary: Playing with JPL's simulation data of the Solar System planets.

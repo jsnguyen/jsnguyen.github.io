@@ -195,3 +195,15 @@ hr {
   text-decoration: none;
 }
 
+.project_row {
+  display: flex;
+}
+
+.project_column {
+  flex: 50%;
+  margin: 1%;
+}
+
+.project_item {
+  flex: 1;
+}

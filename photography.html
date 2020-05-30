@@ -4,15 +4,22 @@ title: Photography
 {% assign image_files = site.static_files | where: "image", true %}
 
 
+<!---
 {% for post in site.categories.Photos %}
 <div class="blog">
   {{ post.date | date: "%-d %B %Y" }} <a href={{ post.url }}>{{ post.title }} </a>
 </div>
 {% endfor %}
 
+-->
+
 <!--
+  FIX URLS AND PHOTO NAMES
+  PHOTO NAMES NEED TO BE A SPECIFIC FORMAT
+  YYYY-MM-DD-NAME.jpg
+-->
 <div class="photorow">
-{% for myimage in image_files %}
+{% for post in site.categories.Photos %}
 
   {% assign newrow = forloop.index0 | modulo: 2 %}
   {% if  newrow == 0 and forloop.index0 != 0 %}
@@ -21,9 +28,10 @@ title: Photography
   {% endif %}
 
   <div class="photocolumn">
-    <img src="{{ myimage.path }}" />
+    <a href={{ post.url }}>
+      <img src="{{ post.photo }}" />
+    </a>
   </div>
 
 {% endfor %}
 </div> 
--->
