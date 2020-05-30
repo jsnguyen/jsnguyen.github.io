@@ -23,6 +23,11 @@ html {
     src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf");
 }
 
+.me_img {
+  width: 40%;
+  float: right;
+}
+
 .header img {
   float: left;
   width: 45px;
@@ -140,7 +145,7 @@ hr {
 
 .blog a:hover {
   text-decoration: none;
-  color: #f1f1f1;
+  color: #000000;
 }
 
 .blog a:visited {
@@ -183,7 +188,7 @@ hr {
 
 .projects a:hover {
   text-decoration: none;
-  color: #f1f1f1;
+  color: #000000;
 }
 
 .projects a:visited {
