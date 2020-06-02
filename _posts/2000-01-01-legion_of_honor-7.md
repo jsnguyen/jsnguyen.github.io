@@ -1,7 +1,7 @@
 ---
 layout: photo
-title: legion_of_honor-7
-photo: /assets/photos/legion_of_honor-7.jpg
+title: 2000-01-01-legion_of_honor-7
+photo: /assets/photos/2000-01-01-legion_of_honor-7.jpg
 categories: Photos
 ---
 

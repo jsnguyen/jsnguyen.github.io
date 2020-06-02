@@ -2,4 +2,16 @@
 title: About
 ---
 
-This is my new website for project build logs. I mostly have this for my own personal use so that I have a forum to write and disseminate my knowledge.
+<div class=index_row>
+  <div class=index_col>
+    <body>
+    <br />
+    <br />
+    Hello! I am Jayke Nguyen and I graduated from UC Berkeley in 2018 with degrees in physics and astrophysics. I currently work at Lawrence Livermore National Laboratory developing adaptive optics systems and measuring the parallax of nearby brown dwarfs. In Fall 2021 I will be pursuing a PhD in Physics at UCSD.
+    </body>
+  </div>
+
+  <div class=index_pic_col>
+    <img src="assets/photos/me_img_crop.png" alt="me_img" width="300" class=pic_col/>
+  </div>
+</div>

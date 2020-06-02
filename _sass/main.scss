@@ -23,9 +23,19 @@ html {
     src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf");
 }
 
-.me_img {
-  width: 40%;
-  float: right;
+.index_row {
+  display: flex;
+}
+
+.index_col {
+  flex: 60%;
+  padding-right: 2%;
+}
+
+.index_pic_col {
+  display: flex;
+  flex: 40%;
+  justify-content: center;
 }
 
 .header img {
@@ -79,7 +89,7 @@ body {
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
-  background-color: #f2e6ff; /* Black */
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(226,226,226,1) 100%); 
   overflow-x: hidden; /* Disable horizontal scroll */
 }
 

@@ -3,11 +3,17 @@ layout: default
 ---
 
 <post>
-  <h3> {{ page.date | date_to_string | downcase }} </h3>
+  <div style="display: flex; justify-content: center;">
+    <h3> {{ page.date | date_to_string | downcase }} </h3>
+  </div>
 
-  {% assign stripped_name = page.path | remove: "_posts/" | remove: ".md" %}
-  <img src="/assets/photos/{{ stripped_name }}.jpg" alt="4th_of_July-4" style="width: 50%;">
+  <div style="display: flex; justify-content: center;">
+    {% assign stripped_name = page.path | remove: "_posts/" | remove: ".md" %}
+    <img src="/assets/photos/{{ stripped_name }}.jpg" alt="{{ stripped_name }}" style="width: 75%">
+  </div>
 
-  {{ content }}
+  <div style="display: flex; justify-content: center;">
+    {{ content }}
+  </div>
 </post>
 
