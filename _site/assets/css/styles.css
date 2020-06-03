@@ -12,7 +12,7 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 .index_col { flex: 60%; padding-right: 2%; }
 
-.index_pic_col { display: flex; flex: 40%; justify-content: center; }
+.index_pic_col { display: flex; flex: 40%; justify-content: center; height: auto; }
 
 .header img { float: left; width: 45px; height: 45px; }
 
