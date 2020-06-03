@@ -1,6 +1,6 @@
 html {
   background: #ffffff;
-  margin-left: 200px; /* Same as the width of the sidebar */
+  margin-left: 168px; /* Same as the width of the sidebar */
 }
 
 @font-face {
@@ -44,7 +44,6 @@ html {
   width: 48%;
   padding: 2%;
 }
-
 
 .about_pic_col {
   float: right;
@@ -98,6 +97,13 @@ body {
   margin: 0px 0px 0px 0px;
   padding-left: 25%;
   padding-right: 25%;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
 
 .sidebar {
@@ -262,3 +268,4 @@ hr {
 .photo_post img{
   width: 80%;
 }
+
