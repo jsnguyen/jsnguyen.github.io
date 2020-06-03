@@ -8,13 +8,13 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 @font-face { font-family: "MajorMonoDisplay"; src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf"); }
 
-.about_row { display: flex; }
-
-.about_col { flex: 60%; padding-right: 2%; }
-
 .index_pic_col { display: flex; flex: 90%; justify-content: center; }
 
 .index_pic_col img { max-width: 90%; height: 100%; border-radius: 10px; object-fit: cover; }
+
+.about_row { display: flex; }
+
+.about_col { flex: 60%; padding-right: 2%; }
 
 .about_pic_col { display: flex; flex: 50%; justify-content: center; }
 

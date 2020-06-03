@@ -23,15 +23,6 @@ html {
   src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf");
 }
 
-.about_row {
-  display: flex;
-}
-
-.about_col {
-  flex: 60%;
-  padding-right: 2%;
-}
-
 .index_pic_col {
   display: flex;
   flex: 90%;
@@ -44,6 +35,16 @@ html {
   border-radius: 10px;
   object-fit: cover;
 }
+
+.about_row {
+  display: flex;
+}
+
+.about_col {
+  flex: 60%;
+  padding-right: 2%;
+}
+
 
 .about_pic_col {
   display: flex;
