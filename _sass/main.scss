@@ -23,25 +23,39 @@ html {
   src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf");
 }
 
-.index_row {
+.about_row {
   display: flex;
 }
 
-.index_col {
+.about_col {
   flex: 60%;
   padding-right: 2%;
 }
 
 .index_pic_col {
   display: flex;
-  flex: 40%;
+  flex: 90%;
   justify-content: center;
 }
 
 .index_pic_col img {
-  max-width: 80%;
-  height: auto;
+  max-width: 90%;
+  height: 100%;
   border-radius: 10px;
+  object-fit: cover;
+}
+
+.about_pic_col {
+  display: flex;
+  flex: 50%;
+  justify-content: center;
+}
+
+.about_pic_col img {
+  max-width: 90%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .header img {
