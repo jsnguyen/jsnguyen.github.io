@@ -37,25 +37,23 @@ html {
 }
 
 .about_row {
-  display: flex;
 }
 
 .about_col {
-  flex: 90%;
+  float: left;
+  width: 48%;
+  padding: 2%;
 }
 
 
 .about_pic_col {
+  float: right;
+  width: 48%;
 }
 
 .about_pic_col img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
   width: 80%;
   height: auto;
-  border-radius: 10px;
-  object-fit: cover;
 }
 
 .header img {
@@ -254,12 +252,13 @@ hr {
 }
 
 .photo_post {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .photo_post img{
   width: 80%;
-  border-radius: 10px;
 }
