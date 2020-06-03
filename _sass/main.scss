@@ -219,3 +219,16 @@ hr {
 .project_item {
   flex: 1;
 }
+
+.bottom {
+  float: left;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-align: center;    
+  width: 100%;
+  font-size: 0.6em;
+  opacity: 60%;
+  position: absolute;
+  bottom: 0px; 
+  left: 0px;
+}
