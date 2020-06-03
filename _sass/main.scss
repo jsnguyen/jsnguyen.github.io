@@ -24,13 +24,12 @@ html {
 }
 
 .index_pic_col {
-  display: flex;
-  flex: 90%;
-  justify-content: center;
-  max-height: 50%;
 }
 
 .index_pic_col img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
   max-width: 90%;
   height: auto;
