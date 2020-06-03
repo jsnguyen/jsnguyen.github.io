@@ -36,7 +36,11 @@ html {
   display: flex;
   flex: 40%;
   justify-content: center;
-  height: 100%;
+}
+
+.index_pic_col img {
+  width: 80%;
+  border-radius: 10px;
 }
 
 .header img {
