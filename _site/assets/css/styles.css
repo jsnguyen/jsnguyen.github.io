@@ -10,7 +10,7 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 .index_pic_col { display: flex; flex: 90%; justify-content: center; }
 
-.index_pic_col img { max-width: 90%; height: 100%; border-radius: 10px; object-fit: cover; }
+.index_pic_col img { max-width: 90%; height: auto; border-radius: 10px; object-fit: cover; }
 
 .about_row { display: flex; }
 
@@ -18,7 +18,7 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 .about_pic_col { display: flex; flex: 50%; justify-content: center; }
 
-.about_pic_col img { max-width: 90%; height: 100%; border-radius: 10px; object-fit: cover; }
+.about_pic_col img { max-width: 90%; height: auto; border-radius: 10px; object-fit: cover; }
 
 .header img { float: left; width: 45px; height: 45px; }
 
