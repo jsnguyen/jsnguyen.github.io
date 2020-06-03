@@ -3,16 +3,12 @@ layout: default
 ---
 
 <post>
-  <div style="display: flex; justify-content: center;">
+  <div class="photo_post">
     <h3> {{ page.date | date_to_string | downcase }} </h3>
-  </div>
 
-  <div style="display: flex; justify-content: center;">
     {% assign stripped_name = page.path | remove: "_posts/" | remove: ".md" %}
-    <img src="/assets/photos/{{ stripped_name }}.jpg" alt="{{ stripped_name }}" style="width: 75%">
-  </div>
+    <img src="/assets/photos/{{ stripped_name }}.jpg" alt="{{ stripped_name }}">
 
-  <div style="display: flex; justify-content: center;">
     {{ content }}
   </div>
 </post>

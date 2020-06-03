@@ -8,15 +8,13 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 @font-face { font-family: "MajorMonoDisplay"; src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf"); }
 
-.index_pic_col img { display: block; margin-left: auto; margin-right: auto; width: 100%; max-width: 90%; height: auto; border-radius: 10px; object-fit: cover; }
+.index_pic_col img { display: block; margin-left: auto; margin-right: auto; width: 100%; height: auto; border-radius: 10px; object-fit: cover; }
 
 .about_row { display: flex; }
 
-.about_col { flex: 60%; padding-right: 2%; }
+.about_col { flex: 90%; }
 
-.about_pic_col { display: flex; flex: 50%; justify-content: center; }
-
-.about_pic_col img { width: 100%; max-width: 100%; height: auto; border-radius: 10px; object-fit: cover; }
+.about_pic_col img { display: block; margin-left: auto; margin-right: auto; width: 80%; height: auto; border-radius: 10px; object-fit: cover; }
 
 .header img { float: left; width: 45px; height: 45px; }
 
@@ -78,5 +76,9 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-
 .project_item { flex: 1; }
 
 .bottom { float: left; padding-bottom: 10px; padding-top: 10px; text-align: center; width: 100%; font-size: 0.6em; opacity: 60%; position: absolute; bottom: 0px; left: 0px; }
+
+.photo_post { display: flex; flex-direction: column; align-items: center; }
+
+.photo_post img { width: 80%; border-radius: 10px; }
 
 /*# sourceMappingURL=styles.css.map */
