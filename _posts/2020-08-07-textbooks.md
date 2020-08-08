@@ -4,7 +4,9 @@ title: Textbooks
 categories: Blog
 ---
 
-I have a lot of textbooks sitting on my desk right now that I need to force myself to read in some regimented way. The current assortment is:
+I have a lot of textbooks sitting on my desk right now that I need to force myself to read in some regimented way.
+
+The current assortment is:
 
 - Gravitation *Misner, Thorne, Wheeler*
 - Fundamentals of Astrodynamics, *Bate, Mueller, White*

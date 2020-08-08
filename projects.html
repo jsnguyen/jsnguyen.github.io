@@ -3,30 +3,27 @@ title: Projects
 ---
 <div class="projects">
 
-  <div class="project_row">
-
-  <div class="project_column">
-
   <h2> {{ "Active" | downcase }} </h2>
   <hr>
   {% for item in site.data.active_projects %}
-    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a> </h3>
+    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a>
+    <span class="green_dot">&bull;</span>
+    </h3>
     <body> {{ item.summary }} </body>
     <hr>
   {% endfor %}
 
-  </div>
-  <div class="project_column">
+  <br/>
 
   <h2> {{ "Finished" | downcase }} </h2>
   <hr>
+
   {% for item in site.data.finished_projects %}
-    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a> </h3>
+    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a>
+    <span class="red_dot">&bull;</span>
+    </h3>
     <body> {{ item.summary }} </body>
     <hr>
   {% endfor %}
 
-  </div>
-
-  </div>
 </div>

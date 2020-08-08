@@ -89,7 +89,6 @@ h3{
   font-size: 1em;
 }
 
-
 body {
   color: #000000;
   font-family: "Raleway", sans-serif;
@@ -141,7 +140,7 @@ body {
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover {
   text-decoration: none;
-  color: #ffffff;
+  color: #DCDCDC;
 }
 
 .sidebar a:visited {
@@ -172,14 +171,27 @@ hr {
 
 }
 
+.blog h2{
+  display: inline;
+}
+
+.blog_date {
+  float: right; 
+  color: #C0C0C0;
+}
+
 .blog a{
   text-decoration: none;
-  color: #818181;
+  color: #101010;
+  border-bottom: 1px solid #000;
+  padding-bottom: 3px;
 }
 
 .blog a:hover {
   text-decoration: none;
-  color: #000000;
+  color: #DCDCDC;
+  border-bottom: 1px solid #DCDCDC;
+  padding-bottom: 3px;
 }
 
 .blog a:visited {
@@ -187,7 +199,7 @@ hr {
 }
 
 .current.color-current {
-  color: #884dff;
+  color: #0044CC;
   font-weight: bold;
 }
 
@@ -233,19 +245,6 @@ hr {
   text-decoration: none;
 }
 
-.project_row {
-  display: flex;
-}
-
-.project_column {
-  flex: 50%;
-  margin: 1%;
-}
-
-.project_item {
-  flex: 1;
-}
-
 .bottom {
   float: left;
   padding-bottom: 10px;
@@ -269,5 +268,21 @@ hr {
 
 .photo_post img{
   width: 80%;
+}
+
+.green_dot {
+  height: 0.5em;
+  width: 0.5em;
+  color: #00FF00;
+  position:relative;
+  left:-0.5em;
+}
+
+.red_dot {
+  height: 0.5em;
+  width: 0.5em;
+  color: #FF4500;
+  position:relative;
+  left:-0.5em;
 }
 

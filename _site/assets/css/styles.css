@@ -40,7 +40,7 @@ body { color: #000000; font-family: "Raleway", sans-serif; font-size: 1.1em; mar
 .sidebar a { text-decoration: none; color: #000000; }
 
 /* When you mouse over the navigation links, change their color */
-.sidebar a:hover { text-decoration: none; color: #ffffff; }
+.sidebar a:hover { text-decoration: none; color: #DCDCDC; }
 
 .sidebar a:visited { text-decoration: none; }
 
@@ -48,13 +48,17 @@ body { color: #000000; font-family: "Raleway", sans-serif; font-size: 1.1em; mar
 
 hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-left: 0; margin-right: 0; padding: 0; }
 
-.blog a { text-decoration: none; color: #818181; }
+.blog h2 { display: inline; }
 
-.blog a:hover { text-decoration: none; color: #000000; }
+.blog_date { float: right; color: #C0C0C0; }
+
+.blog a { text-decoration: none; color: #101010; border-bottom: 1px solid #000; padding-bottom: 3px; }
+
+.blog a:hover { text-decoration: none; color: #DCDCDC; border-bottom: 1px solid #DCDCDC; padding-bottom: 3px; }
 
 .blog a:visited { text-decoration: none; }
 
-.current.color-current { color: #884dff; font-weight: bold; }
+.current.color-current { color: #0044CC; font-weight: bold; }
 
 .photorow { height: 200px; padding-left: 15%; padding-right: 15%; }
 
@@ -71,16 +75,14 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-
 
 .projects a:visited { text-decoration: none; }
 
-.project_row { display: flex; }
-
-.project_column { flex: 50%; margin: 1%; }
-
-.project_item { flex: 1; }
-
 .bottom { float: left; padding-bottom: 10px; padding-top: 10px; text-align: center; width: 100%; font-size: 0.6em; opacity: 60%; position: absolute; bottom: 0px; left: 0px; }
 
 .photo_post { display: block; margin-left: auto; margin-right: auto; margin: 0 auto; text-align: center; }
 
 .photo_post img { width: 80%; }
+
+.green_dot { height: 0.5em; width: 0.5em; color: #00FF00; position: relative; left: -0.5em; }
+
+.red_dot { height: 0.5em; width: 0.5em; color: #FF4500; position: relative; left: -0.5em; }
 
 /*# sourceMappingURL=styles.css.map */
