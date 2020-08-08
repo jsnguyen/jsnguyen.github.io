@@ -4,12 +4,10 @@ layout: default
 
 <post>
   <div class="photo_post">
-    <h3> {{ page.date | date_to_string | downcase }} </h3>
 
-    {% assign stripped_name = page.path | remove: "_posts/" | remove: ".md" %}
-    <img src="/assets/photos/{{ stripped_name }}.jpg" alt="{{ stripped_name }}">
-
+    <img src="{{ page.photo }}" alt="{{ page.photo }}">
     {{ content }}
+
   </div>
 </post>
 

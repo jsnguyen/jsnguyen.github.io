@@ -9,3 +9,7 @@
 - name: poly_earth 
   link: https://github.com/jsnguyen/poly_earth
   summary: Julia script for converting NASA hgt binary files into usable stls.
+
+- name: p_ephem 
+  link: https://github.com/jsnguyen/p_ephem
+  summary: A script that makes pretty pictures of current planetary positions using JPL simulation data.

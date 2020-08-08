@@ -20,7 +20,7 @@ title: Photography
 -->
 
 <div class="photorow">
-{% for post in site.categories.Photos %}
+{% for post in site.photography %}
 
   {% assign newrow = forloop.index0 | modulo: 2 %}
   {% if  newrow == 0 and forloop.index0 != 0 %}
