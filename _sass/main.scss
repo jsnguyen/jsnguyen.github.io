@@ -23,20 +23,8 @@ html {
   src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf");
 }
 
-.index_pic_col {
-}
-
-.index_pic_col img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
 .about_row {
+
 }
 
 .about_col {
@@ -245,6 +233,11 @@ hr {
   text-decoration: none;
 }
 
+.projects_legend{
+  font-size: 0.75em;
+  opacity: 0.6;
+}
+
 .bottom {
   float: left;
   padding-bottom: 10px;
@@ -256,6 +249,10 @@ hr {
   position: absolute;
   bottom: 0px; 
   left: 0px;
+}
+
+.post_date{
+  color: #C0C0C0;
 }
 
 .photo_post {

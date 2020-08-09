@@ -8,8 +8,6 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 @font-face { font-family: "MajorMonoDisplay"; src: url("/assets/fonts/MajorMonoDisplay-Regular.ttf"); }
 
-.index_pic_col img { display: block; margin-left: auto; margin-right: auto; width: 75%; height: auto; border-radius: 10px; object-fit: cover; }
-
 .about_col { float: left; width: 48%; padding: 2%; }
 
 .about_pic_col { float: right; width: 48%; }
@@ -75,7 +73,11 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-
 
 .projects a:visited { text-decoration: none; }
 
+.projects_legend { font-size: 0.75em; opacity: 0.6; }
+
 .bottom { float: left; padding-bottom: 10px; padding-top: 10px; text-align: center; width: 100%; font-size: 0.6em; opacity: 60%; position: absolute; bottom: 0px; left: 0px; }
+
+.post_date { color: #C0C0C0; }
 
 .photo_post { display: block; margin-left: auto; margin-right: auto; margin: 0 auto; text-align: center; }
 
