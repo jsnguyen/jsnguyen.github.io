@@ -24,7 +24,6 @@ html {
 }
 
 .about_row {
-
 }
 
 .about_col {
@@ -39,6 +38,8 @@ html {
 }
 
 .about_pic_col img {
+  display: block;
+  margin: auto;
   width: 80%;
   height: auto;
 }
@@ -265,6 +266,11 @@ hr {
 
 .photo_post img{
   width: 80%;
+}
+
+.photo_content {
+  text-align: center;
+
 }
 
 .green_dot {

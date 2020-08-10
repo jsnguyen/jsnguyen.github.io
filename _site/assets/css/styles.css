@@ -12,7 +12,7 @@ html { background: #ffffff; margin-left: 200px; /* Same as the width of the side
 
 .about_pic_col { float: right; width: 48%; }
 
-.about_pic_col img { width: 80%; height: auto; }
+.about_pic_col img { display: block; margin: auto; width: 80%; height: auto; }
 
 .header img { float: left; width: 45px; height: 45px; }
 
@@ -82,6 +82,8 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-
 .photo_post { display: block; margin-left: auto; margin-right: auto; margin: 0 auto; text-align: center; }
 
 .photo_post img { width: 80%; }
+
+.photo_content { text-align: center; }
 
 .green_dot { height: 0.5em; width: 0.5em; color: #00FF00; position: relative; left: -0.5em; }
 
