@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" viewBox="0 0 100 100">
+<metadata>
+<vectornator:setting key="DisplayWhiteBackground" value="0"/>
+<vectornator:setting key="RulersVisible" value="1"/>
+<vectornator:setting key="GridSpacing" value="36"/>
+<vectornator:setting key="Units" value="Pixels"/>
+<vectornator:setting key="New" value="1"/>
+<vectornator:setting key="DynamicGuides" value="0"/>
+<vectornator:setting key="SnapToPoints" value="0"/>
+<vectornator:setting key="SnapToGrid" value="0"/>
+<vectornator:setting key="SnapToGuides" value="1"/>
+<vectornator:setting key="SnapToEdges" value="0"/>
+</metadata>
+<defs/>
+<g id="Layer 1" vectornator:layerName="Layer 1">
+<path stroke="#000000" stroke-width="4" d="M60.6951+45.7896L75.9344+84.113L98+32.078L74.9109+18.3832" fill="#ffffff" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#000000" stroke-width="4" d="M61.0665+46.921L75.9374+84.2417L2+79.1148L12.9887+43.3091" fill="#ffffff" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#000000" stroke-width="4" d="M60.4722+45.6479L74.8945+18.2424C74.8945+18.2424+66.977+22.3007+51.6401+21.5234C36.3031+20.746+27.4851+15.7583+27.4851+15.7583L13.0628+43.1637C13.0628+43.1637+21.8808+48.1515+37.2178+48.9289C52.5547+49.7062+60.4722+45.6479+60.4722+45.6479Z" fill="#ffffff" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+</g>
+</svg>

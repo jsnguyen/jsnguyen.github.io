@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" viewBox="0 0 100 100">
+<metadata>
+<vectornator:setting key="DisplayWhiteBackground" value="0"/>
+<vectornator:setting key="RulersVisible" value="1"/>
+<vectornator:setting key="GridSpacing" value="36"/>
+<vectornator:setting key="Units" value="Pixels"/>
+<vectornator:setting key="New" value="1"/>
+<vectornator:setting key="DynamicGuides" value="0"/>
+<vectornator:setting key="SnapToPoints" value="0"/>
+<vectornator:setting key="SnapToGrid" value="0"/>
+<vectornator:setting key="SnapToGuides" value="1"/>
+<vectornator:setting key="SnapToEdges" value="0"/>
+</metadata>
+<defs/>
+<g id="Layer 1" vectornator:layerName="Layer 1">
+<g opacity="1">
+<g>
+<path stroke-linecap="round" stroke-width="4" stroke="#79adf0" d="M92.5784+67.5545C78.9465+75.9864+36.4828+99.9947+12.5411+88.0239C-5.99386+78.7564+16.931+57.4574+16.931+57.4574" fill="none" stroke-linejoin="round"/>
+<path d="M90.2779+85.1107L96.1641+67.0978L96.9234+64.7743L94.4955+64.4901L75.6738+62.2874C74.5767+62.159+73.5832+62.9442+73.4548+64.0413C73.3265+65.1384+74.1117+66.1318+75.2088+66.2602L94.0306+68.463L92.362+65.8553L86.4757+83.8682C86.1327+84.9181+86.7057+86.0474+87.7556+86.3905C88.8055+86.7336+89.9348+86.1606+90.2779+85.1107Z" fill="#79adf0"/>
+</g>
+</g>
+<path stroke="#000000" stroke-width="4" d="M22.1439+40.0443C22.1439+30.5568+29.835+22.8657+39.3225+22.8657C48.81+22.8657+56.5011+30.5568+56.5011+40.0443C56.5011+49.5317+48.81+57.2228+39.3225+57.2228C29.835+57.2228+22.1439+49.5317+22.1439+40.0443Z" fill="#ffd9a9" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#000000" stroke-width="4" d="M71.3647+16.4931C71.3647+9.38044+77.1306+3.61451+84.2433+3.61451C91.3559+3.61451+97.1218+9.38044+97.1218+16.4931C97.1218+19.722+95.9335+22.6734+93.9704+24.9338C91.6091+27.6526+88.127+29.3717+84.2433+29.3717C77.1306+29.3717+71.3647+23.6057+71.3647+16.4931Z" fill="#ff732e" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#000000" stroke-width="4" d="M20.3307+41.0025C-2.17009+48.0098+13.2937+56.2571+42.4539+48.0098C70.6731+40.0286+79.1251+24.5932+55.6077+31.2945" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+</g>
+</svg>

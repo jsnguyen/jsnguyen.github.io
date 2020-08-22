@@ -6,15 +6,21 @@ title: Projects
   <h3 class="projects_legend"> active <span class="green_dot">&bull;</span> inactive <span class="red_dot">&bull;</span> </h3>
   <hr/>
   {% for item in site.data.projects %}
-    <h3> <a href={{ item.link }} > {{ item.name | downcase }} </a>
+    <h3> 
+      <img src={{ item.icon }}>
 
-    {% if item.active %}
-    <span class="green_dot">&bull;</span>
-    {% else %}
-    <span class="red_dot">&bull;</span>
-    {% endif %}
+      <a href={{ item.link }} > {{ item.name | downcase }} </a>
+
+      {% if item.active %}
+      <span class="green_dot">&bull;</span>
+      {% else %}
+      <span class="red_dot">&bull;</span>
+      {% endif %}
+
     </h3>
+
     <body> {{ item.summary }} </body>
+
     <hr>
   {% endfor %}
 
