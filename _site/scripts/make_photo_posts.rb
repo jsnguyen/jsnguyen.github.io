@@ -6,15 +6,29 @@ PHOTOS_EXT = '.jpg'
 POSTS_EXT = '.md'
 
 Dir.glob(File.join(PHOTOS_DIR+'/*.jpg')) do |filename|
+
   puts 'FILENAME: ',filename
 
   name = File.basename(filename.chomp(PHOTOS_EXT))
 
   post_filename = name+POSTS_EXT
 
-  puts 'name: ',name
-  puts 'filename: ',filename
-  puts 'post_filename: ',post_filename
+  print 'name: '
+  print name
+  print "\n"
+  print 'filename: '
+  print filename
+  print "\n"
+  print 'post_filename: '
+  print post_filename
+  print "\n"
+
+  if File.file?(File.join(POSTS_DIR,post_filename))
+    print post_filename
+    print ' exists! Skipping...'
+    print "\n"
+    next
+  end
 
   puts File.join(POSTS_DIR,post_filename)
   File.open(File.join(POSTS_DIR,post_filename),'w') do |pf|
