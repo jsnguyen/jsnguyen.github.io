@@ -58,7 +58,7 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin-
 
 .current.color-current { color: #0044CC; font-weight: bold; }
 
-.photorow { height: 200px; padding-left: 15%; padding-right: 15%; }
+.photorow { height: 200px; padding-left: 0%; padding-right: 0%; }
 
 .photocolumn { float: left; width: 50%; }
 
