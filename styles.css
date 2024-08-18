@@ -236,7 +236,7 @@ footer {
 }
 
 .project-text{
-    display: inline-block;
+    display: block;
     width: 80%;
 }
 
@@ -258,4 +258,38 @@ footer {
 
 .paragraph-text p{
     margin-bottom: 20px;
+}
+
+@media(max-width: 800px) {
+    .intro {
+        flex-direction: column;
+        text-align: center;
+    } 
+    .icon{
+        width: 40%;
+    }
+
+    .icon-text {
+        text-align: center;
+    }
+
+    .intro-text {
+        text-align: center;
+    }
+
+    .project-text{
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .project-card {
+        flex-direction: column;
+    }
+    .project-card img{
+        width: 50%;
+    }
+
+    .project-card video{
+        width: 50%;
+    }
 }
