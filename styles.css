@@ -1,0 +1,261 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inconsolata";
+    font-optical-sizing: auto;
+    font-style: normal;
+    line-height: 1.6;
+    color: white;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    font-family: "Epilogue";
+    background: #0b0b13;
+    opacity: 0.75;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+a {
+    color: white;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: white;
+}
+
+a:hover {
+    color: lightgrey;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header h1 {
+    font-family: "Epilogue";
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.intro {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.025);
+}
+
+
+.intro h1 {
+    font-family: "Epilogue";
+    font-weight: 300;
+    font-size: 38px;
+    margin-bottom: 8px;
+}
+
+.intro-text {
+    width: 80%;
+    margin: 0 0 0 20px;
+    text-align: left;
+}
+
+.icon {
+    width: 20%;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.icon-text {
+    margin: 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    margin-top: 20px;
+}
+
+section {
+    padding: 20px;
+}
+
+section h2 {
+    font-family: "Epilogue";
+    font-size: 32px;
+    color: #D2D2D2;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 8px;
+}
+
+section h3 {
+    font-family: "Epilogue";
+    font-size: 26px;
+    font-weight: 300;
+}
+
+section p {
+    font-size: 1.2em;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0b0b13;
+    opacity: 0.75;
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    max-width: 900px; /* Adjust this value to control the content width */
+    margin: 0 auto;   /* Automatically center the container */
+    border-top: 3px solid white;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+.blinking-line {
+    display: inline; /* Ensures the underline spans only the text width */
+    border-bottom: 2px solid #fff; /* Underline with a solid line */
+    animation: blink 5.0s infinite;
+    padding-block: 8px;
+}
+
+@keyframes blink {
+0%, 50%, 100% {
+    border-color: white;
+}
+25%, 75% {
+    border-color: transparent;
+}
+}
+
+.left-item {
+    margin-right: auto; /* This pushes the remaining items to the right */
+    color: white;
+    text-decoration: none;
+}
+
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(11,11,19,1) 0%, rgba(23,24,47,1) 50%, rgba(11,11,19,1) 100%); 
+}
+
+.card {
+    border: 2px solid #D2D2D2;
+    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.025);
+}
+
+.code-project-card {
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.code-project-card p {
+    text-decoration: none;
+}
+
+.code-project-card:hover {
+    transform: scale(1.01);
+}
+
+.code-project-card-header{
+    display: flex;
+    flex-direction: row;
+}
+
+.code-project-card-header img {
+    height: 26px;
+    margin: 5px 7px 0 0;
+}
+
+.project-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.project-text{
+    display: inline-block;
+    width: 80%;
+}
+
+.project-card img{
+    display: inline-block;
+    width: 20%;
+    border-radius: 14px;
+    height: auto; /* Maintains the aspect ratio of the image */
+    margin: 10px;
+}
+
+.project-card video{
+    display: inline-block;
+    width: 20%;
+    height: auto; /* Maintains the aspect ratio of the image */
+    border-radius: 14px;
+    margin: 10px;
+}
+
+.paragraph-text p{
+    margin-bottom: 20px;
+}

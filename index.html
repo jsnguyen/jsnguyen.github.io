@@ -1,26 +1,179 @@
----
-title: Jayke Nguyen
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
 
-<div style="padding: 2%;">
-  <body>
-    <p style="text-align:center"> Welcome to my personal website! 
-    <br/>
-    <br/>
-    I mostly have this for my own use so that I have a platform to write about my personal projects. Check out my blog and projects page for more information on what I'm currently working on.
-    <p/>
-  </body>
-<div>
+    <title>jayke.io</title>
 
-<div style="display: flex; justify-content: center; padding: 10px;"/>
-  <hr style="width: 50%;"/>
-</div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
-<h3 style="display: flex; justify-content: center;">
-  <a href="mailto:me@jayke.io"> me@jayke.io </a>
-</h3>
+    <link rel="stylesheet" href="styles.css">
 
-<h3 style="display: flex; justify-content: center;">
-  <a href="https://github.com/jsnguyen"> github </a>
-</h3>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+    <div id="particles-js"></div>
+    <script src="stars.js"></script>
+
+    <main>
+        <section id="intro">
+            <div class="intro">
+                <div class="icon">
+                    <img src="icon.png"b />
+                    <div class="icon-text">
+                        <p><a href="mailto:jsn@ucsd.edu">jsn@ucsd.edu</a></p>
+                        <p><a href="https://x.com/AstroJayke">@AstroJayke</a></p>
+                    </div>
+                </div>
+                <div class="intro-text">
+                    <h1> <div class="blinking-line"> Hi, I'm Jayke Samson Nguyen </div> </h1>
+                    <p> Ph.D. Candidate @ <a href="https://astro.ucsd.edu/"> UCSD A&A Department </a></p>
+                    <br>
+                    <p> I study exoplanets through ground-based direct imaging in the mid-IR. I'm also helping build the <a href="http://planetimager.org/">Gemini Planet Imager 2.0</a>. Other interests include protoplanetary disks and planetary formation theory.</p>
+                    <br>
+                </div>
+            </div>
+        </section>
+
+        <div class="card">
+            <section id="projects">
+                <h2>Projects</h2>
+
+                <div class="project-card">
+                    <div class="project-text">
+                        <h3>Direct Imaging of Exoplanets in the Mid-IR </h3>
+                        <p>I'm looking for exoplanets in the mid-IR (>4.7 µm). Planets at these wavelengths are older and colder than the current population of planets we've directly imaged.
+                        </p>
+                    </div>
+                    <video autoplay loop muted playsinline>
+                        <source src="images/square.webm" type="video/webm">
+                    </video>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-text">
+                        <h3>The Pyramid Wavefront Sensor Upgrade of GPI 2.0 </h3>
+                        <p>I helped build the new pyramid wavefront sensor going into the Gemini Planet Imager 2.0. I worked on integrating the movable mirrors, needed to direct the beam through the wavefront sensor.
+                    </div>
+                    <img src="images/prism.jpg" />
+                </div>
+
+                <div class="project-card">
+                    <div class="project-text">
+                        <h3>GPI 2.0 AO Simulations</h3>
+                        <p>I've developed AO simulations of the new AO system on GPI 2.0 using HCIpy. The simulations were designed to test performance and efficacy of the upgrades to the system. </p>
+                    </div>
+                    <video autoplay loop muted playsinline>
+                        <source src="images/psf.webm" type="video/webm">
+                    </video>
+                </div>
+            </section>
+        </div>
+
+        <div class="card">
+            <section id="coding">
+                <h2>Code</h2>
+
+                <a href="https://github.com/jsnguyen/rain">
+                    <div class="code-project-card">
+                        <div class="code-project-card-header">
+                            <img src="icons/water_drop_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"/>
+                            <h3> Rain </h3>
+                        </div>
+                        <p>Re-implementation of Drizzle, meant for performing the distortion correction solution for imaging systems.</p>
+                    </div>
+                </a>
+                <br>
+
+                <a href="https://github.com/jsnguyen/parallelize">
+                    <div class="code-project-card">
+                        <div class="code-project-card-header">
+                            <img src="icons/device_hub_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"/>
+                            <h3>Parallelize</h3>
+                        </div>
+                        <p>An easy way of parallelizing functions that are performing mutually independent operations.</p>
+                    </div>
+                </a>
+                <br>
+
+                <a href="https://github.com/jsnguyen/fast_plot">
+                    <div class="code-project-card">
+                        <div class="code-project-card-header">
+                            <img src="icons/stacked_line_chart_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"/>
+                            <h3>Fast Plot</h3>
+                        </div>
+                        <p>A drop-in replacement of matplotlib.imshow using PIL instead.</p>
+                    </div>
+                </a>
+                <br>
+
+                <a href="https://github.com/jsnguyen/target_selection">
+                    <div class="code-project-card">
+                        <div class="code-project-card-header">
+                            <img src="icons/point_scan_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"/>
+                            <h3>Target Selection Tool</h3>
+                        </div>
+                        <p>Generates plots of observing targets and their visibility in the sky at a given date.</p>
+                    </div>
+                </a>
+                <br>
+
+                <a href="https://github.com/jsnguyen/obslog">
+                    <div class="code-project-card">
+                        <div class="code-project-card-header">
+                            <img src="icons/receipt_long_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"/>
+                            <h3>ObsLog</h3>
+                        </div>
+                        <p>A .toml file format for reading in observation logs.</p>
+                    </div>
+                </a>
+                <br>
+            </section>
+        </div>
+
+        <div class="card">
+            <section id="community">
+                <div class="paragraph-text">
+                <h2>Community Service/Outreach</h2>
+
+                <h3><a href="https://x.com/AoTSD/"> Astro On Tap, San Diego </a></h3>
+                <p>I'm currently one of the hosts for Astronomy on Tap in San Diego! AoT is a bi-monthly event that provides free, public talks about astronomy and astrophysics in a brewery. </p>
+
+                <h3><a href="https://center.ucsd.edu/mentor-village/cohort">Cohort Program</a></h3>
+                <p>I'm currently a mentor for the Cohort program, a program for providing group mentorship for students at all stages throughout their undergraduate careers. </p>
+
+                <h3>Astro Graduate Council</h3>
+                <p>I was the first president of the newly formed Astro Graduate Council, a student organization for representing graduate students within the department.</p>
+
+                <a href="https://www.akamaihawaii.org/"> <h3>Akamai Initative</h3> </a>
+                <p>I previously was an instructor for the Akamai program. With a small team, I helped design a day-long STEM project to teach fundamental engineering skills to undergraduate researchers beginning their research careers.</p>
+                </div>
+
+            </section>
+        </div>
+
+        <div class="card">
+            <section id="publications">
+            <h2> Publications </h2>
+            <h3> <a href="https://ui.adsabs.harvard.edu/search/filter_author_facet_hier_fq_author=AND&filter_author_facet_hier_fq_author=author_facet_hier%3A%220%2FNguyen%2C%20J%22&filter_database_fq_database=AND&filter_database_fq_database=((database%3Aastronomy%20OR%20database%3Aphysics))&filter_database_fq_database=database%3A%22astronomy%22&fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq=%7B!type%3Daqp%20v%3D%24fq_author%7D&fq_author=(author_facet_hier%3A%220%2FNguyen%2C%20J%22)&fq_database=(((database%3Aastronomy%20OR%20database%3Aphysics))%20AND%20database%3A%22astronomy%22)&p_=0&q=-docs(bd1c146b61e072e28a1e645bc866c05b)%20-docs(aec0f802ea026c7809ecd918300b951c)%20-docs(141ebfed7a0e21c42bd4958d48e2a6d8)%20%20author%3A%22Nguyen%2C%20Jayke%20Samson%22&sort=date%20desc%2C%20bibcode%20desc">NASA ADS</a></h3>
+            </section>
+        </div>
+
+    </main>
+
+    <footer>
+        2024 jayke.io
+    </footer>
+</body>
+</html>

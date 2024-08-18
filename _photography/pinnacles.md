@@ -1,7 +1,0 @@
----
-layout: photo
-title: pinnacles
-photo: ../assets/photos/photography/pinnacles.jpg
----
-
-These rocks strangely resembled a giant hand. The bird in the photo directly above the hand is fact the rare California condor. At the time there were less than 500 in existence in the wild.
