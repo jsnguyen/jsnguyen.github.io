@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+
+    <title>jayke.io</title>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.2.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2025.2.1/core.js"></script>
+
+    <script>
+        // Reset button state on page load
+        window.addEventListener('load', function() {
+            const plotButton = document.querySelector("#plot_button");
+            if (plotButton) {
+                plotButton.disabled = true;
+            }
+        });
+    </script>
+
+</head>
+<body>
+    <div id="particles-js"></div>
+    <script src="stars.js"></script>
+
+    <main>
+        <section id="intro">
+            <div class="intro">
+                <div class="icon">
+                    <img src="icon.png"b />
+                    <div class="icon-text">
+                        <p><a href="mailto:jsn@ucsd.edu">jsn@ucsd.edu</a></p>
+                        <p><a href="https://x.com/AstroJayke">@AstroJayke</a></p>
+                    </div>
+                </div>
+                <div class="intro-text">
+                    <h1> <div class="blinking-line"> Hi, I'm Jayke Samson Nguyen </div> </h1>
+                    <p> Ph.D. Candidate @ <a href="https://astro.ucsd.edu/"> UCSD A&A Department </a></p>
+                    <br>
+                    <p> I study exoplanets through ground-based direct imaging in the mid-IR. I'm also helping build the <a href="http://planetimager.org/">Gemini Planet Imager 2.0</a>. Other interests include protoplanetary disks and planetary formation theory.</p>
+                    <br>
+                </div>
+            </div>
+        </section>
+
+        <div class="card">
+            <div class="pyscript-card">
+                <div class="pyscript-card-header">
+                    <h2>Target Plotter</h2>
+                    <p> Get the elevation and altitude plots of a celestial object using browser-embedded Python! </p>
+                </div>
+                <div class="display-container loading">
+                    <div id="loading-placeholder">
+                        <div class="loading-spinner-light"></div>
+                        <p>Loading target plotter...</p>
+                    </div>
+                    <div id="plot-loading">
+                        <div class="loading-spinner-dark"></div>
+                        <p>Generating plot...</p>
+                    </div>
+                    <div id="ready">
+                        <p>Ready to plot!</p>
+                    </div>
+                    <script type="py" src="./target_plotter.py" config="./pyscript.toml"></script>
+                </div>
+                <div class="input-container">
+                    <div class="input-section">
+                        <div class="input-section-header">Target</div>
+                        <div class="input-row with-header">
+                            <div class="input-group">
+                                <label class="input-label" for="ra_input">Right Ascension</label>
+                                <input type="text" id="ra_input" placeholder="23 07 28.7" value="23 07 28.7157209544" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="dec_input">Declination</label>
+                                <input type="text" id="dec_input" placeholder="+21 08 03.3" value="+21 08 03.310767492"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-section">
+                        <div class="input-section-header">Observing Location</div>
+                        <div class="input-row with-header">
+                            <div class="input-group">
+                                <label class="input-label" for="lat_input">Latitude</label>
+                                <input type="text" id="lat_input" placeholder="19.8286" value="19.8286" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="lon_input">Longitude</label>
+                                <input type="text" id="lon_input" placeholder="-155.4742" value="-155.4742"/>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="height_input">Elevation (m)</label>
+                                <input type="text" id="height_input" placeholder="Elevation" value="4123"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <button id="plot_button" disabled>Make Plot</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        2024 jayke.io
+    </footer>
+</body>
+</html>
