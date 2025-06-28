@@ -119,10 +119,6 @@ main {
     margin-top: 20px;
 }
 
-section {
-    padding: 20px;
-}
-
 section h2 {
     font-family: "Epilogue";
     font-size: 32px;
@@ -201,6 +197,7 @@ footer {
     margin-top: 40px;
     margin-bottom: 40px;
     box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.025);
+    padding: 20px;
 }
 
 .code-project-card {
@@ -325,11 +322,11 @@ button:focus {
     justify-content: center;
     border-radius: 14px;
     border:#D2D2D2 solid 5px;
-    height: 425px;
-    width: 75%;
     overflow: hidden;
     background-color: white;
     padding: 20px;
+    height: 450px;
+    width: 75%;
 }
 
 .display-container.loading {
@@ -433,6 +430,7 @@ button:focus {
 }
 
 .input-label {
+    font-family: "Epilogue";
     font-size: 14px;
     font-weight: 500;
     color: #D2D2D2;
@@ -451,7 +449,34 @@ button:focus {
     margin-top: 5px;
 }
 
+#resolve_button {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+#resolve_button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+#resolve_button:disabled {
+    background-color: #666666;
+    color: #999999;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+}
+
 .input-section-header {
+    font-family: "Epilogue";
     font-size: 18px;
     font-weight: 600;
     color: #ffffff;

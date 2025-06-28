@@ -24,15 +24,7 @@
     <link rel="stylesheet" href="https://pyscript.net/releases/2025.2.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2025.2.1/core.js"></script>
 
-    <script>
-        // Reset button state on page load
-        window.addEventListener('load', function() {
-            const plotButton = document.querySelector("#plot_button");
-            if (plotButton) {
-                plotButton.disabled = true;
-            }
-        });
-    </script>
+    <script src="sesame.js"></script>
 
 </head>
 <body>
@@ -46,7 +38,7 @@
                     <img src="icon.png"b />
                     <div class="icon-text">
                         <p><a href="mailto:jsn@ucsd.edu">jsn@ucsd.edu</a></p>
-                        <p><a href="https://x.com/AstroJayke">@AstroJayke</a></p>
+                        <p><a href="https://bsky.app/profile/astrojayke.bsky.social">@AstroJayke</a></p>
                     </div>
                 </div>
                 <div class="intro-text">
@@ -84,12 +76,29 @@
                         <div class="input-section-header">Target</div>
                         <div class="input-row with-header">
                             <div class="input-group">
+                                <label class="input-label" for="target_name_input">Target Name</label>
+                                <input type="text" id="target_name_input" placeholder="HD 209458" value="HD 209458" />
+                                <button type="button" id="resolve_button" onclick="resolveTarget()">Resolve</button>
+                            </div>
+                        </div>
+                        <div class="input-row with-header">
+                            <div class="input-group">
                                 <label class="input-label" for="ra_input">Right Ascension</label>
                                 <input type="text" id="ra_input" placeholder="23 07 28.7" value="23 07 28.7157209544" />
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="dec_input">Declination</label>
                                 <input type="text" id="dec_input" placeholder="+21 08 03.3" value="+21 08 03.310767492"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-section">
+                        <div class="input-section-header">Observation Date</div>
+                        <div class="input-row with-header">
+                            <div class="input-group">
+                                <label class="input-label" for="date_input">Date (UTC)</label>
+                                <input type="date" id="date_input" value="2025-07-05" />
                             </div>
                         </div>
                     </div>
