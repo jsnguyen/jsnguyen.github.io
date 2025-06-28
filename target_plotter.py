@@ -48,14 +48,18 @@ if display_container:
 
 # Enable the plot button now that PyScript is ready
 plot_button = document.querySelector("#plot_button")
+save_button = document.querySelector("#save_button")
 if plot_button:
     plot_button.disabled = False
+# Ensure save button stays disabled until a plot is generated
+if save_button:
+    save_button.disabled = True
 
 @when("click", "#plot_button")
 async def handle_click(event):
-    # Show loading spinner and disable button
+    # Show loading spinner and disable buttons
     plot_loading = document.querySelector("#plot-loading")
-    #plot_button = document.querySelector("#plot_button")
+    save_button = document.querySelector("#save_button")
     display_container = document.querySelector(".display-container")
     
     if plot_loading:
@@ -63,8 +67,9 @@ async def handle_click(event):
         ready.style.display = "none"
         plot_loading.style.display = "block"
 
-    #if plot_button:
-    #    plot_button.disabled = True
+    # Disable save button during loading
+    if save_button:
+        save_button.disabled = True
     
     # Allow DOM to update by yielding control
     await asyncio.sleep(0.05)
@@ -75,12 +80,13 @@ async def handle_click(event):
     date_input = document.querySelector("#date_input")
     lat_input = document.querySelector("#lat_input")
     lon_input = document.querySelector("#lon_input")
-    height_input = document.querySelector("#height_input")
+    target_name_input = document.querySelector("#target_name_input")
 
-    location = EarthLocation(lon=float(lon_input.value), lat=float(lat_input.value), height=float(height_input.value)*u.meter)
+    # 4000m is good enough there should be a negligible difference for higher/lower elevations anyways
+    location = EarthLocation(lon=float(lon_input.value), lat=float(lat_input.value), height=float(4000)*u.meter)
     
     # Generate the plot
-    fig = make_target_plot(location, ra_input.value, dec_input.value, date_input.value)
+    fig = make_target_plot(location, ra_input.value, dec_input.value, date_input.value, name=target_name_input.value)
     
     # Hide loading spinner and display plot
     if plot_loading:
@@ -89,7 +95,7 @@ async def handle_click(event):
         display_container.classList.remove("loading")
     display(fig, append=False)
     
-    # Re-enable button
+    # Re-enable buttons - save button will be enabled by the mutation observer
     if plot_button:
         plot_button.disabled = False
 
@@ -141,7 +147,7 @@ def find_bounds(boolean_list):
     
     return bounds
 
-def make_target_plot(location, ra, dec, date):
+def make_target_plot(location, ra, dec, date, name=None):
 
     delta_hours = 8
     delta_midnight = np.linspace(-delta_hours, delta_hours, 1000) * u.hour
@@ -199,8 +205,8 @@ def make_target_plot(location, ra, dec, date):
 
     fig = plt.figure(figsize=(6,4))
 
-    fig.patch.set_facecolor('none')  # Make figure background transparent
-    fig.subplots_adjust(hspace=0.05)
+    #fig.patch.set_facecolor('none')  # Make figure background transparent
+    fig.subplots_adjust(hspace=0.05, bottom=0.25)  # Add more space at bottom for rotated labels
 
     # use gridspec here to make the colorbar play nicely
     gs = GridSpec(2, 2, width_ratios=[1, 0.05], height_ratios=[1, 1], wspace=0.1)
@@ -272,10 +278,13 @@ def make_target_plot(location, ra, dec, date):
     cax.set_yticks([0.5, 1.5, 2.5])
     cax.set_yticklabels(['Not Visible', 'Vignetted', 'Visible'], va='center', rotation=90)
 
-    ax.text(0.5, 1.2, f' Time Visible: {time_visible:.2f}     Min Moon Sep: {np.min(moon_seps):.2f} deg ',
+    if name is not None:
+        fig.suptitle(f'{name} Visiblity On {date}', fontsize=12)
+
+    ax.text(0.5, -0.7, f' Time Visible: {time_visible:.2f}  |  Min Moon Sep: {np.min(moon_seps):.2f} deg ',
             horizontalalignment='center',
             verticalalignment='center',
-            transform = axs[0].transAxes,
+            transform = axs[1].transAxes,
             bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.25'))
     
     return fig

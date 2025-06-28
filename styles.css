@@ -270,7 +270,6 @@ footer {
 }
 
 input[type="text"] {
-    text-align: center;
     padding: 10px;
     margin: 10px 0;
     border: 2px solid #D2D2D2;
@@ -279,41 +278,6 @@ input[type="text"] {
     color: white;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #D2D2D2;
-    color: black;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    transform: scale(1);
-}
-
-button:disabled {
-    background-color: #666666;
-    color: #999999;
-    cursor: not-allowed;
-    transform: scale(1);
-    box-shadow: none;
-}
-
-button:hover:not(:disabled) {
-    background-color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(210, 210, 210, 0.3);
-}
-
-button:active:not(:disabled) {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(210, 210, 210, 0.2);
-}
-
-button:focus {
-    outline: 2px solid #D2D2D2;
-    outline-offset: 2px;
-}
 
 .display-container {
     display: flex;
@@ -326,7 +290,7 @@ button:focus {
     background-color: white;
     padding: 20px;
     height: 450px;
-    width: 75%;
+    width: 80%;
 }
 
 .display-container.loading {
@@ -338,6 +302,11 @@ button:focus {
     border-radius: 9px;
     opacity: 0;
     animation: fadeIn 0.25s ease-in-out forwards;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
 @keyframes fadeIn {
@@ -409,7 +378,7 @@ button:focus {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 75%;
+    width: 80%;
     margin-top: 6px;
 }
 
@@ -425,37 +394,44 @@ button:focus {
 
 .input-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 8px 0;
+    gap: 15px;
 }
 
-.input-label {
-    font-family: "Epilogue";
-    font-size: 14px;
-    font-weight: 500;
-    color: #D2D2D2;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-    margin-top: 2px;
-}
-
-.input-row input[type="text"] {
-    width: 180px;
+.input-group .input-label {
+    flex: 0 0 120px;
+    text-align: left;
     margin: 0;
 }
 
-.input-row button {
-    margin-top: 5px;
+.input-group input[type="text"], .input-group input[type="date"] {
+    flex: 1;
+    width: auto;
+    min-width: 110px;
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 14px;
 }
 
-#resolve_button {
-    padding: 5px 10px;
-    font-size: 14px;
-    margin: 10px;
-    background-color: #4CAF50;
-    color: white;
+.input-group:has(#resolve_button) {
+    flex-direction: row;
+    align-items: center;
 }
+
+.input-group:has(#resolve_button) input[type="text"] {
+    flex: 1;
+    width: auto;
+}
+
+.input-group:has(#resolve_button) #resolve_button {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
 
 #resolve_button:hover:not(:disabled) {
     background-color: #45a049;
@@ -466,31 +442,79 @@ button:focus {
     color: #999999;
 }
 
-.input-group {
-    display: flex;
-    align-items: center;
-}
-
-.input-group input[type="text"] {
-    flex: 1;
-}
-
-.input-section-header {
+.input-label {
     font-family: "Epilogue";
-    font-size: 18px;
-    font-weight: 600;
-    color: #ffffff;
-    text-align: center;
-    margin: 10px 0 5px 0;
-    width: 100%;
-    border-bottom: 2px solid #D2D2D2;
-    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #D2D2D2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.input-row input[type="text"], .input-row input[type="date"] {
+    width: 250px;
+    margin: 0;
+}
+
+.input-row button {
+    margin-top: 5px;
+}
+
+button {
+    font-family: "Epilogue";
+    padding: 8px;
+    font-size: 14px;
+    margin: 10px;
+    width: 100px;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #D2D2D2;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    transform: scale(1);
+}
+
+button:disabled {
+    background-color: #666666;
+    color: #999999;
+    cursor: not-allowed;
+    transform: scale(1);
+    box-shadow: none;
+}
+
+button:hover:not(:disabled) {
+    background-color: #ffffff;
+    background-color: #45a049;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(210, 210, 210, 0.3);
+}
+
+button:active:not(:disabled) {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(210, 210, 210, 0.2);
+}
+
+button:focus {
+    outline: 2px solid #D2D2D2;
+    outline-offset: 2px;
 }
 
 .input-section {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-bottom: 6px;
+}
+
+.input-section-header {
+    font-family: "Epilogue";
+    font-size: 14px;
+    color: #757575;
+    width: 100%;
+    border-top: 2px solid #D2D2D2;
+    padding: 8px 0 8px 0;
 }
 
 .input-row.with-header {
@@ -519,4 +543,136 @@ button:focus {
 
 .intro-link:visited {
     color: inherit;
+}
+
+/* Bottom bar for plot controls */
+.plot-bottom-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+.plot-bottom-bar button {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    min-width: 100px;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    transform: scale(1);
+    cursor: pointer;
+}
+
+.plot-bottom-bar button:hover:not(:disabled) {
+    background-color: #45a049;
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.plot-bottom-bar button:disabled {
+    background-color: #666666;
+    color: #999999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.plot-bottom-bar button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+#save_button {
+    background-color: #2196F3;
+}
+
+#save_button:hover:not(:disabled) {
+    background-color: #1976D2;
+}
+
+/* Animation when save button becomes enabled */
+@keyframes saveButtonEnable {
+    0% {
+        opacity: 0.6;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#save_button:not(:disabled) {
+    animation: saveButtonEnable 0.3s ease-out;
+}
+
+.display-container.loading {
+    border: none;
+    background-color: transparent;
+}
+
+/* Responsive adjustments for plot and bottom bar */
+@media (max-width: 768px) {
+    .display-container {
+        width: 95%;
+        height: 350px;
+        padding: 15px;
+    }
+    
+    .input-container {
+        width: 95%;
+    }
+    
+    .plot-bottom-bar {
+        height: 45px;
+        gap: 10px;
+    }
+    
+    .plot-bottom-bar button {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .display-container {
+        width: 100%;
+        height: 280px;
+        padding: 10px;
+    }
+    
+    .input-container {
+        width: 100%;
+    }
+    
+    .intro {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .intro-text {
+        width: 100%;
+        margin: 20px 0 0 0;
+        text-align: center;
+    }
+    
+    .icon {
+        width: 30%;
+    }
+    
+    .plot-bottom-bar {
+        height: 40px;
+        gap: 8px;
+    }
+    
+    .plot-bottom-bar button {
+        padding: 5px 10px;
+        font-size: 12px;
+        min-width: 70px;
+    }
 }

@@ -1,8 +1,12 @@
 // Reset button state on page load
 window.addEventListener('load', function() {
     const plotButton = document.querySelector("#plot_button");
+    const saveButton = document.querySelector("#save_button");
     if (plotButton) {
         plotButton.disabled = true;
+    }
+    if (saveButton) {
+        saveButton.disabled = true;
     }
 });
 
@@ -87,6 +91,17 @@ async function resolveTargetSESAME(targetName, raInput, decInput) {
             raInput.value = ra_hms;
             decInput.value = dec_dms;
             console.log(`Resolved ${targetName}: RA=${ra_hms}, Dec=${dec_dms}`);
+            
+            // Automatically trigger plot generation
+            const plotButton = document.querySelector("#plot_button");
+            const saveButton = document.querySelector("#save_button");
+            if (plotButton && !plotButton.disabled) {
+                // Disable save button before triggering plot
+                if (saveButton) {
+                    saveButton.disabled = true;
+                }
+                plotButton.click();
+            }
         } else {
             // Try fallback with text output format
             await resolveTargetSESAMEText(targetName, raInput, decInput);
@@ -141,6 +156,17 @@ async function resolveTargetSESAMEText(targetName, raInput, decInput) {
             raInput.value = ra_hms;
             decInput.value = dec_dms;
             console.log(`Resolved ${targetName}: RA=${ra_hms}, Dec=${dec_dms}`);
+            
+            // Automatically trigger plot generation
+            const plotButton = document.querySelector("#plot_button");
+            const saveButton = document.querySelector("#save_button");
+            if (plotButton && !plotButton.disabled) {
+                // Disable save button before triggering plot
+                if (saveButton) {
+                    saveButton.disabled = true;
+                }
+                plotButton.click();
+            }
         } else {
             throw new Error('No valid coordinates found in SESAME response');
         }

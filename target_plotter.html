@@ -26,6 +26,90 @@
 
     <script src="sesame.js"></script>
 
+    <script>
+        // Save plot functionality
+        function savePlot() {
+            // Get the plot figure element from matplotlib
+            const displayContainer = document.querySelector('.display-container');
+            const plotElements = displayContainer.querySelectorAll('img, canvas, svg');
+            
+            if (plotElements.length === 0) {
+                alert('No plot to save. Please generate a plot first.');
+                return;
+            }
+            
+            // Get target name and create filename
+            const targetNameInput = document.querySelector('#target_name_input');
+            let filename = 'target_plot.png'; // default filename
+            
+            if (targetNameInput && targetNameInput.value.trim()) {
+                const targetName = targetNameInput.value.trim();
+                // Replace spaces with underscores and remove any problematic characters
+                const sanitizedName = targetName.replace(/\s+/g, '_').replace(/[<>:"/\\|?*]/g, '');
+                filename = `${sanitizedName}_plot.png`;
+            }
+            
+            // Try to find the matplotlib figure
+            const plotElement = plotElements[plotElements.length - 1]; // Get the most recent plot
+            
+            if (plotElement.tagName === 'IMG') {
+                // If it's an image, create a download link
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = plotElement.src;
+                link.click();
+            } else if (plotElement.tagName === 'CANVAS') {
+                // If it's a canvas, convert to blob and download
+                plotElement.toBlob(function(blob) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                });
+            } else {
+                // Fallback: try to capture the entire display container
+                alert('Plot saving is available after generating a plot.');
+            }
+        }
+        
+        // Enable save button when plot is generated
+        function enableSaveButton() {
+            const saveButton = document.querySelector('#save_button');
+            if (saveButton) {
+                saveButton.disabled = false;
+            }
+        }
+        
+        // Monitor for plot generation
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    const displayContainer = document.querySelector('.display-container');
+                    // Only look for matplotlib plot images, not any img elements
+                    const plotElements = displayContainer.querySelectorAll('img[src*="data:image"]');
+                    if (plotElements.length > 0) {
+                        enableSaveButton();
+                    }
+                }
+            });
+        });
+        
+        // Start observing when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const displayContainer = document.querySelector('.display-container');
+            if (displayContainer) {
+                observer.observe(displayContainer, { childList: true, subtree: true });
+            }
+            
+            // Add click handler for save button
+            const saveButton = document.querySelector('#save_button');
+            if (saveButton) {
+                saveButton.addEventListener('click', savePlot);
+            }
+        });
+    </script>
+
 </head>
 <body>
     <div id="particles-js"></div>
@@ -71,58 +155,55 @@
                     </div>
                     <script type="py" src="./target_plotter.py" config="./pyscript.toml"></script>
                 </div>
+                
+                <div class="plot-bottom-bar">
+                    <button id="plot_button" disabled>Make Plot</button>
+                    <button id="save_button" disabled>Save Plot</button>
+                </div>
+
                 <div class="input-container">
+
                     <div class="input-section">
                         <div class="input-section-header">Target</div>
-                        <div class="input-row with-header">
-                            <div class="input-group">
-                                <label class="input-label" for="target_name_input">Target Name</label>
-                                <input type="text" id="target_name_input" placeholder="HD 209458" value="HD 209458" />
-                                <button type="button" id="resolve_button" onclick="resolveTarget()">Resolve</button>
-                            </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label" for="target_name_input">Target Name</label>
+                            <input type="text" id="target_name_input" placeholder="Target Name" value="HR 8799" />
+                            <button type="button" id="resolve_button" onclick="resolveTarget()">Resolve</button>
                         </div>
-                        <div class="input-row with-header">
-                            <div class="input-group">
-                                <label class="input-label" for="ra_input">Right Ascension</label>
-                                <input type="text" id="ra_input" placeholder="23 07 28.7" value="23 07 28.7157209544" />
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label" for="dec_input">Declination</label>
-                                <input type="text" id="dec_input" placeholder="+21 08 03.3" value="+21 08 03.310767492"/>
-                            </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="ra_input">RA (HMS)</label>
+                            <input type="text" id="ra_input" placeholder="RA" value="23 07 28.7" />
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="dec_input">Dec (DMS)</label>
+                            <input type="text" id="dec_input" placeholder="Dec" value="+21 08 03.0"/>
                         </div>
                     </div>
 
                     <div class="input-section">
                         <div class="input-section-header">Observation Date</div>
-                        <div class="input-row with-header">
-                            <div class="input-group">
-                                <label class="input-label" for="date_input">Date (UTC)</label>
-                                <input type="date" id="date_input" value="2025-07-05" />
-                            </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label" for="date_input">Date (UTC)</label>
+                            <input type="date" id="date_input" value="2025-07-05" />
                         </div>
                     </div>
 
                     <div class="input-section">
                         <div class="input-section-header">Observing Location</div>
-                        <div class="input-row with-header">
-                            <div class="input-group">
-                                <label class="input-label" for="lat_input">Latitude</label>
-                                <input type="text" id="lat_input" placeholder="19.8286" value="19.8286" />
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label" for="lon_input">Longitude</label>
-                                <input type="text" id="lon_input" placeholder="-155.4742" value="-155.4742"/>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label" for="height_input">Elevation (m)</label>
-                                <input type="text" id="height_input" placeholder="Elevation" value="4123"/>
-                            </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label" for="lat_input">Latitude</label>
+                            <input type="text" id="lat_input" placeholder="19.8286" value="19.8286" />
                         </div>
-                    </div>
 
-                    <div class="input-row">
-                        <button id="plot_button" disabled>Make Plot</button>
+                        <div class="input-group">
+                            <label class="input-label" for="lon_input">Longitude</label>
+                            <input type="text" id="lon_input" placeholder="-155.4742" value="-155.4742"/>
+                        </div>
                     </div>
 
                 </div>
