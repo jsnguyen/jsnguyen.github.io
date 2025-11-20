@@ -25,7 +25,7 @@ body {
 
 a {
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 a:visited {
@@ -87,19 +87,6 @@ header h1 {
 
 main {
     margin-top: 20px;
-}
-
-.targetplotter-page main {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-}
-
-.targetplotter-page .pyscript-card {
-    max-width: 960px;
-    width: min(90vw, 960px);
 }
 
 section h2 {
@@ -192,6 +179,7 @@ header {
     background-color: rgba(157, 157, 157, 0.612);
     padding: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
 }
 
 .code-project-card p {
@@ -266,10 +254,10 @@ header {
 
 .back-button {
     position: absolute;
-    top: 16px;
-    left: 16px;
-    width: 52px;
-    height: 52px;
+    top: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background-color: rgb(159, 159, 159);
     padding: 0;
@@ -329,6 +317,24 @@ input[type="text"] {
     width: auto;
     height: auto;
     object-fit: contain;
+}
+
+.social-media-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.social-media-icon:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.social-media-icons-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 @keyframes fadeIn {

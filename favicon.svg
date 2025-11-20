@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1285)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(5,0,0,5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200" viewBox="0 0 52.916666 52.916666" version="1.1" id="svg178" inkscape:version="1.0 (4035a4fb49, 2020-05-01)" sodipodi:docname="simple_star_trek_25mm.svg" inkscape:export-filename="C:\Users\jsn\Google Drive\Projects\simple_star_trek\simple_star_trek_exaggerated_proportions_45deg.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96">
+  <defs id="defs172"><clipPath id="SvgjsClipPath1285"><rect width="1000" height="1000" x="0" y="0" rx="300" ry="300"></rect></clipPath></defs>
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="4" inkscape:cx="67.866321" inkscape:cy="83.778521" inkscape:document-units="mm" inkscape:current-layer="g1369" inkscape:document-rotation="0" showgrid="false" units="px" inkscape:window-width="2560" inkscape:window-height="1377" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1"></sodipodi:namedview>
+  <metadata id="metadata175">
+    <rdf:rdf>
+      <cc:work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+        <dc:title></dc:title>
+      </cc:work>
+    </rdf:rdf>
+  </metadata>
+  <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1">
+    <g id="g208" transform="translate(9.2862662,24.25336)">
+      <g id="g1334" transform="matrix(1.3291528,0,0,1.3291528,-5.6522339,5.1709145)">
+        <g id="g1345" transform="matrix(0.96685782,0,0,0.96685782,0.56911971,-0.21840605)">
+          <g id="g1351">
+            <g id="g1362">
+              <g id="g1369">
+                <g id="g1376" transform="rotate(45,19.610501,-1.0720928)">
+                  <g style="stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" transform="translate(-1.0294259,0.41177024)" id="g1355">
+                    <rect rx="2.3349063" ry="2.296665" y="-0.25682181" x="22.768745" height="17.162868" width="4.6698127" id="rect333-0" style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none"></rect>
+                    <rect style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" id="rect333-0-8" width="4.6698132" height="17.16287" x="8.9644279" y="-0.25703603" ry="2.296665" rx="2.3349066"></rect>
+                  </g>
+                  <rect rx="2.3349066" ry="2.296665" y="-6.2214322" x="14.83716" height="17.16287" width="4.6698132" id="rect333-0-2" style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none"></rect>
+                  <circle transform="translate(-5.3541667e-7,0.39565646)" style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" id="path275" cx="17.172068" cy="-11.199311" r="10.266492"></circle>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(5,0,0,5,0,0)" style="filter: invert(100%)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200" viewBox="0 0 52.916666 52.916666" version="1.1" id="svg178" inkscape:version="1.0 (4035a4fb49, 2020-05-01)" sodipodi:docname="simple_star_trek_25mm.svg" inkscape:export-filename="C:\Users\jsn\Google Drive\Projects\simple_star_trek\simple_star_trek_exaggerated_proportions_45deg.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96">
+  <defs id="defs172"></defs>
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="4" inkscape:cx="67.866321" inkscape:cy="83.778521" inkscape:document-units="mm" inkscape:current-layer="g1369" inkscape:document-rotation="0" showgrid="false" units="px" inkscape:window-width="2560" inkscape:window-height="1377" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1"></sodipodi:namedview>
+  <metadata id="metadata175">
+    <rdf:rdf>
+      <cc:work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+        <dc:title></dc:title>
+      </cc:work>
+    </rdf:rdf>
+  </metadata>
+  <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1">
+    <g id="g208" transform="translate(9.2862662,24.25336)">
+      <g id="g1334" transform="matrix(1.3291528,0,0,1.3291528,-5.6522339,5.1709145)">
+        <g id="g1345" transform="matrix(0.96685782,0,0,0.96685782,0.56911971,-0.21840605)">
+          <g id="g1351">
+            <g id="g1362">
+              <g id="g1369">
+                <g id="g1376" transform="rotate(45,19.610501,-1.0720928)">
+                  <g style="stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" transform="translate(-1.0294259,0.41177024)" id="g1355">
+                    <rect rx="2.3349063" ry="2.296665" y="-0.25682181" x="22.768745" height="17.162868" width="4.6698127" id="rect333-0" style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none"></rect>
+                    <rect style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" id="rect333-0-8" width="4.6698132" height="17.16287" x="8.9644279" y="-0.25703603" ry="2.296665" rx="2.3349066"></rect>
+                  </g>
+                  <rect rx="2.3349066" ry="2.296665" y="-6.2214322" x="14.83716" height="17.16287" width="4.6698132" id="rect333-0-2" style="fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none"></rect>
+                  <circle transform="translate(-5.3541667e-7,0.39565646)" style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:1.95591;stroke-miterlimit:4;stroke-dasharray:none" id="path275" cx="17.172068" cy="-11.199311" r="10.266492"></circle>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg></svg></g></g></svg></g></svg>

@@ -11,6 +11,9 @@ const GRID_SETTINGS = {
   }
 };
 
+const RESIZE_DEBOUNCE_MS = 140;
+const MIN_SIZE_DELTA = 2;
+
 document.addEventListener("DOMContentLoaded", () => {
   const renderers = [setupRectGrid(), setupRadialGrid()].filter(Boolean);
   if (!renderers.length) {
@@ -20,16 +23,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const drawAll = () => renderers.forEach(draw => draw());
   drawAll();
 
-  let resizeHandle = null;
-  window.addEventListener("resize", () => {
-    if (resizeHandle) {
-      return;
+  let resizeTimer = null;
+  const queueResize = () => {
+    if (resizeTimer) {
+      clearTimeout(resizeTimer);
     }
-    resizeHandle = requestAnimationFrame(() => {
-      resizeHandle = null;
+    resizeTimer = setTimeout(() => {
+      resizeTimer = null;
       drawAll();
-    });
-  });
+    }, RESIZE_DEBOUNCE_MS);
+  };
+
+  window.addEventListener("resize", queueResize, { passive: true });
+  window.addEventListener("orientationchange", queueResize, { passive: true });
 });
 
 function setupRectGrid() {
@@ -46,7 +52,7 @@ function setupRectGrid() {
 
   return () => {
     const dims = resizeCanvasForHost(canvas, host);
-    if (!dims) {
+    if (!dims || dims.unchanged) {
       return;
     }
 
@@ -99,7 +105,7 @@ function setupRadialGrid() {
 
   return () => {
     const dims = resizeCanvasForHost(canvas, host);
-    if (!dims) {
+    if (!dims || dims.unchanged) {
       return;
     }
 
@@ -159,12 +165,25 @@ function resizeCanvasForHost(canvas, host) {
   }
 
   const dpr = window.devicePixelRatio || 1;
+  const lastWidth = canvas.__lastWidth || 0;
+  const lastHeight = canvas.__lastHeight || 0;
+  const lastDpr = canvas.__lastDpr || 0;
+  const widthChange = Math.abs(width - lastWidth);
+  const heightChange = Math.abs(height - lastHeight);
+
+  if (widthChange < MIN_SIZE_DELTA && heightChange < MIN_SIZE_DELTA && dpr === lastDpr) {
+    return { width: lastWidth || width, height: lastHeight || height, dpr, unchanged: true };
+  }
+
   canvas.width = width * dpr;
   canvas.height = height * dpr;
   canvas.style.width = `${width}px`;
   canvas.style.height = `${height}px`;
+  canvas.__lastWidth = width;
+  canvas.__lastHeight = height;
+  canvas.__lastDpr = dpr;
 
-  return { width, height, dpr };
+  return { width, height, dpr, unchanged: false };
 }
 
 function prepareContext(ctx, dims) {
@@ -265,4 +284,3 @@ function distributeCounts(spans, total) {
 
   return baseCounts;
 }
-const maxStep = i === spans.length - 1 ? segments - 1 : segmenmaxStep

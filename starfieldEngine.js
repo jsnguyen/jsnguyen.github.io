@@ -15,8 +15,8 @@ export const DEFAULT_CONFIG = {
     { offset: 0.5, alpha: 0.5 },
     { offset: 1, alpha: 1 }
   ],
-  maskInnerRadius: 200,
-  maskOuterRadius: 500,
+  maskInnerRadius: 100,
+  maskOuterRadius: 300,
   maskInnerAlpha: 1.0,
   maskOuterAlpha: 0.0,
   maskInnerScaleX: null,
@@ -86,7 +86,7 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
     draw() {
       const gradient = ctx.createLinearGradient(this.startX, this.startY, this.x, this.y);
       (config.fadeStops || []).forEach(stop => {
-        gradient.addColorStop(stop.offset, `hsla(${this.hue},95%,65%,${stop.alpha})`);
+        gradient.addColorStop(stop.offset, `hsla(${this.hue},99%,65%,${stop.alpha})`);
       });
       ctx.strokeStyle = gradient;
       ctx.lineWidth = this.lineWidth;
