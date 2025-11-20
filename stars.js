@@ -1,6 +1,8 @@
 import { DEFAULT_CONFIG, createStarfieldEngine } from "./starfieldEngine.js";
 
-const STAR_CONFIG = {...DEFAULT_CONFIG};
+const STAR_CONFIG = {
+  ...DEFAULT_CONFIG,
+};
 
 const STAR_SCRIPT_URL = import.meta.url;
 

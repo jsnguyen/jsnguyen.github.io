@@ -26,26 +26,31 @@
     <script type="module" src="https://pyscript.net/releases/2025.11.1/core.js"></script>
 
     <script type="module" src="../stars.js"></script>
+    <script type="module" src="../gridBackgrounds.js"></script>
 
     <script src="sesame.js"></script>
     <script src="targetplotter.js"></script>
 
 </head>
-<body>
+<body class="targetplotter-page">
 
+    <div id="grid-rect"></div>
+    <div id="grid-radial"></div>
     <canvas id="warp-canvas"></canvas>
-
-    <header>
-        <h2><a href="../index.html">jayke.io</a></h2>
-    </header>
 
     <main>
 
         <div class="pyscript-card glass-card">
+
+            <a href="../index.html" class="back-button" aria-label="Back to home">
+                <span>&larr;</span>
+            </a>
+
             <div class="pyscript-card-header">
                 <h2>Target Plotter</h2>
                 <p> Note: the visibility is according to the limits on the Keck II telescope. </p>
             </div>
+
             <div class="display-container loading">
                 <div id="loading-placeholder">
                     <div class="loading-spinner-light"></div>
@@ -115,10 +120,6 @@
         </div>
 
     </main>
-
-    <footer>
-        2025 jayke.io
-    </footer>
 
 </body>
 </html>
