@@ -66,8 +66,8 @@ header h1 {
 
 .intro-text {
     width: 80%;
-    margin: 0 0 0 20px;
     text-align: left;
+    margin-left: 20px;
 }
 
 .icon {
@@ -322,6 +322,7 @@ input[type="text"] {
 .social-media-icon {
     width: 32px;
     height: 32px;
+    margin: 5px;
 }
 
 .social-media-icon:hover {
@@ -333,7 +334,6 @@ input[type="text"] {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 12px;
     margin-top: 8px;
 }
 
@@ -657,13 +657,19 @@ button:focus {
     .intro-text {
         width: 100%;
         text-align: center;
+        margin-left: 0;
     }
     
     .icon {
-        width: 30%;
+        width: 40%;
         justify-items: center;
         justify-content: center;
         text-align: center;
+    }
+
+    .social-media-icon{
+        width: 40px;
+        height: 40px;
     }
 
     .icon-text{
