@@ -41,6 +41,20 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
   let maskDpr = 1;
   let maskNeedsUpdate = true;
 
+  const renderFrame = (dt = 0) => {
+    if (config.backgroundFillStyle) {
+      ctx.fillStyle = config.backgroundFillStyle;
+      ctx.fillRect(0, 0, width, height);
+    } else {
+      ctx.clearRect(0, 0, width, height);
+    }
+    for (const star of stars) {
+      star.update(dt);
+      star.draw();
+    }
+    drawCenterMask();
+  };
+
   class Star {
     constructor(seedWarm = false) {
       this.angle = 0;
@@ -104,6 +118,34 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
     }
   }
 
+  function syncStarCount() {
+    const desired = Math.max(Math.floor(config.starCount || 0), 0);
+    if (stars.length < desired) {
+      const toAdd = desired - stars.length;
+      for (let i = 0; i < toAdd; i += 1) {
+        stars.push(new Star(true));
+      }
+    } else if (stars.length > desired) {
+      stars.length = desired;
+    }
+  }
+
+  function rescaleStars(prevMaxTravel) {
+    if (!(prevMaxTravel > 0)) {
+      stars.forEach(star => star.updatePosition());
+      return;
+    }
+    const travelScale = maxTravel / prevMaxTravel;
+    for (const star of stars) {
+      star.dist *= travelScale;
+      if (star.dist > maxTravel) {
+        star.reset(true);
+      } else {
+        star.updatePosition();
+      }
+    }
+  }
+
   function drawCenterMask() {
     if (!maskCanvas || !maskCtx || width <= 0 || height <= 0) {
       return;
@@ -132,6 +174,7 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
   return {
     config,
     resize(newWidth, newHeight, dpr = 1) {
+      const prevMaxTravel = maxTravel;
       width = Math.max(newWidth, 1);
       height = Math.max(newHeight, 1);
       cx = width / 2;
@@ -146,22 +189,18 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-      initStars();
       ensureMaskResources(width, height, dpr);
-    },
-    frame(dt) {
-      if (config.backgroundFillStyle) {
-        ctx.fillStyle = config.backgroundFillStyle;
-        ctx.fillRect(0, 0, width, height);
+
+      if (!stars.length) {
+        initStars();
       } else {
-        ctx.clearRect(0, 0, width, height);
+        syncStarCount();
+        rescaleStars(prevMaxTravel);
       }
-      for (const star of stars) {
-        star.update(dt);
-        star.draw();
-      }
-      drawCenterMask();
-    }
+
+      renderFrame(0); // Draw immediately to avoid visible flashes after resize
+    },
+    frame: renderFrame
   };
 
   function ensureMaskResources(canvasWidth, canvasHeight, dpr) {
