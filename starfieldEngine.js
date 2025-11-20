@@ -1,3 +1,5 @@
+const clamp01 = value => Math.min(Math.max(value, 0), 1);
+
 export const DEFAULT_CONFIG = {
   starCount: 240,
   baseSpeed: 0.03,
@@ -7,14 +9,16 @@ export const DEFAULT_CONFIG = {
   maxLineWidth: 10,
   minLineWidth: 1,
   resetPadding: 80,
+  backgroundFillStyle: null,
   fadeStops: [
     { offset: 0, alpha: 0 },
     { offset: 0.5, alpha: 0.5 },
     { offset: 1, alpha: 1 }
   ],
   maskInnerRadius: 300,
-  maskOuterRadius: 800,
-  maskOuterAlpha: 0.1
+  maskOuterRadius: 500,
+  maskInnerAlpha: 1.0,
+  maskOuterAlpha: 0.0
 };
 
 export function createStarfieldEngine(ctx, customConfig = {}) {
@@ -93,15 +97,26 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
   }
 
   function drawCenterMask() {
-    const inner = Math.min(config.maskInnerRadius, maxTravel);
-    const outerRaw = Math.max(config.maskOuterRadius, inner + 10);
-    const outer = Math.min(outerRaw, maxTravel + config.resetPadding);
-    const grad = ctx.createRadialGradient(cx, cy, inner, cx, cy, outer);
-    grad.addColorStop(0, "rgba(0,0,0,1)");
-    grad.addColorStop(1, `rgba(0,0,0,${config.maskOuterAlpha})`);
+    const innerRadius = Math.max(0, Math.min(config.maskInnerRadius, maxTravel));
+    const outerRaw = Math.max(config.maskOuterRadius, innerRadius + 10);
+    const outerRadius = Math.min(outerRaw, maxTravel + config.resetPadding);
+    if (outerRadius <= 0) {
+      return;
+    }
+
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, outerRadius);
+    const innerAlphaRaw = typeof config.maskInnerAlpha === "number" ? config.maskInnerAlpha : 1;
+    const outerAlphaRaw = typeof config.maskOuterAlpha === "number" ? config.maskOuterAlpha : 0;
+    const innerAlpha = clamp01(innerAlphaRaw);
+    const outerAlpha = clamp01(outerAlphaRaw);
+    const innerStop = clamp01(outerRadius ? innerRadius / outerRadius : 0);
+
+    grad.addColorStop(0, `rgba(0,0,0,${innerAlpha})`);
+    grad.addColorStop(innerStop, `rgba(0,0,0,${innerAlpha})`);
+    grad.addColorStop(1, `rgba(0,0,0,${outerAlpha})`);
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(cx, cy, outer, 0, Math.PI * 2);
+    ctx.arc(cx, cy, outerRadius, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -125,8 +140,12 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
       initStars();
     },
     frame(dt) {
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, width, height);
+      if (config.backgroundFillStyle) {
+        ctx.fillStyle = config.backgroundFillStyle;
+        ctx.fillRect(0, 0, width, height);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+      }
       for (const star of stars) {
         star.update(dt);
         star.draw();
