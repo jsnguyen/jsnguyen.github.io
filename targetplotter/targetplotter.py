@@ -23,6 +23,9 @@ from astropy.utils.data import Conf
 
 Conf.allow_internet = False
 
+from astropy.utils.iers import conf
+conf.auto_max_age = None
+
 import astropy.units as u
 from astropy.coordinates import AltAz, SkyCoord, EarthLocation
 
