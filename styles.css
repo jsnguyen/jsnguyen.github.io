@@ -111,8 +111,10 @@ footer {
     align-items: center;
     padding: 20px;
     width: 100%;
-    max-width: 900px; /* Adjust this value to control the content width */
-    margin: 0 auto;   /* Automatically center the container */
+    max-width: 900px;
+    /* Adjust this value to control the content width */
+    margin: 0 auto;
+    /* Automatically center the container */
 }
 
 header {
@@ -121,13 +123,16 @@ header {
     align-items: center;
     padding: 20px;
     width: 100%;
-    max-width: 900px; /* Adjust this value to control the content width */
-    margin: 0 auto;   /* Automatically center the container */
+    max-width: 900px;
+    /* Adjust this value to control the content width */
+    margin: 0 auto;
+    /* Automatically center the container */
 }
 
 
 .left-item {
-    margin-right: auto; /* This pushes the remaining items to the right */
+    margin-right: auto;
+    /* This pushes the remaining items to the right */
     color: white;
     text-decoration: none;
 }
@@ -190,7 +195,7 @@ header {
     transform: scale(1.01);
 }
 
-.code-project-card-header{
+.code-project-card-header {
     display: flex;
     flex-direction: row;
 }
@@ -206,29 +211,35 @@ header {
     width: 100%;
 }
 
-.project-text{
+.project-text {
     display: inline-block;
     width: 80%;
 }
 
-.project-card img{
+.project-card img {
     display: inline-block;
     width: 20%;
     border-radius: 8px;
-    height: auto; /* Maintains the aspect ratio of the image */
+    height: auto;
+    /* Maintains the aspect ratio of the image */
     margin: 10px;
 }
 
-.project-card video{
+.project-card video {
     display: inline-block;
     width: 20%;
-    height: auto; /* Maintains the aspect ratio of the image */
+    height: auto;
+    /* Maintains the aspect ratio of the image */
     border-radius: 8px;
     margin: 10px;
 }
 
-.paragraph-text p{
+.paragraph-text p {
     margin-bottom: 20px;
+}
+
+section {
+    width: 100%;
 }
 
 .section-header {
@@ -237,7 +248,7 @@ header {
     margin-bottom: 20px;
 }
 
-.pyscript-card{
+.pyscript-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -295,7 +306,7 @@ input[type="text"] {
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border:#D2D2D2 solid 5px;
+    border: #D2D2D2 solid 5px;
     overflow: hidden;
     background-color: white;
     padding: 20px;
@@ -341,6 +352,7 @@ input[type="text"] {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -397,8 +409,13 @@ input[type="text"] {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .input-container {
@@ -436,7 +453,8 @@ input[type="text"] {
     margin: 0;
 }
 
-.input-group input[type="text"], .input-group input[type="date"] {
+.input-group input[type="text"],
+.input-group input[type="date"] {
     flex: 1;
     width: auto;
     min-width: 110px;
@@ -478,7 +496,8 @@ input[type="text"] {
     white-space: nowrap;
 }
 
-.input-row input[type="text"], .input-row input[type="date"] {
+.input-row input[type="text"],
+.input-row input[type="date"] {
     width: 250px;
     margin: 0;
 }
@@ -623,6 +642,7 @@ button:focus {
         opacity: 0.6;
         transform: scale(0.95);
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
@@ -644,22 +664,22 @@ button:focus {
         height: 280px;
         padding: 10px;
     }
-    
+
     .input-container {
         width: 100%;
     }
-    
+
     .intro {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .intro-text {
         width: 100%;
         text-align: center;
         margin-left: 0;
     }
-    
+
     .icon {
         width: 40%;
         justify-items: center;
@@ -667,67 +687,64 @@ button:focus {
         text-align: center;
     }
 
-    .social-media-icon{
+    .social-media-icon {
         width: 40px;
         height: 40px;
     }
 
-    .icon-text{
+    .icon-text {
         font-size: 8px;
         margin: 0;
     }
-    
+
     .plot-bottom-bar {
         height: 40px;
         gap: 8px;
     }
-    
+
     .plot-bottom-bar button {
         padding: 5px 10px;
         min-width: 70px;
     }
 }
+
 .glass-card {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 0px 0px rgba(255, 255, 255, 0);
-  position: relative;
-  overflow: hidden;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 0px 0px rgba(255, 255, 255, 0);
+    position: relative;
+    overflow: hidden;
 }
 
 .glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.8),
-    transparent
-  );
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent);
 }
 
 .glass-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.8),
-    transparent,
-    rgba(255, 255, 255, 0.3)
-  );
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.8),
+            transparent,
+            rgba(255, 255, 255, 0.3));
 }
