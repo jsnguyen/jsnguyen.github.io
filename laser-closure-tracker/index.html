@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laser Closure Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <div>
+          <p class="eyebrow">Laser operations</p>
+          <h1>Closure schedule</h1>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="true">Light mode</button>
+      </header>
+
+      <laser-animation aria-label="Animated sodium laser from the Keck II telescope"></laser-animation>
+
+      <section class="workspace" aria-label="Schedule controls">
+        <div class="panel controls">
+          <div class="upload-box" id="dropZone">
+            <input id="fileInput" type="file" accept=".txt,text/plain">
+            <button class="primary" id="chooseFile" type="button">Choose file</button>
+            <div>
+              <strong id="fileName">No file loaded</strong>
+              <span id="fileMeta">Upload a clearing-house text file.</span>
+            </div>
+          </div>
+
+          <label>
+            <span>Target</span>
+            <select id="targetSelect" disabled>
+              <option>No targets loaded</option>
+            </select>
+          </label>
+
+          <div class="field-grid">
+            <label>
+              <span>UT schedule date</span>
+              <input id="scheduleDate" type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" disabled>
+            </label>
+            <label>
+              <span>Displayed time zone</span>
+              <select id="zoneSelect">
+                <option>Detecting browser time zone...</option>
+              </select>
+            </label>
+          </div>
+
+        </div>
+
+        <section class="summary-grid" aria-label="Closure summary">
+          <article class="panel time-card" aria-live="polite">
+            <span class="label">Current time</span>
+            <strong id="nowDisplay">--</strong>
+            <p id="nowDate">--</p>
+          </article>
+
+          <article class="panel next-card">
+            <span class="label" id="nextCountdownLabel">Next closure in</span>
+            <strong id="nextCountdown">--</strong>
+            <p id="nextDetail">Upload a file and select a target.</p>
+          </article>
+
+          <article class="panel">
+            <span class="label">Closure starts</span>
+            <strong id="nextValue">--</strong>
+            <p id="nextStartDetail">--</p>
+          </article>
+
+          <article class="panel">
+            <span class="label">Closure duration</span>
+            <strong id="durationValue">--</strong>
+            <p id="durationDetail">--</p>
+          </article>
+        </section>
+      </section>
+
+      <section class="panel timeline-panel" aria-label="Closure timeline">
+        <div class="section-head">
+          <div>
+            <span class="label">Selected target</span>
+            <h2 id="targetName">No target selected</h2>
+          </div>
+          <p id="targetDetail">--</p>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="panel table-panel" aria-label="Closure table">
+        <div class="section-head">
+          <div>
+            <span class="label">Closure windows</span>
+            <h2>All closures for target</h2>
+          </div>
+          <p id="tableMeta">--</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Duration</th>
+                <th scope="col">UTC start</th>
+                <th scope="col">UTC end</th>
+              </tr>
+            </thead>
+            <tbody id="closureRows">
+              <tr>
+                <td colspan="6">Upload a file to view closures.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="laser-animation.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
