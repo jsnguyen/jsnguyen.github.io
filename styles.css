@@ -6,7 +6,6 @@
 
 :root {
     --static-background-fill: #19172e;
-    --frame-color: rgba(254, 245, 198, 0.2);
 }
 
 body {
@@ -145,30 +144,6 @@ header {
     left: 0;
     z-index: -1;
     background: transparent;
-}
-
-#grid-radial {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    background: transparent;
-    pointer-events: none;
-
-}
-
-#grid-rect {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -3;
-    background: transparent;
-    pointer-events: none;
-
 }
 
 .card {
