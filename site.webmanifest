@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "jayke.io",
+  "short_name": "jayke.io",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

@@ -15,7 +15,6 @@ body {
     font-style: normal;
     line-height: 1.6;
     color: white;
-    padding: 20px;
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px;
@@ -35,16 +34,6 @@ a:hover {
     color: lightgrey;
     text-decoration: none;
     transition: color 0.3s ease;
-}
-
-header h1 {
-    font-family: "Stack Sans Headline";
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .intro {
@@ -114,26 +103,6 @@ footer {
     /* Adjust this value to control the content width */
     margin: 0 auto;
     /* Automatically center the container */
-}
-
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    width: 100%;
-    max-width: 900px;
-    /* Adjust this value to control the content width */
-    margin: 0 auto;
-    /* Automatically center the container */
-}
-
-
-.left-item {
-    margin-right: auto;
-    /* This pushes the remaining items to the right */
-    color: white;
-    text-decoration: none;
 }
 
 #warp-canvas {
@@ -229,7 +198,6 @@ section {
     align-items: center;
     justify-content: center;
     width: 100%;
-    border-radius: 8px;
     padding: 10px;
     box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.025);
     border: 2px solid rgba(255, 255, 255, 0.4);
@@ -353,16 +321,6 @@ input[type="text"] {
     font-style: italic;
 }
 
-.loading-spinner {
-    border: 3px solid rgba(210, 210, 210, 0.3);
-    border-top: 3px solid #D2D2D2;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 10px auto;
-}
-
 .loading-spinner-dark {
     border: 3px solid rgba(0, 0, 0, 0.2);
     border-top: 3px solid #000000;
@@ -400,16 +358,6 @@ input[type="text"] {
     justify-content: center;
     width: 80%;
     margin-top: 6px;
-}
-
-.input-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 6px 0;
-    flex-wrap: wrap;
 }
 
 .input-group {
@@ -471,16 +419,6 @@ input[type="text"] {
     white-space: nowrap;
 }
 
-.input-row input[type="text"],
-.input-row input[type="date"] {
-    width: 250px;
-    margin: 0;
-}
-
-.input-row button {
-    margin-top: 5px;
-}
-
 button {
     font-family: "Stack Sans Headline";
     padding: 8px;
@@ -504,7 +442,6 @@ button:disabled {
 }
 
 button:hover:not(:disabled) {
-    background-color: #ffffff;
     background-color: #45a049;
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(210, 210, 210, 0.3);
@@ -536,10 +473,6 @@ button:focus {
     padding: 8px 0 8px 0;
 }
 
-.input-row.with-header {
-    margin-top: 0;
-}
-
 .pyscript-card-header {
     display: flex;
     flex-direction: column;
@@ -547,21 +480,6 @@ button:focus {
     justify-content: center;
     width: 100%;
     margin-bottom: 20px;
-}
-
-.intro-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.intro-link:hover {
-    text-decoration: none;
-    color: inherit;
-}
-
-.intro-link:visited {
-    color: inherit;
 }
 
 /* Bottom bar for plot controls */
@@ -626,11 +544,6 @@ button:focus {
 
 #save_button:not(:disabled) {
     animation: saveButtonEnable 0.3s ease-out;
-}
-
-.display-container.loading {
-    border: none;
-    background-color: transparent;
 }
 
 @media (max-width: 600px) {

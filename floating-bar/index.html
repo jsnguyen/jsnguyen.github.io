@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#19172e">
+    <meta name="description" content="A floating glass navigation prototype for jayke.io.">
+    <title>Floating navigation · jayke.io</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="card-deck.css">
+    <link rel="stylesheet" href="floating-nav.css">
+    <script src="card-deck.js" defer></script>
+    <script src="floating-nav.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="demo-header">
+        <a class="wordmark" href="../">jayke.io<span aria-hidden="true">✳</span></a>
+        <span class="prototype-label"><span class="status-dot" aria-hidden="true"></span>Navigation prototype</span>
+    </header>
+
+    <main id="content">
+        <section id="intro" class="demo-section intro" role="tabpanel" aria-labelledby="tab-intro" tabindex="0">
+            <div class="section-label"><span>01 / HOME</span><span class="fine-line"></span></div>
+            <div class="intro-content">
+                <p class="eyebrow">ASTROPHYSICS · INSTRUMENTATION · CODE</p>
+                <h1>Hi! I'm Jayke<br><span>Samson Nguyen.</span></h1>
+                <p class="intro-description">I'm an astrophysicist working on high-contrast imaging with adaptive optics. I build instruments and tools to see a little further.</p>
+                <a class="text-link" href="#research">Explore my research <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="orbit" aria-hidden="true"><div class="orbit-ring"></div><div class="orbit-ring orbit-ring-inner"></div><span class="orbit-star"></span></div>
+            <div class="scroll-note">Explore using the tabs below.</div>
+        </section>
+
+        <section id="apps" class="demo-section" role="tabpanel" aria-labelledby="tab-apps" tabindex="0" hidden>
+            <div class="section-label"><span>02 / APPS</span><span class="fine-line"></span></div>
+            <p class="eyebrow">SMALL TOOLS, USEFUL THINGS</p>
+            <h2>From the toolbox.</h2>
+            <p class="section-description">A few things I've built along the way.</p>
+            <div class="demo-grid">
+                <a class="demo-card" href="../targetplotter/">
+                    <span class="card-icon" aria-hidden="true">⌖</span>
+                    <h3>Target Plotter <span aria-hidden="true">↗</span></h3>
+                    <p>Elevation and altitude plots of celestial objects, with Python running right in your browser.</p>
+                    <span class="card-footer">OBSERVING TOOLS</span>
+                </a>
+                <a class="demo-card" href="https://github.com/jsnguyen/dyre">
+                    <span class="card-icon" aria-hidden="true">⌁</span>
+                    <h3>Dyre <span aria-hidden="true">↗</span></h3>
+                    <p>A tool for dynamically displaying plots locally or remotely.</p>
+                    <span class="card-footer">CODE & VISUALIZATION</span>
+                </a>
+            </div>
+        </section>
+
+        <section id="research" class="demo-section" role="tabpanel" aria-labelledby="tab-research" tabindex="0" hidden>
+            <div class="section-label"><span>03 / RESEARCH</span><span class="fine-line"></span></div>
+            <p class="eyebrow">A CLOSER LOOK AT DISTANT WORLDS</p>
+            <h2>Finding the faint things.</h2>
+            <p class="section-description">From astronomical instrumentation to the techniques that bring the data into focus.</p>
+            <div class="research-list">
+                <article>
+                    <span class="research-number">01</span>
+                    <div><h3>Direct imaging of exoplanets</h3><p>Looking for older, colder exoplanets in the mid-infrared, beyond 4.7 µm.</p></div>
+                    <span class="research-mark" aria-hidden="true">✳</span>
+                </article>
+                <article>
+                    <span class="research-number">02</span>
+                    <div><h3>Adaptive optics</h3><p>Image sharpening for Keck and wavefront sensing for the Gemini Planet Imager 2.0.</p></div>
+                    <span class="research-mark" aria-hidden="true">◎</span>
+                </article>
+            </div>
+            <a class="text-link" href="../#projects">More about my research <span aria-hidden="true">↗</span></a>
+        </section>
+
+        <section id="publications" class="demo-section publications" role="tabpanel" aria-labelledby="tab-publications" tabindex="0" hidden>
+            <div class="section-label"><span>04 / PAPERS</span><span class="fine-line"></span></div>
+            <p class="eyebrow">THE WORK, WRITTEN DOWN</p>
+            <h2>Notes from the field.</h2>
+            <p class="section-description">Publications on exoplanets, adaptive optics, and astronomical instrumentation.</p>
+            <a class="publication-link demo-card" href="../#publications">
+                <div><span class="card-footer">PUBLICATIONS</span><h3>Find my papers on SciXplorer</h3><p>First and n-th author publications.</p></div>
+                <span class="publication-arrow" aria-hidden="true">↗</span>
+            </a>
+            <footer class="demo-footer"><span>jayke.io</span><span>Floating navigation / 01</span></footer>
+        </section>
+    </main>
+
+    <!-- The navigation is standalone: its styling and behavior live in floating-nav.css and floating-nav.js. -->
+    <nav class="floating-nav" aria-label="Primary">
+        <div class="floating-nav__track" role="tablist" aria-label="Content">
+            <span class="floating-nav__indicator" aria-hidden="true"></span>
+            <a id="tab-intro" class="floating-nav__link" href="#intro" role="tab" aria-controls="intro" aria-selected="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v9a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z"/><path d="M9 21v-8h6v8"/></svg>
+                <span>Home</span>
+            </a>
+            <a id="tab-apps" class="floating-nav__link" href="#apps" role="tab" aria-controls="apps" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="6" height="6" rx="1.5"/><rect x="14.5" y="3.5" width="6" height="6" rx="1.5"/><rect x="3.5" y="14.5" width="6" height="6" rx="1.5"/><rect x="14.5" y="14.5" width="6" height="6" rx="1.5"/></svg>
+                <span>Apps</span>
+            </a>
+            <a id="tab-research" class="floating-nav__link" href="#research" role="tab" aria-controls="research" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><ellipse cx="12" cy="12" rx="11" ry="3.5" transform="rotate(-35 12 12)"/><path d="M19 3v3m-1.5-1.5h3"/></svg>
+                <span>Research</span>
+            </a>
+            <a id="tab-publications" class="floating-nav__link" href="#publications" role="tab" aria-controls="publications" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8m-8 4h5"/></svg>
+                <span>Papers</span>
+            </a>
+        </div>
+    </nav>
+</body>
+</html>

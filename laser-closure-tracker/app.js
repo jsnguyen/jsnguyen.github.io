@@ -256,14 +256,9 @@
       closures,
       active,
       next,
-      activeClosure: active,
-      nextClosure: next,
       startMs: opens[0]?.startMs,
       endMs: lastEnd,
-      scheduleStartMs: opens[0]?.startMs,
-      scheduleEndMs: lastEnd,
       totalSec,
-      totalClosureSec: totalSec,
     };
   }
 

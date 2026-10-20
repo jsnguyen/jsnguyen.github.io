@@ -1,0 +1,4 @@
+/* Optional card transition. Removing this file and card-deck.js restores instant panel swaps. */
+.card-deck__incoming {
+    will-change: transform;
+}

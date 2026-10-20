@@ -1,15 +1,11 @@
 from pyscript import when, display
 from pyscript import document
 
-from pyscript import display
-
 import asyncio
 
 import warnings
 from astropy.utils.exceptions import AstropyWarning
 warnings.filterwarnings('ignore', category=AstropyWarning, append=True)
-
-from pathlib import Path
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -120,12 +116,6 @@ def keck_ii_visibility(alt, az):
         else:
             return 0
 
-def moon_sep_visiblity(moon_sep):
-    if moon_sep < 5:
-        return False
-    else:
-        return True
-
 def check_visibility(alt, az):
     if alt < 0:
         return 0
@@ -176,9 +166,6 @@ def make_target_plot(location, ra, dec, date, name=None):
 
     object_skycoord = SkyCoord(ra,dec, unit=(u.hourangle, u.deg))
     altaz_target = object_skycoord.transform_to(frame)
-
-    save_path = Path('targets')
-    save_path.mkdir(exist_ok=True)
 
     twilight = altaz_sun.alt < 0 * u.deg
     night = altaz_sun.alt < -12 * u.deg
