@@ -1,0 +1,282 @@
+import {computeNight} from './observing.js';
+import {renderPlot} from './plot.js';
+import {createTargetHistory} from './history.js';
+
+const targetName = document.querySelector('#target_name_input');
+const raInput = document.querySelector('#ra_input');
+const decInput = document.querySelector('#dec_input');
+const dateInput = document.querySelector('#date_input');
+const dateToday = document.querySelector('#date_today');
+const axisMode = document.querySelector('#axis_mode');
+const showDates = document.querySelector('#show_dates');
+const nowToggle = document.querySelector('#show_current_time');
+const nowStatus = document.querySelector('#now_status');
+const timeZoneInput = document.querySelector('#timezone_input');
+const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+timeZoneInput.querySelector('[value="auto"]').textContent = 'Browser (' + browserZone + ')';
+const latInput = document.querySelector('#lat_input');
+const lonInput = document.querySelector('#lon_input');
+const plotButton = document.querySelector('#plot_button');
+const saveButton = document.querySelector('#save_button');
+const chart = document.querySelector('#chart');
+const status = document.querySelector('#status');
+const inputs = [targetName, raInput, decInput, dateInput, latInput, lonInput];
+
+function parseAngle(value, isRA) {
+    const limit = isRA ? 24 : 90;
+    const error = isRA ? 'Enter RA in hours, from 0 to 24 (HH MM SS).' : 'Enter Dec in degrees, from −90 to +90 (DD MM SS).';
+    const input = value.trim().replace(/^−/, '-');
+    const unitForm = input.match(/^([+-]?[\d.]+)\s*([hd°])(?:\s*([\d.]+)\s*[m′'](?:\s*([\d.]+)\s*[s″"])?)?$/i);
+    let parts;
+    if (unitForm) {
+        if ((unitForm[2].toLowerCase() === 'h') !== isRA) throw new Error(error);
+        parts = [unitForm[1], unitForm[3], unitForm[4]].filter(part => part !== undefined);
+    } else {
+        parts = input.includes(':') ? input.split(/\s*:\s*/) : input.split(/\s+/);
+    }
+    if (parts.length > 3 || !/^[+-]?\d+(\.\d+)?$/.test(parts[0])) throw new Error(error);
+    if (parts.slice(1).some(part => !/^\d+(\.\d+)?$/.test(part) || Number(part) >= 60)) throw new Error(error);
+    if (parts.slice(0, -1).some(part => part.includes('.'))) throw new Error(error);
+
+    const [whole, minutes = 0, seconds = 0] = parts.map(Number);
+    const angle = Math.abs(whole) + minutes / 60 + seconds / 3600;
+    if (angle > limit || (isRA && input.startsWith('-'))) throw new Error(error);
+    if (isRA) return angle % 24;
+    return input.startsWith('-') ? -angle : angle;
+}
+
+function formatAngle(value, isRA) {
+    let tenths = Math.round(Math.abs(value) * 36000);
+    if (isRA) tenths %= 24 * 36000;
+    const whole = String(Math.floor(tenths / 36000)).padStart(2, '0');
+    const minutes = String(Math.floor(tenths / 600) % 60).padStart(2, '0');
+    const seconds = ((tenths % 600) / 10).toFixed(1).padStart(4, '0');
+    const sign = isRA ? '' : (value < 0 ? '-' : '+');
+    return `${sign}${whole} ${minutes} ${seconds}`;
+}
+
+function siteDegrees(input, label, limit) {
+    const value = input.value.trim();
+    const degrees = Number(value);
+    if (!value || !Number.isFinite(degrees) || Math.abs(degrees) > limit) throw new Error(`Enter ${label} in degrees, from −${limit} to +${limit}.`);
+    return degrees;
+}
+
+const defaultTarget = {name: targetName.defaultValue, ra: raInput.defaultValue, dec: decInput.defaultValue};
+const coordinateCache = new Map([[defaultTarget.name, defaultTarget]]);
+let identified = defaultTarget;
+let lookup = null;
+let lookupTimer;
+let plotted = null;
+let dateStatusTimer;
+const targetHistory = createTargetHistory(document.querySelector('#target_history'), ({name}) => {
+    targetName.value = name;
+    changeTargetName(true);
+});
+
+function displayTimeZone() {
+    return timeZoneInput.value === 'auto' ? browserZone : timeZoneInput.value;
+}
+
+function updateDateStatus() {
+    clearTimeout(dateStatusTimer);
+    const instant = Date.now();
+    const now = Math.floor(instant / 1000);
+    const today = new Date(instant).toISOString().slice(0, 10);
+    const inPlot = plotted && now >= plotted.start && now <= plotted.end;
+    dateToday.hidden = dateInput.value !== today;
+    if (plotted) plotted.view.setToday(plotted.date === today);
+    // Preserve the notice's space while the plot is being replaced.
+    nowStatus.style.visibility = plotted ? '' : 'hidden';
+    if (plotted || !nowToggle.checked) nowStatus.textContent = nowToggle.checked && !inPlot ? 'Current time is outside the plotted hours.' : '';
+
+    // Update at UTC midnight or when the current time enters or leaves this plot.
+    const boundaries = [(Math.floor(now / 86400) + 1) * 86400];
+    if (plotted) boundaries.push(plotted.start, plotted.end + 1);
+    const next = Math.min(...boundaries.filter(time => time > now));
+    dateStatusTimer = setTimeout(updateDateStatus, next * 1000 - instant);
+}
+
+function discardPlot() {
+    if (plotted) chart.style.minHeight = chart.getBoundingClientRect().height + 'px';
+    plotted?.view.destroy();
+    plotted = null;
+    saveButton.disabled = true;
+    updateDateStatus();
+}
+
+function settlePlotHeight(view, anchor, previousTop) {
+    // uPlot sizes its canvases after construction. Keep the controls steady until then.
+    requestAnimationFrame(() => {
+        if (plotted?.view !== view || !chart.style.minHeight) return;
+        chart.style.minHeight = '';
+        if (previousTop > window.innerHeight) return;
+        const shift = anchor.getBoundingClientRect().top - previousTop;
+        if (Math.abs(shift) < 1) return;
+        window.scrollBy({top: shift, behavior: 'instant'});
+        // At the top of the page the browser cannot scroll up to absorb a shorter plot.
+        const shortfall = previousTop - anchor.getBoundingClientRect().top;
+        if (shortfall > 1) chart.style.minHeight = (chart.getBoundingClientRect().height + shortfall) + 'px';
+    });
+}
+
+function makePlot(rememberTarget = true) {
+    const name = targetName.value.trim();
+    if (name && (name !== identified?.name || raInput.value !== identified.ra || decInput.value !== identified.dec)) {
+        if (lookup?.name !== name) changeTargetName(true);
+        return;
+    }
+    const anchor = document.activeElement?.closest('.input-container') ? targetName : plotButton;
+    const previousTop = anchor.getBoundingClientRect().top;
+    discardPlot();
+    try {
+        const ra = parseAngle(raInput.value, true);
+        const dec = parseAngle(decInput.value, false);
+        const date = dateInput.value;
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !dateInput.validity.valid) throw new Error('Enter an observing date.');
+        const lat = siteDegrees(latInput, 'latitude', 90);
+        const lon = siteDegrees(lonInput, 'longitude', 180);
+
+        const title = name || `RA ${formatAngle(ra, true)}, Dec ${formatAngle(dec, false)}`;
+        const base = name.replace(/\s+/g, '_').replace(/[<>:"/\\|?*]/g, '') || 'target';
+        const night = computeNight(ra, dec, date, lat, lon);
+        status.textContent = '';
+        const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode.value, showDates: showDates.checked});
+        plotted = {view, date, start: Math.ceil(night.samples[0].time), end: Math.floor(night.samples.at(-1).time), inputs: inputs.map(input => input.value.trim()), filename: `${base}_${date}.png`};
+        if (name && rememberTarget) targetHistory.remember(name, identified.ra, identified.dec, true);
+        saveButton.disabled = false;
+        updateDateStatus();
+        settlePlotHeight(view, anchor, previousTop);
+    } catch (error) {
+        discardPlot();
+        chart.replaceChildren(status);
+        status.textContent = error.message;
+    }
+}
+
+function resolverCoordinates(ra, dec) {
+    if (!ra?.trim() || !dec?.trim()) return null;
+    const raHours = Number(ra) / 15;
+    const decDegrees = Number(dec);
+    if (!Number.isFinite(raHours) || !Number.isFinite(decDegrees) || raHours < 0 || raHours >= 24 || Math.abs(decDegrees) > 90) return null;
+    return {ra: raHours, dec: decDegrees};
+}
+
+async function fetchCoordinates(name, signal) {
+    const query = '~A?' + encodeURIComponent(name);
+    const mirror = 'https://vizier.cfa.harvard.edu/viz-bin/nph-sesame/';
+    const cds = 'https://cds.unistra.fr/cgi-bin/nph-sesame/';
+    for (const [endpoint, format] of [[mirror, '-ox/'], [mirror, ''], [cds, '']]) {
+        try {
+            const attempt = AbortSignal.any([signal, AbortSignal.timeout(5000)]);
+            const response = await fetch(endpoint + format + query, {signal: attempt});
+            if (!response.ok) throw new Error('The target resolver is unavailable.');
+            const body = await response.text();
+            if (format) {
+                const xml = new DOMParser().parseFromString(body, 'application/xml');
+                for (const resolver of xml.querySelectorAll('Resolver')) {
+                    const coords = resolverCoordinates(resolver.querySelector('jradeg')?.textContent, resolver.querySelector('jdedeg')?.textContent);
+                    if (coords) return coords;
+                }
+            } else {
+                for (const line of body.split('\n')) {
+                    const match = /^%J\s+(\S+)\s+(\S+)/.exec(line);
+                    const coords = match && resolverCoordinates(match[1], match[2]);
+                    if (coords) return coords;
+                }
+            }
+        } catch (error) {
+            if (signal.aborted) throw error;
+        }
+    }
+    throw new Error('Target name not found.');
+}
+
+function cancelLookup() {
+    clearTimeout(lookupTimer);
+    lookup?.controller.abort();
+    lookup = null;
+}
+
+async function resolveTarget() {
+    clearTimeout(lookupTimer);
+    const name = targetName.value.trim();
+    if (!name || lookup?.name === name) return;
+    cancelLookup();
+    const request = {name, controller: new AbortController()};
+    lookup = request;
+    status.textContent = `Resolving ${name}…`;
+    try {
+        const saved = targetHistory.find(name);
+        let target = coordinateCache.get(name) || (saved?.verified ? saved : null);
+        if (!target) {
+            const coords = await fetchCoordinates(name, request.controller.signal);
+            target = {name, ra: formatAngle(coords.ra, true), dec: formatAngle(coords.dec, false)};
+        }
+        if (lookup !== request || targetName.value.trim() !== name) return;
+        coordinateCache.set(name, target);
+        identified = target;
+        raInput.value = target.ra;
+        decInput.value = target.dec;
+        makePlot();
+    } catch {
+        if (lookup === request) status.textContent = `Could not resolve ${name}. Check the name or enter coordinates.`;
+    } finally {
+        if (lookup === request) lookup = null;
+    }
+}
+
+function changeTargetName(immediate = false) {
+    cancelLookup();
+    discardPlot();
+    identified = null;
+    raInput.value = '';
+    decInput.value = '';
+    const name = targetName.value.trim();
+    status.textContent = name ? `Resolving ${name}…` : 'Enter a target name or coordinates.';
+    if (!name) return;
+    if (immediate) resolveTarget();
+    else lookupTimer = setTimeout(resolveTarget, 350);
+}
+
+targetName.addEventListener('input', () => changeTargetName());
+for (const input of [raInput, decInput]) {
+    input.addEventListener('input', () => {
+        cancelLookup();
+        discardPlot();
+        identified = null;
+        targetName.value = '';
+        status.textContent = 'Use Make Plot to plot these coordinates.';
+    });
+}
+for (const input of [dateInput, latInput, lonInput]) {
+    input.addEventListener('input', () => {
+        discardPlot();
+        if (!lookup && (identified || !targetName.value.trim())) status.textContent = 'Use Make Plot to update the observing settings.';
+    });
+}
+timeZoneInput.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
+axisMode.addEventListener('change', () => plotted?.view.setAxisMode(axisMode.value));
+showDates.addEventListener('change', () => plotted?.view.setShowDates(showDates.checked));
+nowToggle.addEventListener('change', updateDateStatus);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) updateDateStatus(); });
+targetName.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        makePlot();
+    }
+});
+plotButton.addEventListener('click', () => makePlot());
+saveButton.addEventListener('click', () => {
+    if (!plotted) return;
+    if (inputs.some((input, i) => input.value.trim() !== plotted.inputs[i])) {
+        discardPlot();
+        status.textContent = 'Inputs changed. Use Make Plot to update.';
+        return;
+    }
+    plotted.view.save(plotted.filename);
+});
+
+dateInput.value = new Date().toISOString().slice(0, 10);
+// Seed a new history without moving the default target to the top on every visit.
+makePlot(targetHistory.isNew);

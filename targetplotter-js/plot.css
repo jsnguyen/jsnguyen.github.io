@@ -1,0 +1,328 @@
+.targetplotter-js #chart {
+    height: auto;
+    padding: 6px;
+    color: #222;
+    font: 13px/1.4 Arial, sans-serif;
+}
+
+.targetplotter-js .plot-figure {
+    background: white;
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+}
+
+.targetplotter-js .plot-title {
+    font-size: 16px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.targetplotter-js .plot-keys {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    margin: 4px 0;
+}
+
+.targetplotter-js .plot-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.targetplotter-js .plot-swatch {
+    width: 10px;
+    height: 7px;
+}
+
+.targetplotter-js .plot-summary {
+    display: grid;
+    gap: 12px;
+    width: min(100%, 48ch);
+    margin: 12px auto;
+    text-align: left;
+    font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace;
+}
+
+.targetplotter-js .plot-facts {
+    display: grid;
+    gap: 6px;
+}
+
+.targetplotter-js .plot-fact {
+    display: grid;
+    grid-template-columns: 17ch minmax(0, 1fr);
+    column-gap: 1ch;
+    align-items: baseline;
+}
+
+.targetplotter-js .plot-fact-label {
+    color: #555;
+}
+
+@media (max-width: 440px) {
+    .targetplotter-js .plot-fact {
+        grid-template-columns: 1fr;
+    }
+}
+
+.targetplotter-js .plot-readout {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 16px;
+    padding: 6px 3px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+    font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+}
+
+.targetplotter-js .plot-readout-group {
+    display: grid;
+    max-width: 100%;
+    gap: 1px 12px;
+}
+
+.targetplotter-js .plot-readout-clocks {
+    grid-template-columns: 10ch minmax(8ch, var(--clock-width)) 8ch;
+}
+
+.targetplotter-js .plot-readout-date[hidden] { display: none; }
+.targetplotter-js .plot-readout-clocks:has(.plot-readout-date[hidden]) {
+    grid-template-columns: minmax(8ch, var(--clock-width)) 8ch;
+}
+
+.targetplotter-js .plot-readout-coordinates {
+    grid-template-columns: 6ch 6ch minmax(0, 14ch) minmax(0, 13ch);
+}
+
+.targetplotter-js .plot-readout-cell {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    align-items: start;
+}
+
+.targetplotter-js .plot-readout-label {
+    color: #555;
+}
+
+.targetplotter-js .plot-readout-time .plot-readout-label { display: grid; }
+.targetplotter-js .plot-readout-time .plot-readout-label > span,
+.targetplotter-js .plot-readout-time .plot-readout-label::after { grid-area: 1 / 1; }
+.targetplotter-js .plot-readout-time .plot-readout-label::after {
+    content: attr(data-size-label);
+    visibility: hidden;
+}
+
+.targetplotter-js .u-over {
+    cursor: crosshair;
+    touch-action: pan-y;
+}
+
+.targetplotter-js .plot-cursor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed #555;
+    pointer-events: none;
+}
+
+.targetplotter-js .plot-dot {
+    position: absolute;
+    left: -1px;
+    width: 7px;
+    height: 7px;
+    border: 1px solid #111;
+    border-radius: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+}
+
+.targetplotter-js #status:empty {
+    display: none;
+}
+
+.targetplotter-js #status {
+    max-width: 100%;
+    padding: 0 8px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.targetplotter-js select {
+    color-scheme: dark;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #bfc1c4;
+    border-radius: 8px;
+    font-family: inherit;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.targetplotter-js select option {
+    background-color: #34363b;
+    color: white;
+}
+
+.targetplotter-js .plot-toggles input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #4caf50;
+    color-scheme: dark;
+    cursor: pointer;
+}
+
+.targetplotter-js select:focus-visible, .targetplotter-js .plot-toggles input:focus-visible {
+    outline: 2px solid #d2d2d2;
+    outline-offset: 2px;
+}
+
+.targetplotter-js #timezone_input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+}
+
+.targetplotter-js .plot-bottom-bar {
+    flex-wrap: wrap;
+    height: auto;
+}
+
+.targetplotter-js .plot-toggles, .targetplotter-js .plot-toggles label, .targetplotter-js .axis-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.targetplotter-js .plot-toggles {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 12px;
+}
+.targetplotter-js .plot-toggles label { cursor: pointer; }
+.targetplotter-js #axis_mode { min-height: 30px; padding: 3px 8px; }
+.targetplotter-js #date_today { font-size: 0.8em; text-transform: none; letter-spacing: normal; }
+.targetplotter-js #now_status { text-align: center; font-size: 0.9rem; }
+.targetplotter-js #now_status:empty { display: none; }
+
+@media (max-width: 600px) {
+    .targetplotter-js .input-group input {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 440px) {
+    .targetplotter-js .plot-readout-group {
+        column-gap: 6px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 375px) {
+    .targetplotter-js .plot-bottom-bar { padding-inline: 0; }
+    .targetplotter-js .plot-toggles { font-size: 0.875rem; column-gap: 8px; }
+}
+
+@media (max-width: 350px) {
+    .targetplotter-js .form-pair .input-label { font-size: 0.875rem; letter-spacing: normal; }
+    .targetplotter-js .plot-readout-moon .plot-readout-value {
+        min-height: 2lh;
+    }
+}
+
+.targetplotter-js .form-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.targetplotter-js .form-pair .input-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 3px;
+    margin-block: 5px;
+}
+
+.targetplotter-js .form-pair input, .targetplotter-js .form-pair #timezone_input {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    padding-inline: 8px;
+}
+
+.targetplotter-js .target-history {
+    align-items: flex-start;
+    margin-block: 0;
+}
+
+.targetplotter-js .target-history .input-label {
+    white-space: normal;
+}
+
+.targetplotter-js #target_history {
+    --row-height: 2rem;
+    flex: 1;
+    min-width: 0;
+    height: calc(5 * var(--row-height) + 2px);
+    overflow-y: auto;
+    list-style: none;
+    border: 1px solid #D2D2D2;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.targetplotter-js #target_history:empty::before {
+    content: 'No recent targets';
+    display: block;
+    padding: 6px 12px;
+    color: #d2d2d2;
+    font-size: 0.875rem;
+}
+
+.targetplotter-js #target_history li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 30px;
+    height: var(--row-height);
+}
+
+.targetplotter-js #target_history li + li {
+    border-top: 1px solid rgba(210, 210, 210, 0.35);
+}
+
+.targetplotter-js #target_history button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.targetplotter-js #target_history .remove-target {
+    padding: 0 4px;
+    color: #D2D2D2;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.targetplotter-js #target_history button:hover, .targetplotter-js #target_history button:focus-visible {
+    background: rgba(255, 255, 255, 0.16);
+    transform: none;
+    box-shadow: none;
+    outline-offset: -2px;
+}

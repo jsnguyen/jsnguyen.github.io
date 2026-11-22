@@ -1,0 +1,49 @@
+.targetplotter-js #chart .plot-now-marker {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    height: 100%;
+    width: 10px;
+    margin: 0;
+    padding: 0;
+    transform: translateX(-50%);
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    box-shadow: none;
+    transition: none;
+    color: #5c4475;
+    cursor: pointer;
+    touch-action: pan-y;
+}
+
+.targetplotter-js .plot-now-marker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px solid currentColor;
+}
+
+.targetplotter-js .plot-now-marker span {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 3px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    background: #fff;
+    font: 11px/1.3 Arial, sans-serif;
+}
+
+.targetplotter-js #chart .plot-now-marker:focus-visible {
+    outline: 1px dashed currentColor;
+    outline-offset: 0;
+}
+
+@media (pointer: coarse) {
+    .targetplotter-js #chart .plot-now-marker { width: 20px; }
+}

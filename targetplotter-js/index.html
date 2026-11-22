@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Plotter</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="vendor/uPlot.min.css">
+    <link rel="stylesheet" href="plot.css">
+    <link rel="stylesheet" href="interval.css">
+    <link rel="stylesheet" href="current-time.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+
+    <script type="module" src="../stars.js"></script>
+</head>
+<body class="targetplotter-page targetplotter-js">
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
+    <main>
+        <div class="pyscript-card glass-card">
+            <a href="../index.html" class="back-button" aria-label="Back to home">
+                <img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            </a>
+            <div class="pyscript-card-header">
+                <h2>Target Plotter</h2>
+            </div>
+
+            <div id="chart" class="display-container"><p id="status" role="status"></p></div>
+            <div class="plot-bottom-bar">
+                <button type="button" id="plot_button">Make Plot</button>
+                <button type="button" id="save_button" disabled>Save Plot</button>
+                <label class="axis-mode">X-axis
+                    <select id="axis_mode">
+                        <option value="local">Local time</option>
+                        <option value="utc">UTC</option>
+                        <option value="lst">LST</option>
+                    </select>
+                </label>
+                <div class="plot-toggles">
+                    <label><input type="checkbox" id="show_current_time"> Show current time</label>
+                    <label><input type="checkbox" id="show_dates"> Show dates</label>
+                </div>
+            </div>
+            <p id="now_status" role="status"></p>
+            <div class="input-container">
+                <div class="input-section">
+                    <div class="input-group">
+                        <label class="input-label" for="target_name_input">Target Name</label>
+                        <input type="text" id="target_name_input" value="HR 8799">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="ra_input">RA (HMS)</label>
+                        <input type="text" id="ra_input" value="23 07 28.7">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="dec_input">Dec (DMS)</label>
+                        <input type="text" id="dec_input" value="+21 08 03.0">
+                    </div>
+                    <div class="input-group target-history">
+                        <div class="input-label" id="target_history_label">Recent targets</div>
+                        <ul id="target_history" aria-labelledby="target_history_label"></ul>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <div class="form-pair">
+                        <div class="input-group">
+                            <label class="input-label" id="date_label" for="date_input">Date (UTC) <span id="date_today" hidden>(Today)</span></label>
+                            <input type="date" id="date_input" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="timezone_input">Display time</label>
+                            <select id="timezone_input">
+                                <option value="auto" selected>Browser time zone</option>
+                                <option value="PST">PST (UTC−8)</option>
+                                <option value="PDT">PDT (UTC−7)</option>
+                                <option value="HST">HST (UTC−10)</option>
+                                <option value="UTC">UTC</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-section">
+                    <div class="form-pair">
+                        <div class="input-group">
+                            <label class="input-label" for="lat_input">Latitude</label>
+                            <input type="text" id="lat_input" value="19.8286">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="lon_input">Longitude</label>
+                            <input type="text" id="lon_input" value="-155.4742">
+                        </div>
+                    </div>
+                </div>
+                <p>Visibility uses the Keck II telescope limits at Keck and the horizon at other sites.</p>
+            </div>
+        </div>
+    </main>
+    <!-- uPlot 1.6.32 and Astronomy Engine 2.1.19, distributed with their MIT licenses. -->
+    <script src="vendor/astronomy.browser.min.js"></script>
+    <script src="vendor/uPlot.iife.min.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
