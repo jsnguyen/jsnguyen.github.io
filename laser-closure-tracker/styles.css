@@ -177,8 +177,10 @@ keck-scene {
 
 .laser-state {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .laser-state span:not(.lamp) {
