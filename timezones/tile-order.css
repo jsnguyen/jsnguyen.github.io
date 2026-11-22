@@ -1,0 +1,14 @@
+.clock-tile header { touch-action: none; cursor: grab; }
+@media (any-pointer: fine) {
+    .clock-tile { cursor: grab; }
+    .clock-tile details { cursor: auto; }
+}
+.clock-tile.tile-dragging {
+    z-index: 2;
+    opacity: 0.85;
+    border-color: var(--accent);
+    pointer-events: none;
+    user-select: none;
+}
+#clocks:has(.tile-dragging), #clocks:has(.tile-dragging) * { cursor: grabbing; }
+.clock-tile.tile-drop-target { outline: 2px solid var(--accent); outline-offset: -2px; }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Timezones</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="timezones.css">
+    <link rel="stylesheet" href="tile-order.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <script type="module" src="../stars.js"></script>
+    <script defer src="../targetplotter-js/vendor/astronomy.browser.min.js"></script>
+    <script type="module" src="timezones.js"></script>
+</head>
+<body>
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
+    <main>
+        <header class="page-header">
+            <a href="../" class="home-link" aria-label="Back to home"><img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
+            <h1>Timezones</h1>
+            <fieldset class="hour-format" aria-label="Time format">
+                <label><input type="radio" name="hours" value="12"><span>12 h</span></label>
+                <label><input type="radio" name="hours" value="24" checked><span>24 h</span></label>
+            </fieldset>
+        </header>
+
+        <section id="clocks" aria-label="Live clocks"></section>
+        <template id="clock-tile">
+            <article class="clock-tile" tabindex="0" aria-keyshortcuts="Alt+ArrowLeft Alt+ArrowRight" title="Drag to reorder, or use Alt + Left or Right when focused">
+                <header><h2></h2><button type="button" class="remove-zone" hidden>×</button></header>
+                <p class="readout"><span class="clock-time"></span><small class="period"></small></p>
+                <div class="clock-detail"><span class="clock-date"></span><span class="delta"></span></div>
+            </article>
+        </template>
+        <template id="lst-editor">
+            <details id="lst-coordinates">
+                <summary title="Edit LST coordinates"></summary>
+                <form aria-label="LST coordinates">
+                    <label>Latitude (°N)<input type="number" name="latitude" min="-90" max="90" step="any" required></label>
+                    <label>Longitude (°E)<input type="number" name="longitude" min="-180" max="180" step="any" required></label>
+                    <button type="submit">Apply</button>
+                    <button type="button" class="use-keck">Use Keck</button>
+                </form>
+            </details>
+        </template>
+
+        <form class="zone-controls" role="search" aria-label="Add a city clock">
+            <label for="zone-picker">Add timezone</label>
+            <div class="city-search">
+                <input type="search" id="zone-picker" placeholder="Search for a city" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="city-matches" autocomplete="off" spellcheck="false">
+                <ul id="city-matches" role="listbox" aria-label="Matching cities" hidden></ul>
+            </div>
+            <button type="submit">Add</button>
+            <span class="search-status" role="status"></span>
+        </form>
+        <noscript>Enable JavaScript to display the live clocks.</noscript>
+    </main>
+</body>
+</html>
