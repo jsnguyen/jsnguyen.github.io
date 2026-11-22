@@ -355,7 +355,7 @@
     setText("targetName", target?.name || "No target selected");
     setText("targetDetail", target?.detail || "--");
     setText("tableMeta", analysis ? `${analysis.closures.length} closures, ${formatDuration(analysis.totalSec)} total.` : "--");
-    document.querySelector("laser-animation")?.setAttribute("laser-state", analysis?.active ? "off" : "on");
+    renderTelescope(target, analysis, nowMs);
     renderTimeline(analysis, nowMs);
     renderRows(analysis);
 
@@ -385,6 +385,34 @@
     return renderSummary("Next closure", "None left", "No later closures remain in this UT schedule.", "None left", "--", "--", "--");
   }
 
+  function laserStatus(analysis, nowMs) {
+    if (!analysis) return { key: "idle", label: "No schedule loaded" };
+    if (analysis.active) return { key: "closed", label: "Shuttered for closure" };
+    if (analysis.opens.some((open) => nowMs >= open.startMs && nowMs < open.endMs)) return { key: "lasing", label: "Lasing" };
+    if (nowMs < analysis.startMs) return { key: "idle", label: "Off, before first window" };
+    if (nowMs >= analysis.endMs) return { key: "idle", label: "Off, schedule ended" };
+    return { key: "closed", label: "Shuttered between windows" };
+  }
+
+  function renderTelescope(target, analysis, nowMs) {
+    const scene = document.querySelector("keck-scene");
+    const status = laserStatus(analysis, nowMs);
+    document.body.dataset.laser = status.key;
+    setText("laserState", status.label);
+    scene?.setAttribute("laser", status.key === "lasing" ? "on" : "off");
+
+    const coords = target && global.KeckPointing?.parseCoords(target.detail);
+    const pointing = coords && global.KeckPointing.altAz(coords, nowMs);
+    if (!pointing) {
+      scene?.removeAttribute("alt");
+      scene?.removeAttribute("az");
+      return setText("pointing", target ? "No coordinates" : "Parked");
+    }
+    scene?.setAttribute("alt", pointing.alt.toFixed(3));
+    scene?.setAttribute("az", pointing.az.toFixed(3));
+    setText("pointing", `Az ${pointing.az.toFixed(1)}°  El ${pointing.alt.toFixed(1)}°`);
+  }
+
   function renderSummary(label, countdown, detail, start, startDetail, duration, durationDetail = "--") {
     setText("nextCountdownLabel", label);
     setText("nextCountdown", countdown);
@@ -401,7 +429,6 @@
     $("themeToggle").textContent = isDark ? "Light mode" : "Dark mode";
     $("themeToggle").setAttribute("aria-pressed", String(isDark));
     localStorage.setItem("laserClosureTheme", isDark ? "dark" : "light");
-    document.querySelector("laser-animation")?.redraw();
   }
 
   function applySchedule(schedule, fileName) {

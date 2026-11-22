@@ -4,97 +4,96 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laser Closure Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <!-- three.js 0.187.0, distributed with its MIT license in vendor/. -->
+    <script type="module" src="keck-scene.js"></script>
   </head>
-  <body>
+  <body data-laser="idle">
     <main class="shell">
       <header class="masthead">
         <div>
-          <p class="eyebrow">Laser operations</p>
-          <h1>Closure schedule</h1>
+          <h1>Laser closures</h1>
+          <p class="lede">Closure windows for the Keck II laser, read from a Laser Clearinghouse file. The file never leaves your browser.</p>
         </div>
         <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="true">Light mode</button>
       </header>
 
-      <laser-animation aria-label="Animated sodium laser from the Keck II telescope"></laser-animation>
-
-      <section class="workspace" aria-label="Schedule controls">
-        <div class="panel controls">
-          <div class="upload-box" id="dropZone">
-            <input id="fileInput" type="file" accept=".txt,text/plain">
-            <button class="primary" id="chooseFile" type="button">Choose file</button>
-            <div>
-              <strong id="fileName">No file loaded</strong>
-              <span id="fileMeta">Upload a clearing-house text file.</span>
-            </div>
-          </div>
-
-          <label>
-            <span>Target</span>
-            <select id="targetSelect" disabled>
-              <option>No targets loaded</option>
-            </select>
-          </label>
-
-          <div class="field-grid">
-            <label>
-              <span>UT schedule date</span>
-              <input id="scheduleDate" type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" disabled>
-            </label>
-            <label>
-              <span>Displayed time zone</span>
-              <select id="zoneSelect">
-                <option>Detecting browser time zone...</option>
-              </select>
-            </label>
-          </div>
-
+      <section class="scene" aria-label="Keck Observatory 3D view">
+        <keck-scene laser="off"></keck-scene>
+        <div class="scene-caption">
+          <p class="laser-state"><span class="lamp" aria-hidden="true"></span>Keck II <span id="laserState" aria-live="polite">No schedule loaded</span></p>
+          <p class="pointing" id="pointing">Parked</p>
         </div>
-
-        <section class="summary-grid" aria-label="Closure summary">
-          <article class="panel time-card" aria-live="polite">
-            <span class="label">Current time</span>
-            <strong id="nowDisplay">--</strong>
-            <p id="nowDate">--</p>
-          </article>
-
-          <article class="panel next-card">
-            <span class="label" id="nextCountdownLabel">Next closure in</span>
-            <strong id="nextCountdown">--</strong>
-            <p id="nextDetail">Upload a file and select a target.</p>
-          </article>
-
-          <article class="panel">
-            <span class="label">Closure starts</span>
-            <strong id="nextValue">--</strong>
-            <p id="nextStartDetail">--</p>
-          </article>
-
-          <article class="panel">
-            <span class="label">Closure duration</span>
-            <strong id="durationValue">--</strong>
-            <p id="durationDetail">--</p>
-          </article>
-        </section>
       </section>
 
-      <section class="panel timeline-panel" aria-label="Closure timeline">
-        <div class="section-head">
+      <section class="readout" aria-label="Closure summary">
+        <div class="readout-main">
+          <span class="label" id="nextCountdownLabel">Next closure in</span>
+          <strong class="countdown" id="nextCountdown">--</strong>
+          <p id="nextDetail">Load a file and pick a target.</p>
+        </div>
+        <div>
+          <span class="label">Starts</span>
+          <strong id="nextValue">--</strong>
+          <p id="nextStartDetail">--</p>
+        </div>
+        <div>
+          <span class="label">Lasts</span>
+          <strong id="durationValue">--</strong>
+          <p id="durationDetail">--</p>
+        </div>
+        <div>
+          <span class="label">Local time</span>
+          <strong id="nowDisplay">--</strong>
+          <p id="nowDate">--</p>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Schedule controls">
+        <div class="upload" id="dropZone">
+          <input id="fileInput" type="file" accept=".txt,text/plain">
+          <button class="primary" id="chooseFile" type="button">Load file</button>
           <div>
-            <span class="label">Selected target</span>
-            <h2 id="targetName">No target selected</h2>
+            <strong id="fileName">No file loaded</strong>
+            <span id="fileMeta">Choose or drop a clearinghouse .txt file.</span>
           </div>
+        </div>
+
+        <label>
+          <span>Target</span>
+          <select id="targetSelect" disabled>
+            <option>No targets loaded</option>
+          </select>
+        </label>
+
+        <label>
+          <span>UT date</span>
+          <input id="scheduleDate" type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" disabled>
+        </label>
+
+        <label>
+          <span>Time zone</span>
+          <select id="zoneSelect">
+            <option>Detecting browser time zone...</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="timeline-section" aria-label="Closure timeline">
+        <div class="section-head">
+          <h2 id="targetName">No target selected</h2>
           <p id="targetDetail">--</p>
         </div>
         <div class="timeline" id="timeline"></div>
+        <p class="legend"><span class="key open"></span>Open <span class="key closure"></span>Closure <span class="key next"></span>Next closure</p>
       </section>
 
-      <section class="panel table-panel" aria-label="Closure table">
+      <section class="table-section" aria-label="Closure table">
         <div class="section-head">
-          <div>
-            <span class="label">Closure windows</span>
-            <h2>All closures for target</h2>
-          </div>
+          <h2>All closures</h2>
           <p id="tableMeta">--</p>
         </div>
         <div class="table-wrap">
@@ -111,7 +110,7 @@
             </thead>
             <tbody id="closureRows">
               <tr>
-                <td colspan="6">Upload a file to view closures.</td>
+                <td colspan="6">Load a file to see closures.</td>
               </tr>
             </tbody>
           </table>
@@ -119,7 +118,7 @@
       </section>
     </main>
 
-    <script src="laser-animation.js"></script>
+    <script src="pointing.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
