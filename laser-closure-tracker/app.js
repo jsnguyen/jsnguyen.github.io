@@ -76,6 +76,11 @@
     return `${sign}${rest} sec`;
   }
 
+  function lstClock(ms) {
+    const lst = global.KeckPointing?.lst(ms);
+    return Number.isFinite(lst) ? `${secondsToUtcClock((lst / 15) * 3600)} LST` : "--";
+  }
+
   function inferDateFromFileName(fileName) {
     const matches = [...String(fileName || "").matchAll(/(\d{6})(?!.*\d)/g)];
     if (!matches.length) return "";
@@ -224,10 +229,19 @@
     return `${date}${hour}:${parts.minute}:${parts.second} ${parts.timeZoneName}`;
   }
 
-  function formatDateInZone(ms, zone = state.zone) {
-    if (!Number.isFinite(ms)) return "--";
-    const parts = zonedParts(ms, zone);
-    return `${parts.year}-${parts.month}-${parts.day} ${parts.timeZoneName}`;
+  function clockInZone(ms, seconds = true) {
+    const parts = zonedParts(ms);
+    const hour = parts.hour === "24" ? "00" : parts.hour;
+    return seconds ? `${hour}:${parts.minute}:${parts.second}` : `${hour}:${parts.minute}`;
+  }
+
+  function timeTicks(startMs, endMs, maxCount) {
+    const step = [5, 10, 15, 30, 60, 120, 180, 240].map((minutes) => minutes * 60000).find((ms) => (endMs - startMs) / ms <= maxCount) || 14400000;
+    const parts = zonedParts(startMs);
+    const sinceMidnight = ((Number(parts.hour) % 24) * 3600 + Number(parts.minute) * 60 + Number(parts.second)) * 1000 + (startMs % 1000);
+    const ticks = [];
+    for (let ms = startMs - sinceMidnight + Math.ceil(sinceMidnight / step) * step; ms <= endMs; ms += step) ticks.push(ms);
+    return ticks;
   }
 
   function formatUtc(ms) {
@@ -301,17 +315,41 @@
       track.append(node);
     };
 
-    analysis.opens.forEach((open) => band("open-band", open.startMs, open.endMs, `Open ${formatInZone(open.startMs)} to ${formatInZone(open.endMs)}`));
+    analysis.opens.forEach((open) => band("open-band", open.startMs, open.endMs, `Open ${formatInZone(open.startMs)} to ${formatInZone(open.endMs)} (${lstClock(open.startMs)} to ${lstClock(open.endMs)})`));
     analysis.closures.forEach((closure) => {
       const cls = ["closure-band", closure === analysis.active ? "active" : "", closure === analysis.next ? "next" : ""].filter(Boolean).join(" ");
-      band(cls, closure.startMs, closure.endMs, `Closure ${formatInZone(closure.startMs)} to ${formatInZone(closure.endMs)}`);
+      band(cls, closure.startMs, closure.endMs, `Closure ${formatInZone(closure.startMs)} to ${formatInZone(closure.endMs)} (${lstClock(closure.startMs)} to ${lstClock(closure.endMs)})`);
     });
-    if (nowMs >= analysis.startMs && nowMs <= analysis.endMs) band("now-marker", nowMs, nowMs + 1);
 
-    const axis = Object.assign(document.createElement("div"), { className: "axis" });
-    axis.append(span(formatInZone(analysis.startMs, state.zone, false)), span(formatInZone(analysis.endMs, state.zone, false)));
-    track.append(axis);
+    const left = (ms) => `${((ms - analysis.startMs) / spanMs) * 100}%`;
+    timeTicks(analysis.startMs, analysis.endMs, Math.max(2, Math.floor(timeline.clientWidth / 70))).forEach((ms) => {
+      const tick = Object.assign(document.createElement("div"), { className: "tick" });
+      tick.style.left = left(ms);
+      tick.append(span(clockInZone(ms, false)));
+      track.append(tick);
+    });
+
+    const marker = (className, ms, text) => {
+      const node = Object.assign(document.createElement("div"), { className: `marker ${className}` });
+      node.style.left = left(ms);
+      node.append(Object.assign(document.createElement("span"), { className: "marker-label", textContent: text }));
+      track.append(node);
+    };
+    if (nowMs >= analysis.startMs && nowMs <= analysis.endMs) marker("now-marker", nowMs, `now ${formatInZone(nowMs, state.zone, false)}`);
+    const upcoming = analysis.active ? ["ends", analysis.active.endMs] : analysis.next ? ["next", analysis.next.startMs] : null;
+    if (upcoming) marker("next-marker", upcoming[1], `${upcoming[0]} ${formatInZone(upcoming[1], state.zone, false)} · in ${formatDuration((upcoming[1] - nowMs) / 1000)}`);
+
     timeline.append(track);
+    const width = track.clientWidth;
+    track.querySelectorAll(".marker-label").forEach((label) => {
+      const x = label.parentElement.offsetLeft;
+      label.style.left = `${Math.max(0, Math.min(x, width - label.offsetWidth)) - x}px`;
+    });
+    track.querySelectorAll(".tick span").forEach((label) => {
+      const x = label.parentElement.offsetLeft;
+      if (x < label.offsetWidth / 2) label.classList.add("start");
+      else if (width - x < label.offsetWidth / 2) label.classList.add("end");
+    });
   }
 
   const span = (text) => Object.assign(document.createElement("span"), { textContent: text });
@@ -323,7 +361,7 @@
     if (!analysis?.closures.length) {
       const row = document.createElement("tr");
       const empty = cell("No closures found for this target.");
-      empty.colSpan = 6;
+      empty.colSpan = 8;
       row.append(empty);
       tbody.append(row);
       return;
@@ -339,7 +377,9 @@
         cell(formatInZone(closure.endMs)),
         cell(formatDuration(closure.durationSec)),
         cell(formatUtc(closure.startMs)),
-        cell(formatUtc(closure.endMs))
+        cell(formatUtc(closure.endMs)),
+        cell(lstClock(closure.startMs)),
+        cell(lstClock(closure.endMs))
       );
       tbody.append(row);
     });
@@ -350,39 +390,36 @@
     const target = selectedTarget();
     const analysis = analyze(target, nowMs);
 
-    setText("nowDisplay", formatInZone(nowMs, state.zone, false));
-    setText("nowDate", formatDateInZone(nowMs));
     setText("targetName", target?.name || "No target selected");
-    setText("targetDetail", target?.detail || "--");
     setText("tableMeta", analysis ? `${analysis.closures.length} closures, ${formatDuration(analysis.totalSec)} total.` : "--");
     renderTelescope(target, analysis, nowMs);
     renderTimeline(analysis, nowMs);
     renderRows(analysis);
 
-    if (!analysis) return renderSummary("Next closure in", "--", "--", "--", "--", "--");
+    if (!analysis) return renderSummary("Next closure in", "--", "", "Starts", "--", "--", "--");
     if (analysis.active) {
       return renderSummary(
         "Current closure ends in",
         formatDuration((analysis.active.endMs - nowMs) / 1000),
-        "Closure is active now.",
-        "Active now",
-        `Started ${formatInZone(analysis.active.startMs)}.`,
-        formatDuration(analysis.active.durationSec),
-        `Ends at ${formatInZone(analysis.active.endMs)}.`
+        "Closure is active now",
+        "Started",
+        formatInZone(analysis.active.startMs, state.zone, false),
+        `${secondsToUtcClock(analysis.active.startSec)} UTC\n${lstClock(analysis.active.startMs)}`,
+        formatDuration(analysis.active.durationSec)
       );
     }
     if (analysis.next) {
       return renderSummary(
         "Next closure in",
         formatDuration((analysis.next.startMs - nowMs) / 1000),
-        "Next listed closure for the selected target.",
+        "",
+        "Starts",
         formatInZone(analysis.next.startMs, state.zone, false),
-        `UTC ${secondsToUtcClock(analysis.next.startSec)}.`,
-        formatDuration(analysis.next.durationSec),
-        `Ends at ${formatInZone(analysis.next.endMs)}.`
+        `${secondsToUtcClock(analysis.next.startSec)} UTC\n${lstClock(analysis.next.startMs)}`,
+        formatDuration(analysis.next.durationSec)
       );
     }
-    return renderSummary("Next closure", "None left", "No later closures remain in this UT schedule.", "None left", "--", "--", "--");
+    return renderSummary("Next closure", "None left", "No later closures remain in this UT schedule", "Starts", "None left", "--", "--");
   }
 
   function laserStatus(analysis, nowMs) {
@@ -413,14 +450,14 @@
     setText("pointing", `Az ${pointing.az.toFixed(1)}°  El ${pointing.alt.toFixed(1)}°`);
   }
 
-  function renderSummary(label, countdown, detail, start, startDetail, duration, durationDetail = "--") {
+  function renderSummary(label, countdown, detail, startLabel, start, startDetail, duration) {
     setText("nextCountdownLabel", label);
     setText("nextCountdown", countdown);
     setText("nextDetail", detail);
+    setText("startLabel", startLabel);
     setText("nextValue", start);
     setText("nextStartDetail", startDetail);
     setText("durationValue", duration);
-    setText("durationDetail", durationDetail);
   }
 
   function setTheme(theme) {
@@ -434,11 +471,10 @@
   function applySchedule(schedule, fileName) {
     state.schedule = schedule;
     state.targetId = schedule.targets[0].id;
-    state.date = schedule.inferredDate || todayUtcDate();
-    $("scheduleDate").disabled = false;
-    $("scheduleDate").value = state.date;
+    $("dropZone").classList.add("loaded");
+    setText("chooseFile", "Change file");
     setText("fileName", fileName || "Uploaded schedule");
-    setText("fileMeta", `${schedule.targets.length} targets loaded${schedule.inferredDate ? `; date inferred as ${schedule.inferredDate} UT` : ""}.`);
+    setText("fileMeta", `${schedule.targets.length} targets loaded.`);
     renderTargets();
     render();
   }
@@ -451,6 +487,8 @@
       } catch (error) {
         state.schedule = null;
         state.targetId = "";
+        $("dropZone").classList.remove("loaded");
+        setText("chooseFile", "Load file");
         setText("fileName", file.name);
         setText("fileMeta", error.message || "Could not parse this file.");
         renderTargets();
@@ -463,8 +501,12 @@
   function init() {
     setTheme(localStorage.getItem("laserClosureTheme") || "dark");
     populateZones($("zoneSelect"), detectedZone());
+    state.date = $("scheduleDate").value = todayUtcDate();
     $("themeToggle").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
     $("chooseFile").addEventListener("click", () => $("fileInput").click());
+    $("dropZone").addEventListener("click", (event) => {
+      if (!event.currentTarget.classList.contains("loaded") && !event.target.closest("button, input")) $("fileInput").click();
+    });
     $("fileInput").addEventListener("change", () => $("fileInput").files[0] && readFile($("fileInput").files[0]));
     $("targetSelect").addEventListener("change", (event) => {
       state.targetId = event.target.value;
@@ -472,6 +514,7 @@
     });
     $("scheduleDate").addEventListener("change", (event) => {
       state.date = event.target.value || todayUtcDate();
+      event.target.value = state.date;
       render();
     });
     $("zoneSelect").addEventListener("change", (event) => {

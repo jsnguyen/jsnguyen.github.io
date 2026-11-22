@@ -8,6 +8,7 @@ const PARK = { alt: 62, az: 205 };
 const LAUNCH_Y = 12.4;
 const BEAM_LENGTH = 5200;
 const SLEW_RATE = 6;
+const SPIN_RATE = 2;
 const BEAM_TIME = 1.3;
 const CAMERA = { radius: 235, yaw: 202, pitch: 9, aim: [0, 40, 0], hfov: 64 };
 const SODIUM = new THREE.Color("#ffc23d");
@@ -168,8 +169,8 @@ class KeckScene extends HTMLElement {
   render() {
     if (!this.renderer || !this.camera) return;
     const time = this.elapsed;
-    const drift = this.motion ? Math.sin(time * 0.04) * 7 : 0;
-    const yaw = (CAMERA.yaw + this.yaw + drift) * DEG;
+    const spin = this.motion ? time * SPIN_RATE : 0;
+    const yaw = (CAMERA.yaw + this.yaw + spin) * DEG;
     const pitch = CAMERA.pitch * DEG;
     const [ax, ay, az] = CAMERA.aim;
     this.camera.position.set(

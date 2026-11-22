@@ -1,0 +1,137 @@
+/* Dark glass theme over the site starfield, matching floating-bar. Remove this file, the warp-canvas element and the stars.js script to restore the flat theme. */
+:root,
+[data-theme="light"] {
+  color-scheme: dark;
+  --bg: #19172e;
+  --ink: #f3f0ff;
+  --muted: #b0accc;
+  --rule: rgba(255, 255, 255, 0.14);
+  --field: rgba(255, 255, 255, 0.06);
+  --sodium: #ffbe3b;
+  --closed: #ff6b5e;
+  --open: rgba(255, 255, 255, 0.14);
+  --glass: linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03)), rgba(32, 28, 50, 0.68);
+  --glass-edge: rgba(255, 255, 255, 0.26);
+  --glass-shadow: 0 12px 40px rgba(6, 4, 17, 0.35), 0 2px 6px rgba(6, 4, 17, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 -1px 0 rgba(255, 255, 255, 0.07);
+  --glass-pill: linear-gradient(150deg, rgba(242, 230, 255, 0.24), rgba(215, 198, 255, 0.1));
+  --popup: rgba(30, 26, 48, 0.97);
+}
+
+#warp-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.theme-toggle {
+  display: none;
+}
+
+h1 {
+  text-shadow: 0 1px 8px #090f18;
+}
+
+.scene,
+.readout,
+.controls,
+.timeline-section,
+.table-section {
+  border: 1px solid var(--glass-edge);
+  border-radius: 22px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--glass-shadow);
+}
+
+.scene {
+  background: #0b0e1a;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.readout,
+.controls,
+.timeline-section,
+.table-section {
+  margin-top: 16px;
+  padding: 20px 22px;
+}
+
+.readout > div {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+button,
+input,
+select {
+  border-color: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(10, 8, 24, 0.35);
+}
+
+button.primary {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--glass-pill);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+option,
+optgroup {
+  background: #241f3a;
+  color: var(--ink);
+}
+
+.home-link,
+.target-button {
+  border-color: var(--glass-edge);
+  background: var(--glass-pill);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.target-button:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.target-popup {
+  border-color: var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+
+.upload {
+  border-color: rgba(255, 255, 255, 0.28);
+  border-radius: 16px;
+}
+
+.marker-label {
+  border-radius: 6px;
+  background: rgba(25, 23, 46, 0.85);
+}
+
+.target-list [aria-selected="true"],
+.target-list [aria-selected="true"]:hover {
+  border-radius: 10px;
+  background: var(--glass-pill);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .readout,
+  .controls,
+  .timeline-section,
+  .table-section {
+    background: rgba(42, 36, 61, 0.97);
+  }
+}
+
+@media (max-width: 520px) {
+  .readout > div:nth-child(2) {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+}

@@ -7,17 +7,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="target-list.css?v=3">
+    <link rel="stylesheet" href="glass.css?v=2">
+    <script type="module" src="../stars.js"></script>
     <!-- three.js 0.187.0, distributed with its MIT license in vendor/. -->
-    <script type="module" src="keck-scene.js"></script>
+    <script type="module" src="keck-scene.js?v=3"></script>
   </head>
   <body data-laser="idle">
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
     <main class="shell">
       <header class="masthead">
-        <div>
-          <h1>Laser closures</h1>
-          <p class="lede">Closure windows for the Keck II laser, read from a Laser Clearinghouse file. The file never leaves your browser.</p>
-        </div>
+        <a href="../" class="home-link" aria-label="Back to home"><img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
+        <h1>Laser closures</h1>
         <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="true">Light mode</button>
       </header>
 
@@ -33,22 +35,13 @@
         <div class="readout-main">
           <span class="label" id="nextCountdownLabel">Next closure in</span>
           <strong class="countdown" id="nextCountdown">--</strong>
-          <p id="nextDetail">Load a file and pick a target.</p>
+          <p class="duration">Lasts <span id="durationValue">--</span></p>
+          <p id="nextDetail"></p>
         </div>
-        <div>
-          <span class="label">Starts</span>
+        <div class="readout-stack">
+          <span class="label" id="startLabel">Starts</span>
           <strong id="nextValue">--</strong>
           <p id="nextStartDetail">--</p>
-        </div>
-        <div>
-          <span class="label">Lasts</span>
-          <strong id="durationValue">--</strong>
-          <p id="durationDetail">--</p>
-        </div>
-        <div>
-          <span class="label">Local time</span>
-          <strong id="nowDisplay">--</strong>
-          <p id="nowDate">--</p>
         </div>
       </section>
 
@@ -57,21 +50,14 @@
           <input id="fileInput" type="file" accept=".txt,text/plain">
           <button class="primary" id="chooseFile" type="button">Load file</button>
           <div>
-            <strong id="fileName">No file loaded</strong>
-            <span id="fileMeta">Choose or drop a clearinghouse .txt file.</span>
+            <strong id="fileName">Drop a schedule file here</strong>
+            <span id="fileMeta">or click to choose a .txt file</span>
           </div>
         </div>
 
         <label>
-          <span>Target</span>
-          <select id="targetSelect" disabled>
-            <option>No targets loaded</option>
-          </select>
-        </label>
-
-        <label>
           <span>UT date</span>
-          <input id="scheduleDate" type="text" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" disabled>
+          <input id="scheduleDate" type="date">
         </label>
 
         <label>
@@ -84,8 +70,18 @@
 
       <section class="timeline-section" aria-label="Closure timeline">
         <div class="section-head">
-          <h2 id="targetName">No target selected</h2>
-          <p id="targetDetail">--</p>
+          <div class="target-picker">
+            <h2><button class="target-button" id="targetButton" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="targetPopup" disabled>
+              <span id="targetName">No target selected</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button></h2>
+            <select id="targetSelect" hidden disabled>
+              <option value="">No targets loaded</option>
+            </select>
+            <div class="target-popup" id="targetPopup" hidden>
+              <div class="target-list" id="targetList" role="listbox" tabindex="-1" aria-label="Targets"></div>
+            </div>
+          </div>
         </div>
         <div class="timeline" id="timeline"></div>
         <p class="legend"><span class="key open"></span>Open <span class="key closure"></span>Closure <span class="key next"></span>Next closure</p>
@@ -106,11 +102,13 @@
                 <th scope="col">Duration</th>
                 <th scope="col">UTC start</th>
                 <th scope="col">UTC end</th>
+                <th scope="col">LST start</th>
+                <th scope="col">LST end</th>
               </tr>
             </thead>
             <tbody id="closureRows">
               <tr>
-                <td colspan="6">Load a file to see closures.</td>
+                <td colspan="8">Load a file to see closures.</td>
               </tr>
             </tbody>
           </table>
@@ -118,7 +116,8 @@
       </section>
     </main>
 
-    <script src="pointing.js"></script>
-    <script src="app.js"></script>
+    <script src="pointing.js?v=3"></script>
+    <script src="app.js?v=11"></script>
+    <script src="target-list.js?v=2"></script>
   </body>
 </html>

@@ -1,0 +1,110 @@
+.timeline-section {
+  position: relative;
+  z-index: 1;
+}
+
+.target-picker {
+  position: relative;
+}
+
+.target-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  min-height: 0;
+  padding: 6px 12px 6px 14px;
+  font: inherit;
+}
+
+.target-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-button svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  transition: transform 160ms ease;
+}
+
+.target-button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.target-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.target-button:disabled svg {
+  display: none;
+}
+
+.target-popup {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(360px, calc(100vw - 48px));
+  padding: 6px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--popup, var(--bg));
+  box-shadow: 0 16px 40px rgba(6, 4, 17, 0.45);
+}
+
+.target-list {
+  max-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  user-select: none;
+  outline: none;
+}
+
+.target-list [role="option"] {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.target-list [role="option"]:hover {
+  background: var(--field);
+}
+
+.target-list [aria-selected="true"],
+.target-list [aria-selected="true"]:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.target-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-count {
+  flex: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+[aria-selected="true"] .target-count {
+  color: inherit;
+  opacity: 0.7;
+}
+
+@media (max-width: 850px) {
+  .target-list {
+    max-height: 260px;
+  }
+}

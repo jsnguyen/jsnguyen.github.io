@@ -129,19 +129,33 @@ h2 {
 
 .masthead {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
+  align-items: center;
+  gap: 14px;
   margin-bottom: 24px;
 }
 
-.lede {
-  max-width: 56ch;
-  margin-top: 6px;
-  color: var(--muted);
+.home-link {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--field);
+}
+
+.home-link:hover {
+  border-color: var(--muted);
+}
+
+.home-link img {
+  width: 20px;
+  height: 20px;
 }
 
 .theme-toggle {
+  margin-left: auto;
   min-height: 30px;
   padding: 0 10px;
   color: var(--muted);
@@ -216,7 +230,7 @@ keck-scene {
 
 .readout {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.6fr minmax(0, 1fr);
   margin-top: 28px;
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
@@ -248,7 +262,25 @@ keck-scene {
 
 .readout p {
   color: var(--muted);
+  white-space: pre-line;
   font-size: 0.85rem;
+}
+
+.readout p.duration {
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.readout-stack strong {
+  margin-bottom: 0;
+}
+
+.readout-stack p {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
 }
 
 [data-laser="closed"] .countdown {
@@ -257,7 +289,7 @@ keck-scene {
 
 .controls {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.6fr repeat(2, minmax(0, 1fr));
   gap: 18px;
   align-items: end;
   padding: 22px 0 26px;
@@ -267,16 +299,41 @@ keck-scene {
 .upload {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 14px;
+  grid-column: 1 / -1;
   min-width: 0;
+  min-height: 104px;
+  padding: 18px;
+  border: 1px dashed var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.upload.loaded {
+  grid-column: auto;
+  justify-content: flex-start;
+  min-height: 0;
   padding: 4px;
   margin: -4px;
-  border: 1px dashed transparent;
-  border-radius: 6px;
+  border-color: transparent;
+  cursor: default;
 }
 
 .upload.dragging {
   border-color: var(--sodium);
+  background: var(--field);
+}
+
+.upload.loaded button.primary {
+  border-color: var(--rule);
+  background: var(--field);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.controls:has(.upload:not(.loaded)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .upload input {
@@ -340,15 +397,13 @@ keck-scene {
 
 .timeline-track {
   position: relative;
-  height: 64px;
-  border-bottom: 1px solid var(--rule);
+  height: 96px;
 }
 
 .open-band,
-.closure-band,
-.now-marker {
+.closure-band {
   position: absolute;
-  top: 14px;
+  top: 42px;
   height: 26px;
 }
 
@@ -371,33 +426,69 @@ keck-scene {
   opacity: 1;
 }
 
-.now-marker {
-  top: 4px;
+.tick {
+  position: absolute;
+  top: 68px;
   width: 1px;
-  height: 46px;
-  background: var(--ink);
-  z-index: 4;
+  height: 6px;
+  background: var(--muted);
 }
 
-.now-marker::after {
-  content: "now";
+.tick span {
   position: absolute;
-  top: -4px;
-  left: 5px;
-  color: var(--ink);
-  font-size: 0.72rem;
-}
-
-.axis {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 4px;
-  display: flex;
-  justify-content: space-between;
+  top: 9px;
+  transform: translateX(-50%);
   color: var(--muted);
   font-family: var(--mono);
   font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.tick span.start {
+  transform: none;
+}
+
+.tick span.end {
+  transform: translateX(-100%);
+}
+
+.marker {
+  position: absolute;
+  width: 1px;
+}
+
+.now-marker {
+  top: 21px;
+  height: 53px;
+  background: var(--ink);
+  z-index: 5;
+}
+
+.next-marker {
+  top: 0;
+  height: 74px;
+  background: var(--sodium);
+  z-index: 4;
+}
+
+.marker-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 6px;
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.now-marker .marker-label {
+  color: var(--ink);
+}
+
+.next-marker .marker-label {
+  color: var(--sodium);
 }
 
 .legend {
@@ -439,7 +530,7 @@ keck-scene {
 
 table {
   width: 100%;
-  min-width: 760px;
+  min-width: 960px;
   border-collapse: collapse;
 }
 
@@ -476,26 +567,12 @@ tr.next-row td {
     padding-top: 22px;
   }
 
-  .masthead {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .readout,
   .controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .readout > div:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .readout > div:nth-child(n + 3) {
-    border-top: 1px solid var(--rule);
-  }
-
-  .upload {
+  .upload,
+  .upload.loaded {
     grid-column: 1 / -1;
   }
 
@@ -510,8 +587,8 @@ tr.next-row td {
 }
 
 @media (max-width: 520px) {
-  .readout > div:first-child {
-    grid-column: 1 / -1;
+  .readout {
+    grid-template-columns: 1fr;
   }
 
   .readout > div:nth-child(2) {
@@ -520,18 +597,8 @@ tr.next-row td {
     border-top: 1px solid var(--rule);
   }
 
-  .readout > div:nth-child(3) {
-    padding-left: 18px;
-    border-left: 1px solid var(--rule);
-  }
-
-  .readout > div:nth-child(4) {
-    grid-column: 1 / -1;
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .controls {
+  .controls,
+  .controls:has(.upload:not(.loaded)) {
     grid-template-columns: 1fr;
   }
 
