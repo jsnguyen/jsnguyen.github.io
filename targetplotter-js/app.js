@@ -13,12 +13,13 @@ const nowToggle = document.querySelector('#show_current_time');
 const nowStatus = document.querySelector('#now_status');
 const timeZoneInput = document.querySelector('#timezone_input');
 const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-timeZoneInput.querySelector('[value="auto"]').textContent = 'Browser (' + browserZone + ')';
+timeZoneInput.querySelector('[value="auto"]').title = browserZone;
 const latInput = document.querySelector('#lat_input');
 const lonInput = document.querySelector('#lon_input');
-const plotButton = document.querySelector('#plot_button');
 const saveButton = document.querySelector('#save_button');
 const chart = document.querySelector('#chart');
+const plotSurface = document.querySelector('#plot-surface');
+const plotDetails = document.querySelector('#plot-details');
 const status = document.querySelector('#status');
 const inputs = [targetName, raInput, decInput, dateInput, latInput, lonInput];
 
@@ -67,6 +68,7 @@ const coordinateCache = new Map([[defaultTarget.name, defaultTarget]]);
 let identified = defaultTarget;
 let lookup = null;
 let lookupTimer;
+let plotTimer;
 let plotted = null;
 let dateStatusTimer;
 const targetHistory = createTargetHistory(document.querySelector('#target_history'), ({name}) => {
@@ -98,7 +100,11 @@ function updateDateStatus() {
 }
 
 function discardPlot() {
-    if (plotted) chart.style.minHeight = chart.getBoundingClientRect().height + 'px';
+    clearTimeout(plotTimer);
+    if (plotted) {
+        chart.style.minHeight = chart.getBoundingClientRect().height + 'px';
+        plotSurface.style.minHeight = plotSurface.getBoundingClientRect().height + 'px';
+    }
     plotted?.view.destroy();
     plotted = null;
     saveButton.disabled = true;
@@ -109,6 +115,7 @@ function settlePlotHeight(view, anchor, previousTop) {
     // uPlot sizes its canvases after construction. Keep the controls steady until then.
     requestAnimationFrame(() => {
         if (plotted?.view !== view || !chart.style.minHeight) return;
+        plotSurface.style.minHeight = '';
         chart.style.minHeight = '';
         if (previousTop > window.innerHeight) return;
         const shift = anchor.getBoundingClientRect().top - previousTop;
@@ -126,7 +133,7 @@ function makePlot(rememberTarget = true) {
         if (lookup?.name !== name) changeTargetName(true);
         return;
     }
-    const anchor = document.activeElement?.closest('.input-container') ? targetName : plotButton;
+    const anchor = document.activeElement?.closest('.input-container') ? targetName : saveButton;
     const previousTop = anchor.getBoundingClientRect().top;
     discardPlot();
     try {
@@ -149,7 +156,8 @@ function makePlot(rememberTarget = true) {
         settlePlotHeight(view, anchor, previousTop);
     } catch (error) {
         discardPlot();
-        chart.replaceChildren(status);
+        plotSurface.replaceChildren();
+        plotDetails.replaceChildren();
         status.textContent = error.message;
     }
 }
@@ -240,19 +248,17 @@ function changeTargetName(immediate = false) {
 }
 
 targetName.addEventListener('input', () => changeTargetName());
-for (const input of [raInput, decInput]) {
+for (const input of [raInput, decInput, dateInput, latInput, lonInput]) {
     input.addEventListener('input', () => {
-        cancelLookup();
+        if (input === raInput || input === decInput) {
+            cancelLookup();
+            identified = null;
+            targetName.value = '';
+        }
         discardPlot();
-        identified = null;
-        targetName.value = '';
-        status.textContent = 'Use Make Plot to plot these coordinates.';
-    });
-}
-for (const input of [dateInput, latInput, lonInput]) {
-    input.addEventListener('input', () => {
-        discardPlot();
-        if (!lookup && (identified || !targetName.value.trim())) status.textContent = 'Use Make Plot to update the observing settings.';
+        if (targetName.value.trim() && !identified) return;
+        status.textContent = 'Updating plot…';
+        plotTimer = setTimeout(makePlot, 350);
     });
 }
 timeZoneInput.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
@@ -266,12 +272,10 @@ targetName.addEventListener('keydown', event => {
         makePlot();
     }
 });
-plotButton.addEventListener('click', () => makePlot());
 saveButton.addEventListener('click', () => {
     if (!plotted) return;
     if (inputs.some((input, i) => input.value.trim() !== plotted.inputs[i])) {
-        discardPlot();
-        status.textContent = 'Inputs changed. Use Make Plot to update.';
+        makePlot();
         return;
     }
     plotted.view.save(plotted.filename);

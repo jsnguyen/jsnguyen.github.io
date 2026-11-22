@@ -6,7 +6,7 @@ import {createCurrentTimeMarker} from './current-time.js';
 
 const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
 const skyColors = ['#e6f2fc', '#c9c9c9'];
-const panels = [['az', 'Azimuth [°]'], ['alt', 'Altitude [°]'], ['ratePerMinute', 'Field rotation [°/min]']];
+const panels = [['az', 'Azimuth [°]'], ['alt', 'Altitude [°]'], ['rate', 'Field rotation [°/min]']];
 const rotationFormat = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1, signDisplay: 'exceptZero', useGrouping: false});
 
 function add(parent, tag, className, text = '') {
@@ -46,8 +46,13 @@ function drawSky(plot, bands) {
     ctx.restore();
 }
 
+function panelValue(row, field) {
+    return field === 'rate' && row.rate != null ? row.rate * 60 : row[field];
+}
+
 function drawTrack(plot, samples, field) {
     const {ctx, bbox} = plot;
+    const values = plot.data[1];
     ctx.save();
     ctx.beginPath();
     ctx.rect(bbox.left, bbox.top, bbox.width, bbox.height);
@@ -59,7 +64,7 @@ function drawTrack(plot, samples, field) {
     for (let i = 1; i < samples.length; i++) {
         const prev = samples[i - 1];
         const next = samples[i];
-        if (prev[field] == null || next[field] == null || (field === 'az' && Math.abs(next.az - prev.az) > 180)) {
+        if (values[i - 1] == null || values[i] == null || (field === 'az' && Math.abs(next.az - prev.az) > 180)) {
             connected = false;
             continue;
         }
@@ -70,8 +75,8 @@ function drawTrack(plot, samples, field) {
             ctx.strokeStyle = visibilityColors[color];
             connected = false;
         }
-        if (!connected) ctx.moveTo(plot.valToPos(prev.time, 'x', true), plot.valToPos(prev[field], 'y', true));
-        ctx.lineTo(plot.valToPos(next.time, 'x', true), plot.valToPos(next[field], 'y', true));
+        if (!connected) ctx.moveTo(plot.valToPos(prev.time, 'x', true), plot.valToPos(values[i - 1], 'y', true));
+        ctx.lineTo(plot.valToPos(next.time, 'x', true), plot.valToPos(values[i], 'y', true));
         connected = true;
     }
     if (color !== null) ctx.stroke();
@@ -85,8 +90,8 @@ function ticksBetween(min, max, step) {
 }
 
 function makePanel(parent, samples, times, field, label, bands, timeAxis) {
-    const values = samples.map(row => row[field]);
-    const isBottom = field === 'ratePerMinute';
+    const values = samples.map(row => panelValue(row, field));
+    const isBottom = field === 'rate';
     let range = field === 'az' ? [0, 360] : [0, 90];
     if (isBottom) {
         const min = values.reduce((a, b) => b === null ? a : Math.min(a, b), 0);
@@ -95,8 +100,7 @@ function makePanel(parent, samples, times, field, label, bands, timeAxis) {
     }
     const grid = {stroke: '#aaa', width: 0.5};
     const axis = {grid, stroke: '#222', font: '11px Arial', labelFont: '12px Arial', ticks: {size: 3, stroke: '#777'}};
-    const xAxis = {...axis, splits: (plot, axis, min, max) => timeAxis.splits(min, max, plot.width), size: isBottom ? 20 : 0, labelSize: 15};
-    if (isBottom) xAxis.label = timeAxis.caption;
+    const xAxis = {...axis, splits: (plot, axis, min, max) => timeAxis.splits(min, max, plot.width), size: isBottom ? 20 : 0};
     xAxis.values = (plot, ticks) => isBottom ? timeAxis.labels(ticks, plot.width) : ticks.map(() => '');
     const yAxis = {...axis, label, size: 44, labelSize: 16, space: 30};
     if (field === 'az') yAxis.splits = () => [0, 90, 180, 270, 360];
@@ -116,18 +120,21 @@ function makePanel(parent, samples, times, field, label, bands, timeAxis) {
 }
 
 // The cursor and sample readout are DOM elements outside the chart canvases.
-function saveFigure(figure, filename, measuredFacts) {
+function saveFigure(figure, filename, summary, measuredFacts) {
     const bounds = figure.getBoundingClientRect();
-    const factsBounds = measuredFacts?.getBoundingClientRect();
-    const height = bounds.height + (factsBounds ? factsBounds.height + 12 : 0);
+    const sections = [summary, measuredFacts].filter(Boolean).map(element => ({element, rect: element.getBoundingClientRect()}));
+    const width = Math.max(bounds.width, ...sections.map(section => section.rect.width));
+    const height = sections.reduce((total, section) => total + section.rect.height + 12, bounds.height);
     const canvas = document.createElement('canvas');
     const scale = Math.max(1, window.devicePixelRatio);
-    canvas.width = Math.ceil(bounds.width * scale);
+    canvas.width = Math.ceil(width * scale);
     canvas.height = Math.ceil(height * scale);
     const ctx = canvas.getContext('2d');
     ctx.scale(scale, scale);
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, bounds.width, height);
+    ctx.fillRect(0, 0, width, height);
+    ctx.save();
+    ctx.translate((width - bounds.width) / 2, 0);
 
     for (const item of figure.querySelectorAll('canvas, .plot-swatch')) {
         const rect = item.getBoundingClientRect();
@@ -171,25 +178,29 @@ function saveFigure(figure, filename, measuredFacts) {
     // Use the displayed word positions so that wrapped titles and legends export at any width.
     const range = document.createRange();
     ctx.textBaseline = 'middle';
-    function drawText(block, originY) {
+    function drawText(block, originX, originY) {
         for (const item of block.querySelectorAll('.plot-text')) {
             if (!item.getClientRects().length) continue;
             const style = getComputedStyle(item);
-            ctx.fillStyle = style.color;
+            ctx.fillStyle = block === figure ? style.color : '#222';
             ctx.font = style.fontWeight + ' ' + style.fontSize + ' ' + style.fontFamily;
             for (const match of item.textContent.matchAll(/\S+/g)) {
                 range.setStart(item.firstChild, match.index);
                 range.setEnd(item.firstChild, match.index + match[0].length);
                 const rect = range.getBoundingClientRect();
-                ctx.fillText(match[0], rect.left - bounds.left, rect.top - originY + rect.height / 2);
+                ctx.fillText(match[0], rect.left - originX, rect.top - originY + rect.height / 2);
             }
         }
     }
-    drawText(figure, bounds.top);
-    if (factsBounds) {
+    drawText(figure, bounds.left, bounds.top);
+    ctx.restore();
+    ctx.textBaseline = 'middle';
+    let top = bounds.height;
+    for (const {element, rect} of sections) {
         ctx.fillStyle = '#ccc';
-        ctx.fillRect(0, bounds.height, bounds.width, 1);
-        drawText(measuredFacts, factsBounds.top - bounds.height - 6);
+        ctx.fillRect(0, top, width, 1);
+        drawText(element, rect.left - (width - rect.width) / 2, rect.top - top - 6);
+        top += rect.height + 12;
     }
     const link = document.createElement('a');
     link.download = filename;
@@ -198,13 +209,11 @@ function saveFigure(figure, filename, measuredFacts) {
 }
 
 export function renderPlot(container, night, title, dateISO, zone, nowToggle, options = {axisMode: 'local', showDates: false}) {
-    function plotRow(row) {
-        return {...row, ratePerMinute: row.rate == null ? null : row.rate * 60};
-    }
-    const samples = night.samples.map(plotRow);
+    const samples = night.samples;
     const times = samples.map(row => row.time);
     const bands = backgroundBands(samples);
-    const figure = add(container, 'figure', 'plot-figure');
+    const details = container.querySelector('#plot-details');
+    const figure = add(container.querySelector('#plot-surface'), 'figure', 'plot-figure');
     const titleText = title + ' visibility on ' + dateISO + ' UTC';
     const caption = add(figure, 'figcaption', 'plot-title plot-text', titleText);
     const keys = add(figure, 'div', 'plot-keys');
@@ -219,10 +228,9 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const charts = add(figure, 'div', 'plot-panels');
     const timeAxis = createTimeAxis(samples, () => options.axisMode, () => zone, () => options.showDates);
     const plots = panels.map(([field, label]) => makePanel(charts, samples, times, field, label, bands, timeAxis));
-    const footer = add(figure, 'div', 'plot-summary');
-    const summary = createObservingSummary(footer, night, () => zone, () => options.showDates);
+    const axisCaption = add(figure, 'div', 'plot-axis-caption plot-text', timeAxis.caption());
 
-    const readout = add(container, 'output', 'plot-readout');
+    const readout = add(details, 'output', 'plot-readout');
     readout.setAttribute('aria-label', 'Coordinates at the selected time');
     const clockGroup = add(readout, 'span', 'plot-readout-group plot-readout-clocks');
     const coordinateGroup = add(readout, 'span', 'plot-readout-group plot-readout-coordinates');
@@ -252,7 +260,10 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const altValue = addField(coordinateGroup, 'angle', 'Alt');
     const rateValue = addField(coordinateGroup, 'rate', 'Field rotation');
     const moonValue = addField(coordinateGroup, 'moon', 'Moon sep.');
-    const interval = createIntervalSelection(plots, samples, container, () => zone, () => options.showDates);
+    const footer = add(details, 'div', 'plot-summary');
+    add(footer, 'h2', 'details-heading plot-text', 'Observing summary');
+    const summary = createObservingSummary(footer, night, () => zone, () => options.showDates);
+    const interval = createIntervalSelection(plots, samples, details, () => zone, () => options.showDates);
     moonValue.parentElement.title = 'Target–Moon separation and whether the Moon’s center is above the local horizon.';
     const cursors = plots.map(plot => add(plot.over, 'div', 'plot-cursor'));
     const dots = cursors.map(cursor => add(cursor, 'i', 'plot-dot'));
@@ -266,7 +277,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
             cursor.hidden = !row;
             if (!row) continue;
             const plot = plots[i];
-            const value = row[panels[i][0]];
+            const value = panelValue(row, panels[i][0]);
             cursor.style.left = plot.valToPos(row.time, 'x') + 'px';
             dots[i].hidden = value == null || value < plot.scales.y.min || value > plot.scales.y.max;
             if (!dots[i].hidden) dots[i].style.top = plot.valToPos(value, 'y') + 'px';
@@ -280,7 +291,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         lstValue.textContent = formatLST(row.lstHours);
         azValue.textContent = row.az.toFixed(1) + '°';
         altValue.textContent = row.alt.toFixed(1) + '°';
-        rateValue.textContent = row.ratePerMinute == null ? '—' : rotationFormat.format(row.ratePerMinute) + '°/min';
+        rateValue.textContent = row.rate == null ? '—' : rotationFormat.format(panelValue(row, 'rate')) + '°/min';
         moonValue.textContent = row.moonSep.toFixed(1) + '° (' + (row.moonAlt >= 0 ? 'up' : 'down') + ')';
     }
 
@@ -293,7 +304,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const currentTime = createCurrentTimeMarker(plots, times, nowToggle, time => {
         selected = null;
         const row = time == null ? null : night.sampleAt(time);
-        showRow(row ? plotRow(row) : null, Boolean(row));
+        showRow(row, Boolean(row));
     });
     for (const plot of plots) {
         function inspectPointer(event) {
@@ -316,6 +327,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         currentTime.refresh();
     }
     function refreshTimeDisplay() {
+        axisCaption.textContent = timeAxis.caption();
         plots.forEach(plot => plot.redraw(false, true));
         summary.refresh();
         interval.refresh();
@@ -334,10 +346,11 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     return {
         save(filename) {
             currentTime.refresh();
-            saveFigure(figure, filename, interval.completedFacts);
+            saveFigure(figure, filename, footer, interval.completedFacts);
         },
         setAxisMode(mode) {
             options.axisMode = mode;
+            axisCaption.textContent = timeAxis.caption();
             plots.forEach(plot => plot.redraw(false, true));
         },
         setTimeZone(newZone) {
@@ -360,6 +373,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
             plots.forEach(plot => plot.destroy());
             figure.remove();
             readout.remove();
+            footer.remove();
         }
     };
 }

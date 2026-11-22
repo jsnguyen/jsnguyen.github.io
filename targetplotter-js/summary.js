@@ -24,19 +24,16 @@ export function createObservingSummary(footer, night, getZone, getShowDates = ()
 
     const visible = addFact(facts, 'Time visible');
     visible.textContent = night.visibleHours.toFixed(2) + ' h';
-    visible.title = 'Unvignetted target with the Sun below −12°. Windows use 30-second samples and include brief Keck zenith exclusions.';
+    visible.title = 'Unvignetted time with the Sun below −12°, estimated from 30-second samples and corrected for the Keck zenith exclusion.';
     const moon = addFact(facts, 'Min Moon sep.');
     moon.textContent = night.minMoonSep.toFixed(2) + '°';
     moon.title = 'Minimum target–Moon separation over the plotted time range.';
 
-    const events = [[addFact(facts, 'Sunset'), night.sunsetTime], [addFact(facts, 'Sunrise'), night.sunriseTime]];
-    for (const [i, window] of night.windows.entries()) {
-        const label = 'Window ' + (i + 1);
-        events.push([addFact(facts, label + ' start'), window.start]);
-        events.push([addFact(facts, label + ' end'), window.end]);
-    }
-    if (night.windows.length === 0) addFact(facts, 'Observing windows').textContent = 'None';
-    events.push([addFact(facts, 'Upper transit'), night.transitTime]);
+    const events = [
+        [addFact(facts, 'Sunset'), night.sunsetTime],
+        [addFact(facts, 'Sunrise'), night.sunriseTime],
+        [addFact(facts, 'Transit'), night.transitTime]
+    ];
     addFact(facts, 'Transit LST').textContent = night.transitLstHours == null ? '—' : formatLST(night.transitLstHours);
 
     function refresh() {

@@ -1,10 +1,3 @@
-import { DEFAULT_CONFIG, createStarfieldEngine } from "./starfieldEngine.js";
-
-const STAR_CONFIG = {
-  ...DEFAULT_CONFIG,
-};
-
-const STAR_SCRIPT_URL = import.meta.url;
 const RESIZE_DEBOUNCE_MS = 150;
 const MIN_VIEW_DELTA = 2;
 
@@ -25,11 +18,7 @@ function setupWorkerStarfield(canvas) {
   }
 
   try {
-    const workerUrl = STAR_SCRIPT_URL
-      ? new URL("./starsWorker.js", STAR_SCRIPT_URL)
-      : new URL("./starsWorker.js", window.location.href);
-
-    const worker = new Worker(workerUrl, { type: "module" });
+    const worker = new Worker(new URL("./starsWorker.js", import.meta.url), { type: "module" });
     const offscreen = canvas.transferControlToOffscreen();
 
     const dispatcher = createResizeDispatcher(view => {
@@ -41,7 +30,7 @@ function setupWorkerStarfield(canvas) {
       });
     });
 
-    worker.postMessage({ type: "init", canvas: offscreen, config: STAR_CONFIG }, [offscreen]);
+    worker.postMessage({ type: "init", canvas: offscreen }, [offscreen]);
     dispatcher.flush();
     window.addEventListener("resize", dispatcher.queue, { passive: true });
     window.addEventListener("orientationchange", dispatcher.resetAndQueue, { passive: true });
@@ -53,13 +42,14 @@ function setupWorkerStarfield(canvas) {
   }
 }
 
-function startInlineStarfield(canvas) {
+async function startInlineStarfield(canvas) {
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     return;
   }
 
-  const engine = createStarfieldEngine(ctx, STAR_CONFIG);
+  const { createStarfieldEngine } = await import("./starfieldEngine.js");
+  const engine = createStarfieldEngine(ctx);
 
   const dispatcher = createResizeDispatcher(view => {
     engine.resize(view.width, view.height, view.dpr);

@@ -2,6 +2,8 @@ const keckLatitude = 19.8286;
 const keckLongitude = -155.4742;
 const radians = Math.PI / 180;
 const siderealRate = 360 / 86164.0905; // Degrees per second.
+const sampleStep = 30;
+const ephemerisStep = 300;
 
 // https://www2.keck.hawaii.edu/inst/common/TelLimits.html
 function keckVisibility(alt, az) {
@@ -132,15 +134,32 @@ export function intervalRotation(samples, firstIndex, secondIndex) {
     return end.parallacticAngle - start.parallacticAngle;
 }
 
-export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitude, longitude = keckLongitude) {
-    const isKeck = Math.abs(latitude - keckLatitude) < 0.02 && Math.abs(longitude - keckLongitude) < 0.02;
-    const observer = new Astronomy.Observer(latitude, longitude, isKeck ? 4000 : 0);
+// Targets on the same night share solar events, ephemerides, and sampled Sun/Moon altitudes.
+let cachedSiteNight;
+
+function getSiteNight(dateISO, observer, isKeck) {
+    const {latitude, longitude} = observer;
+    if (cachedSiteNight?.dateISO === dateISO && cachedSiteNight.latitude === latitude && cachedSiteNight.longitude === longitude) return cachedSiteNight;
     const midnightHour = isKeck ? 10 : (24 - longitude / 15) % 24;
     const midnight = Astronomy.MakeTime(new Date(Date.parse(dateISO + 'T00:00:00Z') + Math.round(midnightHour * 3600000)));
     const {sunsetTime, sunriseTime} = nightBounds(midnight, observer);
     const duration = sunriseTime - sunsetTime;
-    const sampleStep = 30;
-    const ephemerisStep = 300;
+
+    const sky = [];
+    for (let i = 0; i <= Math.ceil(duration / ephemerisStep); i++) {
+        sky.push(ephemeris(sunsetTime + i * ephemerisStep, observer));
+    }
+
+    cachedSiteNight = {dateISO, latitude, longitude, sunsetTime, sunriseTime, sky};
+    return cachedSiteNight;
+}
+
+export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitude, longitude = keckLongitude) {
+    const isKeck = Math.abs(latitude - keckLatitude) < 0.02 && Math.abs(longitude - keckLongitude) < 0.02;
+    const observer = new Astronomy.Observer(latitude, longitude, isKeck ? 4000 : 0);
+    const siteNight = getSiteNight(dateISO, observer, isKeck);
+    const {sunsetTime, sunriseTime, sky} = siteNight;
+    const duration = sunriseTime - sunsetTime;
 
     // A distant star gives the apparent direction of the input J2000 coordinates.
     // Its precession, nutation and aberration change negligibly over one night.
@@ -154,12 +173,12 @@ export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitu
     const transitTime = transit.date.getTime() / 1000;
     const transitLstHours = localSiderealHours(transit, longitude);
 
-    const sky = [];
-    for (let i = 0; i <= Math.ceil(duration / ephemerisStep); i++) {
-        sky.push(ephemeris(sunsetTime + i * ephemerisStep, observer));
-    }
+    const sampleCount = Math.ceil(duration / sampleStep) + 1;
+    // Store two numbers per grid sample. Off-grid readouts use the interpolated vectors directly.
+    const previousAltitudes = siteNight.altitudes;
+    const altitudes = previousAltitudes || new Float64Array(sampleCount * 2);
 
-    function sampleAt(time) {
+    function calculateSample(time, sampleIndex) {
         const offset = time - sunsetTime;
         if (!Number.isFinite(time) || offset < 0 || offset > duration) return null;
         const astroTime = Astronomy.MakeTime(new Date(time * 1000));
@@ -174,11 +193,21 @@ export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitu
         const left = sky[index];
         const right = sky[index + 1];
         const f = offset / ephemerisStep - index;
-        const sun = Astronomy.EquatorFromVector(interpolateVector(left.sun, right.sun, f, astroTime));
-        const sunAlt = Astronomy.Horizon(astroTime, observer, sun.ra, sun.dec).altitude;
         const moon = interpolateVector(left.moon, right.moon, f, astroTime);
-        const moonEquator = Astronomy.EquatorFromVector(moon);
-        const moonAlt = Astronomy.Horizon(astroTime, observer, moonEquator.ra, moonEquator.dec).altitude;
+        let sunAlt, moonAlt;
+        if (previousAltitudes && sampleIndex !== undefined) {
+            sunAlt = previousAltitudes[2 * sampleIndex];
+            moonAlt = previousAltitudes[2 * sampleIndex + 1];
+        } else {
+            const sun = Astronomy.EquatorFromVector(interpolateVector(left.sun, right.sun, f, astroTime));
+            const moonEquator = Astronomy.EquatorFromVector(moon);
+            sunAlt = Astronomy.Horizon(astroTime, observer, sun.ra, sun.dec).altitude;
+            moonAlt = Astronomy.Horizon(astroTime, observer, moonEquator.ra, moonEquator.dec).altitude;
+            if (sampleIndex !== undefined) {
+                altitudes[2 * sampleIndex] = sunAlt;
+                altitudes[2 * sampleIndex + 1] = moonAlt;
+            }
+        }
         const moonSep = Astronomy.AngleBetween(target.vec, moon);
 
         // Signed dq/dt for parallactic angle measured north through east.
@@ -188,13 +217,14 @@ export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitu
 
     const samples = [];
     let minMoonSep = Infinity;
-    for (let i = 0; i <= Math.ceil(duration / sampleStep); i++) {
-        const row = sampleAt(Math.min(sunsetTime + i * sampleStep, sunriseTime));
+    for (let i = 0; i < sampleCount; i++) {
+        const row = calculateSample(Math.min(sunsetTime + i * sampleStep, sunriseTime), i);
         samples.push(row);
         minMoonSep = Math.min(minMoonSep, row.moonSep);
     }
+    siteNight.altitudes = altitudes;
     const windows = observingWindows(samples, isKeck, latitude, target.dec, transitTime);
     const visibleHours = windows.reduce((seconds, window) => seconds + (window.end - window.start), 0) / 3600;
     addParallacticAngles(samples, target, latitude, isKeck);
-    return { samples, sampleAt, windows, visibleHours, minMoonSep, isKeck, transitTime, transitLstHours, sunsetTime, sunriseTime };
+    return { samples, sampleAt: time => calculateSample(time), windows, visibleHours, minMoonSep, isKeck, transitTime, transitLstHours, sunsetTime, sunriseTime };
 }
