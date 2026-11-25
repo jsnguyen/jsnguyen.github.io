@@ -1,4 +1,4 @@
-import {formatClock, formatLST} from './time.js';
+import {formatClock, formatClockTime, formatEventTime, formatLST} from './time.js';
 import {createTimeAxis} from './axis.js';
 import {createObservingSummary} from './summary.js';
 import {createIntervalSelection} from './interval.js';
@@ -99,9 +99,22 @@ function makePanel(parent, samples, times, field, label, bands, timeAxis) {
         range = max - min < 0.1 ? [-0.1, 0.1] : uPlot.rangeNum(min, max, 0.05, false);
     }
     const grid = {stroke: '#aaa', width: 0.5};
+    const rightPadding = 17;
     const axis = {grid, stroke: '#222', font: '11px Arial', labelFont: '12px Arial', ticks: {size: 3, stroke: '#777'}};
     const xAxis = {...axis, splits: (plot, axis, min, max) => timeAxis.splits(min, max, plot.width), size: isBottom ? 20 : 0};
-    xAxis.values = (plot, ticks) => isBottom ? timeAxis.labels(ticks, plot.width) : ticks.map(() => '');
+    xAxis.values = (plot, ticks) => {
+        if (!isBottom) return ticks.map(() => '');
+        const labels = timeAxis.labels(ticks, plot.width);
+        if (labels.length && timeAxis.uses12Hour()) {
+            // A centered AM/PM label can extend beyond sunrise at the right edge.
+            const room = rightPadding + plot.valToPos(times.at(-1), 'x') - plot.valToPos(ticks.at(-1), 'x');
+            plot.ctx.save();
+            plot.ctx.font = axis.font;
+            if (plot.ctx.measureText(labels.at(-1)).width / 2 > room) labels[labels.length - 1] = '';
+            plot.ctx.restore();
+        }
+        return labels;
+    };
     const yAxis = {...axis, label, size: 44, labelSize: 16, space: 30};
     if (field === 'az') yAxis.splits = () => [0, 90, 180, 270, 360];
     if (field === 'alt') yAxis.splits = () => [0, 30, 60, 90];
@@ -111,7 +124,7 @@ function makePanel(parent, samples, times, field, label, bands, timeAxis) {
     }
 
     return new uPlot({
-        width: parent.clientWidth, height: isBottom ? 162 : 128, padding: [10, 17, 6, 0],
+        width: parent.clientWidth, height: isBottom ? 162 : 128, padding: [10, rightPadding, 6, 0],
         scales: {x: {time: false, range: [times[0], times.at(-1)]}, y: {range}},
         axes: [xAxis, yAxis], series: [{}, {paths: () => null, points: {show: false}}],
         cursor: {show: false}, legend: {show: false}, select: {show: false},
@@ -208,7 +221,7 @@ function saveFigure(figure, filename, summary, measuredFacts) {
     link.click();
 }
 
-export function renderPlot(container, night, title, dateISO, zone, nowToggle, options = {axisMode: 'local', showDates: false}) {
+export function renderPlot(container, night, title, dateISO, zone, nowToggle, options = {axisMode: 'local', showDates: false, use12Hour: false}) {
     const samples = night.samples;
     const times = samples.map(row => row.time);
     const bands = backgroundBands(samples);
@@ -226,7 +239,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     }
 
     const charts = add(figure, 'div', 'plot-panels');
-    const timeAxis = createTimeAxis(samples, () => options.axisMode, () => zone, () => options.showDates);
+    const timeAxis = createTimeAxis(samples, () => options.axisMode, () => zone, () => options.showDates, () => options.use12Hour);
     const plots = panels.map(([field, label]) => makePanel(charts, samples, times, field, label, bands, timeAxis));
     const axisCaption = add(figure, 'div', 'plot-axis-caption plot-text', timeAxis.caption());
 
@@ -252,7 +265,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         initialClockZone = first.zone;
         const longestZone = first.zone.length >= last.zone.length ? first.zone : last.zone;
         clockLabel.dataset.sizeLabel = 'Time (' + longestZone + ')';
-        clockGroup.style.setProperty('--clock-width', clockLabel.dataset.sizeLabel.length + 'ch');
+        clockGroup.style.setProperty('--clock-width', Math.max(clockLabel.dataset.sizeLabel.length, options.use12Hour ? 11 : 8) + 'ch');
     }
     updateClockZone();
     const lstValue = addField(clockGroup, 'lst', 'LST');
@@ -262,8 +275,9 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const moonValue = addField(coordinateGroup, 'moon', 'Moon sep.');
     const footer = add(details, 'div', 'plot-summary');
     add(footer, 'h2', 'details-heading plot-text', 'Observing summary');
-    const summary = createObservingSummary(footer, night, () => zone, () => options.showDates);
-    const interval = createIntervalSelection(plots, samples, details, () => zone, () => options.showDates);
+    const eventTime = time => formatEventTime(time, zone, options.showDates, options.use12Hour);
+    const summary = createObservingSummary(footer, night, eventTime);
+    const interval = createIntervalSelection(plots, samples, details, eventTime);
     moonValue.parentElement.title = 'Target–Moon separation and whether the Moon’s center is above the local horizon.';
     const cursors = plots.map(plot => add(plot.over, 'div', 'plot-cursor'));
     const dots = cursors.map(cursor => add(cursor, 'i', 'plot-dot'));
@@ -287,7 +301,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
             return;
         }
         dateValue.textContent = clock.date;
-        clockValue.textContent = clock.time;
+        clockValue.textContent = formatClockTime(clock.time, options.use12Hour);
         lstValue.textContent = formatLST(row.lstHours);
         azValue.textContent = row.az.toFixed(1) + '°';
         altValue.textContent = row.alt.toFixed(1) + '°';
@@ -361,6 +375,11 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         setShowDates(visible) {
             options.showDates = visible;
             dateValue.parentElement.hidden = !visible;
+            refreshTimeDisplay();
+        },
+        setUse12Hour(enabled) {
+            options.use12Hour = enabled;
+            updateClockZone();
             refreshTimeDisplay();
         },
         setToday(isToday) {

@@ -1,8 +1,7 @@
 import {intervalRotation} from './observing.js';
 import {addFact} from './summary.js';
-import {formatEventTime} from './time.js';
 
-export function createIntervalSelection(plots, samples, parent, getZone, getShowDates = () => false) {
+export function createIntervalSelection(plots, samples, parent, eventTime) {
     const control = document.createElement('div');
     control.className = 'plot-interval';
     const hint = document.createElement('span');
@@ -117,10 +116,8 @@ export function createIntervalSelection(plots, samples, parent, getZone, getShow
         if (!range) return;
         const start = samples[first].time;
         const end = samples[last].time;
-        const zone = getZone();
-        const showDates = getShowDates();
-        startValue.textContent = formatEventTime(start, zone, showDates);
-        endValue.textContent = formatEventTime(end, zone, showDates);
+        startValue.textContent = eventTime(start);
+        endValue.textContent = eventTime(end);
         elapsedValue.textContent = Number(((end - start) / 60).toFixed(2)) + ' min';
         const angle = intervalRotation(samples, first, last);
         rotationValue.textContent = angle == null ? 'unavailable' : (angle > 0 ? '+' : '') + angle.toFixed(1) + '°';

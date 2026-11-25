@@ -1,4 +1,4 @@
-import {formatClock, formatLST} from './time.js';
+import {formatClock, formatClockTime, formatLST} from './time.js';
 
 const steps = [0.1, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 14400, 21600, 43200];
 
@@ -14,7 +14,7 @@ function civilOffset(time, zone) {
     return Date.parse(clock.date + 'T' + clock.time + 'Z') / 1000 - whole;
 }
 
-export function createTimeAxis(samples, getMode, getZone, getShowDates) {
+export function createTimeAxis(samples, getMode, getZone, getShowDates, getUse12Hour = () => false) {
     const first = samples[0];
     const last = samples.at(-1);
     const duration = last.time - first.time;
@@ -25,10 +25,12 @@ export function createTimeAxis(samples, getMode, getZone, getShowDates) {
     const siderealRate = siderealChange / duration;
     const lst = time => initialLST + (time - first.time) * siderealRate;
     const zone = () => getMode() === 'utc' ? 'UTC' : getZone();
+    const uses12Hour = () => getMode() !== 'lst' && getUse12Hour();
 
     function tickStep(width) {
-        const count = Math.max(2, Math.min(9, Math.floor((width - 65) / 58)));
-        return steps.find(step => duration / step <= count + 1) || steps.at(-1);
+        const intervals = uses12Hour() ? Math.max(2, Math.min(9, (width - 77) / 75))
+            : Math.max(2, Math.min(9, Math.floor((width - 65) / 58))) + 1;
+        return steps.find(step => duration / step <= intervals) || steps.at(-1);
     }
 
     function splits(min, max, width) {
@@ -53,14 +55,16 @@ export function createTimeAxis(samples, getMode, getZone, getShowDates) {
     function labels(ticks, width) {
         const step = tickStep(width);
         const sidereal = getMode() === 'lst';
+        const use12Hour = uses12Hour();
         const displayZone = zone();
         const labels = ticks.map(time => {
             const seconds = sidereal ? lst(time) : time;
             const rounded = Math.round(seconds * 10);
             const whole = step < 1 ? Math.floor(rounded / 10) : Math.round(seconds);
             const clock = sidereal ? formatLST(whole / 3600) : formatClock(whole, displayZone).time;
-            if (step < 1) return clock + '.' + ((rounded % 10 + 10) % 10);
-            return step < 60 ? clock : clock.slice(0, 5);
+            let text = step < 60 ? clock : clock.slice(0, 5);
+            if (step < 1) text += '.' + ((rounded % 10 + 10) % 10);
+            return formatClockTime(text, use12Hour);
         });
         // Identify repeated civil times on a fall-back night.
         if (!sidereal && new Set(labels).size < labels.length) {
@@ -78,5 +82,5 @@ export function createTimeAxis(samples, getMode, getZone, getShowDates) {
         return zones + ' · ' + start.date + (start.date === end.date ? '' : ' to ' + end.date);
     }
 
-    return {splits, labels, caption};
+    return {splits, labels, caption, uses12Hour};
 }

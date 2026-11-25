@@ -7,7 +7,7 @@
 
     <!-- Google Fonts' Stack Sans variable subsets, licensed under fonts/OFL.txt. -->
     <link rel="stylesheet" href="vendor/uPlot.min.css">
-    <link rel="stylesheet" href="plot.css?v=6">
+    <link rel="stylesheet" href="plot.css?v=7">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="manifest" href="/site.webmanifest">
@@ -15,19 +15,19 @@
 
     <!-- uPlot and Astronomy Engine are distributed with their MIT licenses. -->
     <script type="importmap">
-        {"imports": {"./observing.js": "./observing.js?v=2", "./plot.js": "./plot.js?v=3", "./summary.js": "./summary.js?v=2"}}
+        {"imports": {"./observing.js": "./observing.js?v=2", "./plot.js": "./plot.js?v=4", "./time.js": "./time.js?v=2", "./axis.js": "./axis.js?v=2", "./summary.js": "./summary.js?v=3", "./interval.js": "./interval.js?v=2"}}
     </script>
-    <link rel="modulepreload" href="plot.js?v=3">
+    <link rel="modulepreload" href="plot.js?v=4">
     <link rel="modulepreload" href="observing.js?v=2">
     <link rel="modulepreload" href="history.js">
-    <link rel="modulepreload" href="time.js">
-    <link rel="modulepreload" href="axis.js">
-    <link rel="modulepreload" href="summary.js?v=2">
+    <link rel="modulepreload" href="time.js?v=2">
+    <link rel="modulepreload" href="axis.js?v=2">
+    <link rel="modulepreload" href="summary.js?v=3">
     <link rel="modulepreload" href="current-time.js">
-    <link rel="modulepreload" href="interval.js">
+    <link rel="modulepreload" href="interval.js?v=2">
     <script defer src="vendor/astronomy.browser.min.js"></script>
     <script defer src="vendor/uPlot.iife.min.js"></script>
-    <script type="module" src="app.js?v=4"></script>
+    <script type="module" src="app.js?v=5"></script>
     <script type="module" src="../stars.js" fetchpriority="low"></script>
 </head>
 <body class="targetplotter-page targetplotter-js">
@@ -63,6 +63,7 @@
                 <div class="chart-options">
                     <label><input type="checkbox" id="show_current_time"> Show current time</label>
                     <label><input type="checkbox" id="show_dates"> Show dates</label>
+                    <label><input type="checkbox" id="use_12_hour"> 12-hour clock</label>
                 </div>
                 <p id="now_status" role="status"></p>
                 <div id="plot-details"></div>

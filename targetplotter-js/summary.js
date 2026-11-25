@@ -1,4 +1,4 @@
-import {formatEventTime, formatLST} from './time.js';
+import {formatLST} from './time.js';
 
 export function addFact(parent, label) {
     const row = document.createElement('div');
@@ -15,7 +15,7 @@ export function addFact(parent, label) {
     return value;
 }
 
-export function createObservingSummary(footer, night, getZone, getShowDates = () => false) {
+export function createObservingSummary(footer, night, eventTime) {
     const facts = document.createElement('div');
     facts.className = 'plot-facts';
     facts.setAttribute('role', 'group');
@@ -37,9 +37,7 @@ export function createObservingSummary(footer, night, getZone, getShowDates = ()
     addFact(facts, 'Transit LST').textContent = night.transitLstHours == null ? '—' : formatLST(night.transitLstHours);
 
     function refresh() {
-        const zone = getZone();
-        const showDates = getShowDates();
-        for (const [value, time] of events) value.textContent = formatEventTime(time, zone, showDates);
+        for (const [value, time] of events) value.textContent = eventTime(time);
     }
     refresh();
     return {refresh};

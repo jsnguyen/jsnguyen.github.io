@@ -9,6 +9,7 @@ const dateInput = document.querySelector('#date_input');
 const dateToday = document.querySelector('#date_today');
 const axisMode = document.querySelector('#axis_mode');
 const showDates = document.querySelector('#show_dates');
+const use12Hour = document.querySelector('#use_12_hour');
 const nowToggle = document.querySelector('#show_current_time');
 const nowStatus = document.querySelector('#now_status');
 const timeZoneInput = document.querySelector('#timezone_input');
@@ -148,7 +149,7 @@ function makePlot(rememberTarget = true) {
         const base = name.replace(/\s+/g, '_').replace(/[<>:"/\\|?*]/g, '') || 'target';
         const night = computeNight(ra, dec, date, lat, lon);
         status.textContent = '';
-        const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode.value, showDates: showDates.checked});
+        const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode.value, showDates: showDates.checked, use12Hour: use12Hour.checked});
         plotted = {view, date, start: Math.ceil(night.samples[0].time), end: Math.floor(night.samples.at(-1).time), inputs: inputs.map(input => input.value.trim()), filename: `${base}_${date}.png`};
         if (name && rememberTarget) targetHistory.remember(name, identified.ra, identified.dec, true);
         saveButton.disabled = false;
@@ -264,6 +265,7 @@ for (const input of [raInput, decInput, dateInput, latInput, lonInput]) {
 timeZoneInput.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
 axisMode.addEventListener('change', () => plotted?.view.setAxisMode(axisMode.value));
 showDates.addEventListener('change', () => plotted?.view.setShowDates(showDates.checked));
+use12Hour.addEventListener('change', () => plotted?.view.setUse12Hour(use12Hour.checked));
 nowToggle.addEventListener('change', updateDateStatus);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateDateStatus(); });
 targetName.addEventListener('keydown', event => {

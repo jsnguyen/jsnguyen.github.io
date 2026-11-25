@@ -28,10 +28,16 @@ export function formatClock(unixSeconds, zone = 'UTC') {
     return {date: iso.slice(0, 10), time: iso.slice(11, 19), zone};
 }
 
-export function formatEventTime(unixSeconds, zone, showDates = false) {
+export function formatClockTime(time, use12Hour = false) {
+    if (!use12Hour) return time;
+    const hour = Number(time.slice(0, 2));
+    return (hour % 12 || 12) + time.slice(2) + (hour < 12 ? ' AM' : ' PM');
+}
+
+export function formatEventTime(unixSeconds, zone, showDates = false, use12Hour = false) {
     if (unixSeconds == null) return '—';
     const clock = formatClock(unixSeconds, zone);
-    return (showDates ? clock.date + ' ' : '') + clock.time + ' ' + clock.zone;
+    return (showDates ? clock.date + ' ' : '') + formatClockTime(clock.time, use12Hour) + ' ' + clock.zone;
 }
 
 export function formatTimeRange(start, end, zone) {

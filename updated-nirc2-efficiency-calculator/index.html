@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Updated NIRC2 Efficiency Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/uPlot.min.css">
+    <link rel="stylesheet" href="styles.css?v=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- uPlot is distributed with its MIT license in vendor/. -->
+    <script type="importmap">
+        {"imports": {"./efficiency.js": "./efficiency.js?v=1", "./plots.js": "./plots.js?v=1", "./equation.js": "./equation.js?v=1", "./contour.js": "./contour.js?v=1", "./sliders.js": "./sliders.js?v=1"}}
+    </script>
+    <script defer src="vendor/uPlot.iife.min.js"></script>
+    <script type="module" src="app.js?v=2"></script>
+    <script type="module" src="../stars.js" fetchpriority="low"></script>
+</head>
+<body class="nirc2-efficiency">
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
+    <main class="workspace">
+        <header class="workspace-header">
+            <a href="../index.html" class="home-link" aria-label="Back to home">
+                <img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            </a>
+            <h1>Updated NIRC2 Efficiency Calculator</h1>
+        </header>
+
+        <div class="workspace-grid">
+            <div id="results" class="results-column">
+                <section class="summary" aria-label="Efficiency summary">
+                    <div class="summary-head">
+                        <div class="summary-stat">
+                            <span>Efficiency</span>
+                            <strong id="efficiency_value">—</strong>
+                        </div>
+                        <div class="summary-stat summary-elapsed">
+                            <span>Total elapsed</span>
+                            <strong id="elapsed_value">—</strong>
+                            <small id="elapsed_seconds"></small>
+                        </div>
+                    </div>
+                    <div class="time-bar" aria-hidden="true">
+                        <i data-part="integration"></i>
+                        <i data-part="nirc2Overhead"></i>
+                        <i data-part="aoOverhead"></i>
+                    </div>
+                    <dl class="time-parts">
+                        <div data-part="integration"><dt>Integration</dt><dd>—</dd></div>
+                        <div data-part="nirc2Overhead"><dt>NIRC2 overhead</dt><dd>—</dd></div>
+                        <div data-part="aoOverhead"><dt>AO/Tel overhead</dt><dd>—</dd></div>
+                        <div><dt>Min. tint</dt><dd id="minimum_value">—</dd></div>
+                    </dl>
+                    <p id="status" role="status"></p>
+                </section>
+
+                <div class="chart-paper">
+                    <div id="plot_panels" class="plot-panels"></div>
+                    <div id="contour_panel" class="contour-panel"></div>
+                </div>
+            </div>
+
+            <aside id="settings" class="input-container" aria-label="Observing sequence">
+                <fieldset class="plot-field">
+                    <legend>Overhead model</legend>
+                    <div class="segments">
+                        <label title="Keck NIRC2 calculator, from before the 2023 Archon upgrade"><input type="radio" name="model" value="original"><span>Original</span></label>
+                        <label title="Timing measured from NIRC2 frames taken after the 2023 Archon upgrade"><input type="radio" name="model" value="updated" checked><span>Updated</span></label>
+                    </div>
+                    <details id="equation" class="collapsible">
+                        <summary>Equation</summary>
+                        <div class="equation-math" data-tex=""></div>
+                        <div class="equation-math equation-constants" data-tex=""></div>
+                        <p class="equation-key">t tint, C coadds, D dithers, R repeats, X × Y subarray, N MCDS read pairs (2N reads)</p>
+                    </details>
+                </fieldset>
+
+                <div class="field-pair settings-group">
+                    <div class="plot-field">
+                        <label for="tint_input">Tint (s)</label>
+                        <input type="number" id="tint_input" value="10" min="0" step="any" inputmode="decimal">
+                        <input type="range" id="tint_slider" class="snap-slider" min="0" step="1" aria-label="Tint slider">
+                    </div>
+                    <div class="plot-field">
+                        <label for="coadds_input">Coadds</label>
+                        <input type="number" id="coadds_input" value="10" min="1" step="1" inputmode="numeric">
+                        <input type="range" id="coadds_slider" class="snap-slider" min="0" step="1" aria-label="Coadds slider">
+                    </div>
+                </div>
+                <div class="field-pair">
+                    <div class="plot-field">
+                        <label for="dithers_input">Dithers</label>
+                        <input type="number" id="dithers_input" value="1" min="1" step="1" inputmode="numeric">
+                    </div>
+                    <div class="plot-field">
+                        <label for="repeats_input" title="Repeats per dither position">Repeats</label>
+                        <input type="number" id="repeats_input" value="1" min="1" step="1" inputmode="numeric">
+                    </div>
+                </div>
+                <fieldset id="move_field" class="plot-field">
+                    <legend>Dither moves</legend>
+                    <div class="segments">
+                        <label title="Typical move, about 25 s"><input type="radio" name="move" value="typical" checked><span>Typical (25 s)</span></label>
+                        <label title="Fast scripted move, about 9 s"><input type="radio" name="move" value="fast"><span>Fast (9 s)</span></label>
+                    </div>
+                </fieldset>
+
+                <div class="settings-group">
+                    <fieldset class="plot-field">
+                        <legend>Compare lines</legend>
+                        <div class="segments">
+                            <label><input type="radio" name="compare" value="reads"><span>Reads</span></label>
+                            <label><input type="radio" name="compare" value="subc" checked><span>Subarray</span></label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="plot-field">
+                        <legend>Reads</legend>
+                        <div class="segments">
+                            <label title="Correlated double sampling"><input type="radio" name="reads" value="2" checked><span>2</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="8"><span>8</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="16"><span>16</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="32"><span>32</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="64"><span>64</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="128"><span>128</span></label>
+                        </div>
+                        <div id="compare_reads_row" class="compare-row"></div>
+                    </fieldset>
+                    <fieldset class="plot-field">
+                        <legend>Subarray (subc)</legend>
+                        <div class="segments">
+                            <label title="subc 1024 (1024 × 1024)"><input type="radio" name="subc" value="1024" checked><span>1024</span></label>
+                            <label title="subc 768 (768 × 776)"><input type="radio" name="subc" value="768"><span>768</span></label>
+                            <label title="subc 512 (512 × 512)"><input type="radio" name="subc" value="512"><span>512</span></label>
+                            <label title="subc 256 (256 × 264)"><input type="radio" name="subc" value="256"><span>256</span></label>
+                            <label title="subc 128 (128 × 152)"><input type="radio" name="subc" value="128"><span>128</span></label>
+                            <label title="subc 64 (64 × 56)"><input type="radio" name="subc" value="64"><span>64</span></label>
+                        </div>
+                        <div id="compare_subc_row" class="compare-row"></div>
+                        <div class="field-pair subc-size">
+                            <div class="plot-field">
+                                <label for="subc_x_input">X (px)</label>
+                                <input type="number" id="subc_x_input" value="1024" min="32" max="1024" step="32" inputmode="numeric">
+                            </div>
+                            <div class="plot-field">
+                                <label for="subc_y_input">Y (px)</label>
+                                <input type="number" id="subc_y_input" value="1024" min="8" max="1024" step="8" inputmode="numeric">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <details class="collapsible">
+                    <summary>About the models</summary>
+                    <div class="notes-body">
+                        <p><b>Original</b> follows Keck's <a href="https://www2.keck.hawaii.edu/inst/nirc2/nirc2_snr_eff.html">NIRC2 efficiency calculator</a>, written before the November 2023 Archon upgrade. Dither moves take 6 s.</p>
+                        <p><b>Updated</b> is fit to frame headers taken after the upgrade: 14,311 of our frames, checked against 139,541 in the <a href="https://koa.ipac.caltech.edu/">Keck Observatory Archive</a>.</p>
+                        <ul>
+                            <li>Readout: one 200 kHz read per coadd for CDS, N for MCDS with N read pairs.</li>
+                            <li>Transfer: 52 ns per pixel per read pair, after each coadd.</li>
+                            <li>Between frames: 4.0 s plus 0.28 s per megapixel. Some scripts add about 5 s.</li>
+                            <li>Dither moves: 25 s typical or 9 s fast, with D + 1 moves and none for a single position, as in section 2.4 of the <a href="https://www2.keck.hawaii.edu/inst/nirc2/ObserversManual.html">observer's manual</a>.</li>
+                        </ul>
+                        <p>Neither model adds the old 15 s per LGS dither, since it no longer applies. Legal subarray sizes follow Keck's <a href="https://www2.keck.hawaii.edu/inst/nirc2/TminSubarrays.html">subarray table</a>.</p>
+                    </div>
+                </details>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>
