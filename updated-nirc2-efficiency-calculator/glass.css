@@ -1,0 +1,23 @@
+/* Purple glass theme from tools/tool-theme.css. Remove this file and that link to restore the slate theme. */
+body.nirc2-efficiency {
+    --well: var(--glass-field);
+    --line: var(--glass-line);
+    --muted: var(--glass-muted);
+    --ink: var(--glass-ink);
+    --accent: var(--glass-accent);
+    --selected: rgba(255, 255, 255, 0.3);
+    --mono: "Stack Sans Text", system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+
+.nirc2-efficiency .chart-paper { --mono: ui-monospace, Menlo, Consolas, monospace; }
+
+.nirc2-efficiency :is(.results-column, .input-container) { border-color: var(--glass-edge); border-radius: 22px; background: var(--glass); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow); }
+.nirc2-efficiency .home-link { border-color: var(--glass-edge); background: var(--glass-pill); }
+.nirc2-efficiency .home-link:hover { border-color: rgba(255, 255, 255, 0.45); }
+.nirc2-efficiency .workspace-header h1 { font: 300 2rem/1.2 var(--headline); }
+.nirc2-efficiency .summary-stat strong { font-weight: 300; }
+.nirc2-efficiency :is(.summary-elapsed small, .time-parts dd, .plot-field input[type="number"]) { font-variant-numeric: tabular-nums; }
+.nirc2-efficiency .segments input:checked + span { background: var(--glass-pill); }
+.nirc2-efficiency .compare-row label:has(input:is(:checked, :disabled)) { background: rgba(255, 255, 255, 0.08); }
+.nirc2-efficiency .collapsible { background: var(--glass-field); }

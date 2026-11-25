@@ -1,4 +1,4 @@
-/* Dark glass theme over the site starfield, matching floating-bar. Remove this file, the warp-canvas element and the stars.js script to restore the flat theme. */
+/* Purple glass theme from tools/tool-theme.css. Remove this file, that link, the warp-canvas element and the stars.js script to restore the flat theme. */
 :root,
 [data-theme="light"] {
   color-scheme: dark;
@@ -10,11 +10,7 @@
   --sodium: #ffbe3b;
   --closed: #ff6b5e;
   --open: rgba(255, 255, 255, 0.14);
-  --glass: linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03)), rgba(32, 28, 50, 0.68);
-  --glass-edge: rgba(255, 255, 255, 0.26);
-  --glass-shadow: 0 12px 40px rgba(6, 4, 17, 0.35), 0 2px 6px rgba(6, 4, 17, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 -1px 0 rgba(255, 255, 255, 0.07);
-  --glass-pill: linear-gradient(150deg, rgba(242, 230, 255, 0.24), rgba(215, 198, 255, 0.1));
-  --popup: rgba(30, 26, 48, 0.97);
+  --mono: "Stack Sans Text", system-ui, sans-serif;
 }
 
 #warp-canvas {
@@ -29,8 +25,9 @@
   display: none;
 }
 
-h1 {
-  text-shadow: 0 1px 8px #090f18;
+.readout strong.countdown {
+  font-family: "Stack Sans Headline", system-ui, sans-serif;
+  font-weight: 300;
 }
 
 .scene,
@@ -41,8 +38,8 @@ h1 {
   border: 1px solid var(--glass-edge);
   border-radius: 22px;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
 }
 
@@ -86,7 +83,6 @@ optgroup {
   color: var(--ink);
 }
 
-.home-link,
 .target-button {
   border-color: var(--glass-edge);
   background: var(--glass-pill);
