@@ -35,11 +35,15 @@ export function createObservingSummary(footer, night, eventTime) {
         [addFact(facts, 'Transit'), night.transitTime]
     ];
     addFact(facts, 'Transit LST').textContent = night.transitLstHours == null ? '—' : formatLST(night.transitLstHours);
-    events.push([addFact(facts, 'Rise'), night.riseTime], [addFact(facts, 'Set'), night.setTime]);
+    const rise = addFact(facts, 'Rise');
+    rise.title = 'When the target first becomes visible with the Sun below −12°.';
+    const set = addFact(facts, 'Set');
+    set.title = 'When the target last stops being visible with the Sun below −12°.';
+    events.push([rise, night.windows[0]?.start], [set, night.windows.at(-1)?.end]);
 
     function refresh() {
         for (const [value, time] of events) value.textContent = eventTime(time);
     }
     refresh();
-    return {refresh};
+    return {refresh, visible};
 }

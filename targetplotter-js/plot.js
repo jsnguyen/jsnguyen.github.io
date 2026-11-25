@@ -3,6 +3,7 @@ import {createTimeAxis} from './axis.js';
 import {createObservingSummary} from './summary.js';
 import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
+import {createRemainingTime} from './remaining-time.js';
 
 export const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
 export const skyColors = ['#e6f2fc', '#c9c9c9'];
@@ -277,6 +278,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     add(footer, 'h2', 'details-heading plot-text', 'Observing summary');
     const eventTime = time => formatEventTime(time, zone, options.showDates, options.use12Hour);
     const summary = createObservingSummary(footer, night, eventTime);
+    const remaining = createRemainingTime(summary.visible, night.windows, nowToggle);
     const interval = createIntervalSelection(plots, samples, details, eventTime);
     moonValue.parentElement.title = 'Target–Moon separation and whether the Moon’s center is above the local horizon.';
     const cursors = plots.map(plot => add(plot.over, 'div', 'plot-cursor'));
@@ -384,9 +386,11 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         },
         setToday(isToday) {
             caption.textContent = titleText + (isToday ? ' (Today)' : '');
+            remaining.setToday(isToday);
         },
         destroy() {
             observer.disconnect();
+            remaining.destroy();
             currentTime.destroy();
             interval.destroy();
             plots.forEach(plot => plot.destroy());

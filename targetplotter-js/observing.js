@@ -176,8 +176,6 @@ export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitu
     const transit = center.ut - previousTransit.ut <= nextTransit.ut - center.ut ? previousTransit : nextTransit;
     const transitTime = transit.date.getTime() / 1000;
     const transitLstHours = localSiderealHours(transit, longitude);
-    const rise = Astronomy.SearchAltitude('Star1', observer, 1, transit, -1, 0);
-    const set = Astronomy.SearchAltitude('Star1', observer, -1, transit, 1, 0);
 
     const sampleCount = Math.ceil(duration / sampleStep) + 1;
     // Store two numbers per grid sample. Off-grid readouts use the interpolated vectors directly.
@@ -232,5 +230,5 @@ export function computeNight(raHours, decDegrees, dateISO, latitude = keckLatitu
     const windows = observingWindows(samples, isKeck, latitude, target.dec, transitTime);
     const visibleHours = windows.reduce((seconds, window) => seconds + (window.end - window.start), 0) / 3600;
     addParallacticAngles(samples, target, latitude, isKeck);
-    return { samples, sampleAt: time => calculateSample(time), windows, visibleHours, minMoonSep, isKeck, transitTime, transitLstHours, sunsetTime, sunriseTime, riseTime: rise && rise.date.getTime() / 1000, setTime: set && set.date.getTime() / 1000 };
+    return { samples, sampleAt: time => calculateSample(time), windows, visibleHours, minMoonSep, isKeck, transitTime, transitLstHours, sunsetTime, sunriseTime };
 }
