@@ -5,7 +5,7 @@ function normalize(text) {
 }
 
 async function loadCities() {
-    const response = await fetch(new URL('./cities.json', import.meta.url));
+    const response = await fetch(new URL('./cities.json?v=2', import.meta.url));
     if (!response.ok) throw new Error('Could not load the city list.');
     const data = await response.json();
     const supported = Intl.supportedValuesOf?.('timeZone');
@@ -30,12 +30,12 @@ async function loadCities() {
     // The source rows are already ordered by population.
     const cities = [];
     const zoneCities = new Map();
-    for (const [name, index, asciiName] of data.cities) {
+    for (const [name, index, latitude, longitude, asciiName] of data.cities) {
         const location = regions[index];
         if (!location.zone) continue;
         const key = normalize(name);
         const keys = asciiName ? [key, normalize(asciiName)] : [key];
-        const city = {name, ...location, keys};
+        const city = {name, ...location, keys, latitude, longitude};
         cities.push(city);
         for (const alias of keys) {
             const id = location.zone + '/' + alias.replace(/ city$/, '');
@@ -83,15 +83,25 @@ function matchRank(city, name, qualifiers, zoneQuery) {
     return rank === 4 ? -1 : rank;
 }
 
+function getCatalog() {
+    if (!catalog) catalog = loadCities().catch(error => { catalog = null; throw error; });
+    return catalog;
+}
+
+export async function findCity({name, zone, region}) {
+    const key = normalize(name);
+    const cities = await getCatalog();
+    return cities.find(city => city.zone === zone && (!region || city.region === region) && city.keys.includes(key) && Number.isFinite(city.latitude)) ?? null;
+}
+
 export async function searchCities(query) {
     const [name, ...location] = query.split(',').map(normalize);
     if (!name) return [];
-    if (!catalog) catalog = loadCities().catch(error => { catalog = null; throw error; });
     const qualifiers = location.join(' ').split(' ').filter(Boolean);
     const zoneQuery = query.includes('/');
     const matches = [[], [], [], []];
     const seen = new Set();
-    for (const city of await catalog) {
+    for (const city of await getCatalog()) {
         const rank = matchRank(city, name, qualifiers, zoneQuery);
         if (rank < 0 || matches[rank].length === 8) continue;
         const id = city.name + '/' + city.region + '/' + city.zone;

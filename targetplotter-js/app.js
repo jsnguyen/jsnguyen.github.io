@@ -1,5 +1,6 @@
-import {computeNight} from './observing.js';
+import {computeNight, isKeckSite} from './observing.js';
 import {renderPlot} from './plot.js';
+import {renderEmptyPlot} from './empty-plot.js';
 import {createTargetHistory} from './history.js';
 
 const targetName = document.querySelector('#target_name_input');
@@ -71,6 +72,7 @@ let lookup = null;
 let lookupTimer;
 let plotTimer;
 let plotted = null;
+let placeholder = null;
 let dateStatusTimer;
 const targetHistory = createTargetHistory(document.querySelector('#target_history'), ({name}) => {
     targetName.value = name;
@@ -100,15 +102,38 @@ function updateDateStatus() {
     dateStatusTimer = setTimeout(updateDateStatus, next * 1000 - instant);
 }
 
-function discardPlot() {
-    clearTimeout(plotTimer);
-    if (plotted) {
-        chart.style.minHeight = chart.getBoundingClientRect().height + 'px';
-        plotSurface.style.minHeight = plotSurface.getBoundingClientRect().height + 'px';
+function observingSite() {
+    const date = dateInput.value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !dateInput.validity.valid) throw new Error('Enter an observing date.');
+    return {date, lat: siteDegrees(latInput, 'latitude', 90), lon: siteDegrees(lonInput, 'longitude', 180)};
+}
+
+function showEmptyPlot() {
+    placeholder?.destroy();
+    let night = null;
+    try {
+        const {date, lat, lon} = observingSite();
+        // Any target gives the night's times and Sun altitudes.
+        night = computeNight(0, 0, date, lat, lon);
+    } catch {
+        // The blank plot then has no times or sky.
     }
+    const settings = {axisMode: axisMode.value, zone: displayTimeZone(), showDates: showDates.checked, use12Hour: use12Hour.checked};
+    placeholder = renderEmptyPlot(chart, night, isKeckSite(Number(latInput.value), Number(lonInput.value)), settings, nowToggle);
+}
+
+function hideEmptyPlot() {
+    placeholder?.destroy();
+    placeholder = null;
+}
+
+function discardPlot(showEmpty = true) {
+    clearTimeout(plotTimer);
+    if (plotted) chart.style.minHeight = chart.getBoundingClientRect().height + 'px';
     plotted?.view.destroy();
     plotted = null;
     saveButton.disabled = true;
+    if (showEmpty) showEmptyPlot();
     updateDateStatus();
 }
 
@@ -136,19 +161,17 @@ function makePlot(rememberTarget = true) {
     }
     const anchor = document.activeElement?.closest('.input-container') ? targetName : saveButton;
     const previousTop = anchor.getBoundingClientRect().top;
-    discardPlot();
+    discardPlot(false);
     try {
         const ra = parseAngle(raInput.value, true);
         const dec = parseAngle(decInput.value, false);
-        const date = dateInput.value;
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !dateInput.validity.valid) throw new Error('Enter an observing date.');
-        const lat = siteDegrees(latInput, 'latitude', 90);
-        const lon = siteDegrees(lonInput, 'longitude', 180);
+        const {date, lat, lon} = observingSite();
 
         const title = name || `RA ${formatAngle(ra, true)}, Dec ${formatAngle(dec, false)}`;
         const base = name.replace(/\s+/g, '_').replace(/[<>:"/\\|?*]/g, '') || 'target';
         const night = computeNight(ra, dec, date, lat, lon);
         status.textContent = '';
+        hideEmptyPlot();
         const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode.value, showDates: showDates.checked, use12Hour: use12Hour.checked});
         plotted = {view, date, start: Math.ceil(night.samples[0].time), end: Math.floor(night.samples.at(-1).time), inputs: inputs.map(input => input.value.trim()), filename: `${base}_${date}.png`};
         if (name && rememberTarget) targetHistory.remember(name, identified.ra, identified.dec, true);
@@ -156,9 +179,10 @@ function makePlot(rememberTarget = true) {
         updateDateStatus();
         settlePlotHeight(view, anchor, previousTop);
     } catch (error) {
-        discardPlot();
+        discardPlot(false);
         plotSurface.replaceChildren();
         plotDetails.replaceChildren();
+        showEmptyPlot();
         status.textContent = error.message;
     }
 }
@@ -266,6 +290,7 @@ timeZoneInput.addEventListener('change', () => plotted?.view.setTimeZone(display
 axisMode.addEventListener('change', () => plotted?.view.setAxisMode(axisMode.value));
 showDates.addEventListener('change', () => plotted?.view.setShowDates(showDates.checked));
 use12Hour.addEventListener('change', () => plotted?.view.setUse12Hour(use12Hour.checked));
+for (const input of [timeZoneInput, axisMode, showDates, use12Hour]) input.addEventListener('change', () => { if (placeholder) showEmptyPlot(); });
 nowToggle.addEventListener('change', updateDateStatus);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateDateStatus(); });
 targetName.addEventListener('keydown', event => {

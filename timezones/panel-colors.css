@@ -1,0 +1,10 @@
+/* Tinted clock panels and sunrise banner. Remove this file and its link to restore the plain glass panels. */
+.clock-tile { --tile-hue: 265; border-color: hsl(var(--tile-hue) 80% 78% / 0.4); background: linear-gradient(150deg, hsl(var(--tile-hue) 75% 62% / 0.32), hsl(var(--tile-hue) 70% 50% / 0.06) 65%), rgba(22, 19, 38, 0.72); }
+.clock-tile:nth-child(7n + 2) { --tile-hue: 215; }
+.clock-tile:nth-child(7n + 3) { --tile-hue: 175; }
+.clock-tile:nth-child(7n + 4) { --tile-hue: 140; }
+.clock-tile:nth-child(7n + 5) { --tile-hue: 38; }
+.clock-tile:nth-child(7n + 6) { --tile-hue: 8; }
+.clock-tile:nth-child(7n + 7) { --tile-hue: 320; }
+.clock-tile h2 { color: hsl(var(--tile-hue) 85% 86%); }
+.sun-banner { border-color: hsl(36 90% 75% / 0.4); background: linear-gradient(100deg, hsl(36 90% 60% / 0.3), hsl(330 70% 55% / 0.14)), rgba(22, 19, 38, 0.72); }

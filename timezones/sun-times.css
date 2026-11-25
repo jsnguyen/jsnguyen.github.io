@@ -1,0 +1,5 @@
+/* Sunrise and sunset banner and tile lines from sun-times.js. Remove this file, that script and their references to drop them. */
+.clock-tile .sun-time { align-self: start; color: var(--muted); font-size: 0.82rem; text-align: center; }
+.clock-tile:has(.sun-time:not([hidden])) { grid-template-rows: minmax(28px, auto) minmax(66px, 1fr) auto minmax(28px, 1fr); }
+.clock-tile:has(.sun-time:not([hidden])) .readout { align-self: end; }
+.sun-banner { margin: 0 0 14px; padding: 10px 16px; border: 1px solid var(--glass-edge, var(--line)); border-radius: 22px; background: var(--glass, var(--panel)); -webkit-backdrop-filter: var(--glass-blur, none); backdrop-filter: var(--glass-blur, none); box-shadow: var(--glass-shadow, none); text-align: center; font: 300 1.2rem/1.3 "Stack Sans Headline", system-ui, sans-serif; }

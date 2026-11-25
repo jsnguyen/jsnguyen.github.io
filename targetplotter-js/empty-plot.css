@@ -1,0 +1,10 @@
+/* Status text in the title's place above the blank plot from empty-plot.js. Remove this file and its link to restore the full status panel. */
+.targetplotter-js #status:not(:empty) {
+    position: static;
+    padding: 16px 16px 0;
+    background: none;
+    color: #202834;
+    font: 500 16px/1.4 Arial, sans-serif;
+}
+
+.targetplotter-js #status:not(:empty) + #plot-surface .plot-figure { padding-top: 0; }

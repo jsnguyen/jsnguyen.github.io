@@ -12,5 +12,5 @@ body {
 .hour-format input:checked + span { color: #fff; background: var(--glass-pill); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3); }
 .remove-zone { color: var(--muted); }
 .remove-zone:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
-#lst-coordinates form, #city-matches { background: var(--popup); }
+#city-matches { background: var(--popup); }
 #city-matches [aria-selected="true"], #city-matches li:hover { background: rgba(255, 255, 255, 0.1); }

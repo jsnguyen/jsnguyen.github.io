@@ -1,20 +1,22 @@
 import {formatClock} from '../targetplotter-js/time.js';
 import {setupCitySearch} from './city-search.js';
 import {setupTileOrder} from './tile-order.js';
+import {showSunTimes} from './sun-times.js';
 
 const day = 86400;
 const keck = {latitude: 19.8286, longitude: -155.4742};
 const defaultZones = ['Pacific/Honolulu', 'America/Los_Angeles', 'America/New_York', 'Europe/London'];
 const grid = document.querySelector('#clocks');
 const template = document.querySelector('#clock-tile');
-const coordinates = document.querySelector('#lst-editor').content.querySelector('details');
-const siteForm = coordinates.querySelector('form');
+const siteForm = document.querySelector('.site-controls');
 const picker = document.querySelector('#zone-picker');
 const hours = document.querySelector('.hour-format');
+const secondsToggle = document.querySelector('.seconds-format input');
 let browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let cities = defaultZones.filter(zone => zone !== browserZone).slice(0, 3).map(zone => ({name: locationName(zone), zone}));
 let tileOrder = [];
 let hour12 = false;
+let showSeconds = true;
 let site = keck;
 let tiles = [];
 let timer;
@@ -27,11 +29,12 @@ try {
     if (Number.isFinite(savedSite?.latitude) && Math.abs(savedSite.latitude) <= 90 &&
         Number.isFinite(savedSite.longitude) && Math.abs(savedSite.longitude) <= 180) site = savedSite;
     hour12 = saved?.hours === 12;
+    showSeconds = saved?.seconds !== false;
 } catch { /* Storage can be unavailable in private browsing. */ }
 
 function savePreferences() {
     try {
-        localStorage.setItem('timezones.preferences', JSON.stringify({zones: cities, hours: hour12 ? 12 : 24, site, order: tileOrder}));
+        localStorage.setItem('timezones.preferences', JSON.stringify({zones: cities, hours: hour12 ? 12 : 24, seconds: showSeconds, site, order: tileOrder}));
     } catch { /* The clocks also work without storage. */ }
 }
 
@@ -90,22 +93,15 @@ function siteName() {
 }
 
 function showCoordinates() {
-    const {latitude, longitude} = site;
-    siteForm.elements.latitude.value = latitude;
-    siteForm.elements.longitude.value = longitude;
-    const lat = Math.abs(latitude).toFixed(4) + '° ' + (latitude < 0 ? 'S' : 'N');
-    const lon = Math.abs(longitude).toFixed(4) + '° ' + (longitude < 0 ? 'W' : 'E');
-    const summary = coordinates.querySelector('summary');
-    summary.textContent = siteName() + ' · ' + lat + ', ' + lon;
-    summary.setAttribute('aria-label', 'Edit LST coordinates, ' + summary.textContent);
+    siteForm.elements.latitude.value = site.latitude;
+    siteForm.elements.longitude.value = site.longitude;
+    document.querySelector('night-strip')?.setAttribute('site', site.latitude + ',' + site.longitude);
 }
 
 function setSite(newSite) {
     site = newSite;
     showCoordinates();
     savePreferences();
-    coordinates.open = false;
-    coordinates.querySelector('summary').focus();
     refresh();
 }
 
@@ -114,7 +110,7 @@ function makeTile(key, title, zone, city) {
     tile.dataset.clockKey = key;
     const heading = tile.querySelector('h2');
     const date = tile.querySelector('.clock-date');
-    if (zone === 'LST') date.replaceWith(coordinates);
+    if (zone === 'LST') date.remove();
     if (city) {
         const button = tile.querySelector('button');
         button.hidden = false;
@@ -130,7 +126,7 @@ function makeTile(key, title, zone, city) {
     const offset = tile.querySelector('.delta');
     offset.hidden = zone === 'UTC';
     if (zone === 'LST') offset.title = 'Shortest clock difference from UTC';
-    return {element: tile, key, zone, title, heading, readout: tile.querySelector('.clock-time'), period: tile.querySelector('.period'), date, offset};
+    return {element: tile, key, zone, title, city, heading, readout: tile.querySelector('.clock-time'), period: tile.querySelector('.period'), date, offset};
 }
 
 function buildClocks() {
@@ -160,11 +156,12 @@ function refresh() {
         if (tile.zone === 'LST') heading = siteName() + ' / LST';
         else if (clock.abbreviation !== tile.title) heading += ' / ' + clock.abbreviation;
         if (tile.heading.textContent !== heading) tile.heading.textContent = heading;
-        tile.readout.textContent = hms(clock.seconds, hour12);
+        tile.readout.textContent = hms(clock.seconds, hour12).slice(0, showSeconds ? 8 : 5);
         tile.period.textContent = hour12 ? (clock.seconds < day / 2 ? ' AM' : ' PM') : '';
         if (clock.date) tile.date.textContent = clock.date;
         if (!tile.offset.hidden) tile.offset.textContent = formatOffset(utcDifference(clock, utcSeconds), tile.zone === 'LST');
     }
+    showSunTimes(tiles, now, site, hour12, (zone, date) => readClock(zone, date).seconds);
     if (!document.hidden) timer = setTimeout(refresh, 1000 - Date.now() % 1000);
 }
 
@@ -185,25 +182,16 @@ hours.addEventListener('change', event => {
     savePreferences();
     refresh();
 });
+secondsToggle.addEventListener('change', () => {
+    showSeconds = secondsToggle.checked;
+    savePreferences();
+    refresh();
+});
 siteForm.addEventListener('submit', event => {
     event.preventDefault();
     setSite({latitude: siteForm.elements.latitude.valueAsNumber, longitude: siteForm.elements.longitude.valueAsNumber});
 });
 siteForm.querySelector('.use-keck').addEventListener('click', () => setSite(keck));
-coordinates.addEventListener('toggle', () => {
-    if (!coordinates.open) return;
-    const anchor = coordinates.parentElement.getBoundingClientRect();
-    const fitsBelow = anchor.bottom + 6 + siteForm.offsetHeight <= window.innerHeight;
-    coordinates.classList.toggle('open-above', !fitsBelow && anchor.top > window.innerHeight - anchor.bottom);
-});
-document.addEventListener('pointerdown', event => {
-    if (coordinates.open && !coordinates.contains(event.target)) coordinates.open = false;
-});
-coordinates.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || !coordinates.open) return;
-    coordinates.open = false;
-    coordinates.querySelector('summary').focus();
-});
 function syncBrowserZone() {
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (zone === browserZone) return refresh();
@@ -213,5 +201,6 @@ function syncBrowserZone() {
 window.addEventListener('focus', syncBrowserZone);
 document.addEventListener('visibilitychange', syncBrowserZone);
 hours.querySelector('[value="' + (hour12 ? 12 : 24) + '"]').checked = true;
+secondsToggle.checked = showSeconds;
 showCoordinates();
 buildClocks();

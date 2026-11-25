@@ -1,0 +1,3 @@
+/* Cartoon Keck sky strip from night-strip.js. Remove this file, that script and the night-strip element to drop it. */
+night-strip { display: block; height: clamp(140px, 20vw, 210px); margin-bottom: 14px; overflow: hidden; border: 1px solid var(--glass-edge, var(--line)); border-radius: 22px; background: #0b1030; box-shadow: var(--glass-shadow, none); }
+night-strip canvas { display: block; width: 100%; height: 100%; }

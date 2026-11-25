@@ -1,0 +1,10 @@
+/* Tighter spacing for the timezones page. Clock digits keep their size. Remove this file and its link to restore the roomier layout. */
+main { margin: clamp(10px, 2vw, 20px) auto 20px; }
+.page-header { margin-bottom: 12px; }
+night-strip { height: clamp(120px, 16vw, 170px); margin-bottom: 10px; }
+night-strip:not([hidden]) + .sun-banner { position: relative; width: fit-content; margin: -52px 0 19px 12px; padding: 5px 14px; font-size: 1rem; }
+#clocks { gap: 10px; }
+.clock-tile, .clock-tile:has(.sun-time:not([hidden])) { grid-template-rows: minmax(26px, auto); grid-auto-rows: auto; row-gap: 2px; padding: 10px 14px; }
+.clock-tile .readout { padding: 4px 0; line-height: 1; }
+.zone-controls, .site-controls { margin: 12px 0; }
+.search-status:empty { display: none; }

@@ -4,9 +4,9 @@ import {createObservingSummary} from './summary.js';
 import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
 
-const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
-const skyColors = ['#e6f2fc', '#c9c9c9'];
-const panels = [['az', 'Azimuth [°]'], ['alt', 'Altitude [°]'], ['rate', 'Field rotation [°/min]']];
+export const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
+export const skyColors = ['#e6f2fc', '#c9c9c9'];
+export const panels = [['az', 'Azimuth [°]'], ['alt', 'Altitude [°]'], ['rate', 'Field rotation [°/min]']];
 const rotationFormat = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1, signDisplay: 'exceptZero', useGrouping: false});
 
 function add(parent, tag, className, text = '') {
@@ -17,7 +17,7 @@ function add(parent, tag, className, text = '') {
     return element;
 }
 
-function backgroundBands(samples) {
+export function backgroundBands(samples) {
     const bands = [];
     let start = samples[0].time;
     let previous = null;
@@ -89,7 +89,7 @@ function ticksBetween(min, max, step) {
     return ticks;
 }
 
-function makePanel(parent, samples, times, field, label, bands, timeAxis) {
+export function makePanel(parent, samples, times, field, label, bands, timeAxis) {
     const values = samples.map(row => panelValue(row, field));
     const isBottom = field === 'rate';
     let range = field === 'az' ? [0, 360] : [0, 90];

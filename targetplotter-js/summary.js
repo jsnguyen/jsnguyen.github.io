@@ -35,6 +35,7 @@ export function createObservingSummary(footer, night, eventTime) {
         [addFact(facts, 'Transit'), night.transitTime]
     ];
     addFact(facts, 'Transit LST').textContent = night.transitLstHours == null ? '—' : formatLST(night.transitLstHours);
+    events.push([addFact(facts, 'Rise'), night.riseTime], [addFact(facts, 'Set'), night.setTime]);
 
     function refresh() {
         for (const [value, time] of events) value.textContent = eventTime(time);
