@@ -81,7 +81,7 @@ const targetHistory = createTargetHistory(document.querySelector('#target_histor
 });
 
 function displayTimeZone() {
-    if (timezoneMode.value === 'utc') return 'UTC';
+    if (timezoneMode.value !== 'local') return timezoneMode.value;
     return timeZoneInput.value === 'auto' ? browserZone : timeZoneInput.value;
 }
 

@@ -1,4 +1,4 @@
-const offsets = {PST: -8, PDT: -7, HST: -10, UTC: 0};
+const offsets = {HST: -10, AKST: -9, AKDT: -8, PST: -8, PDT: -7, MST: -7, MDT: -6, CST: -6, CDT: -5, EST: -5, EDT: -4, UTC: 0};
 const formatters = new Map();
 
 function zoneFormatter(zone) {

@@ -17,12 +17,12 @@
 
     <!-- uPlot and Astronomy Engine are distributed with their MIT licenses. -->
     <script type="importmap">
-        {"imports": {"./observing.js": "./observing.js?v=4", "./plot.js": "./plot.js?v=6", "./time.js": "./time.js?v=2", "./axis.js": "./axis.js?v=2", "./summary.js": "./summary.js?v=5", "./interval.js": "./interval.js?v=2", "./empty-plot.js": "./empty-plot.js?v=1", "./remaining-time.js": "./remaining-time.js?v=1"}}
+        {"imports": {"./observing.js": "./observing.js?v=4", "./plot.js": "./plot.js?v=6", "./time.js": "./time.js?v=3", "./axis.js": "./axis.js?v=2", "./summary.js": "./summary.js?v=5", "./interval.js": "./interval.js?v=2", "./empty-plot.js": "./empty-plot.js?v=1", "./remaining-time.js": "./remaining-time.js?v=1"}}
     </script>
     <link rel="modulepreload" href="plot.js?v=6">
     <link rel="modulepreload" href="observing.js?v=4">
     <link rel="modulepreload" href="history.js">
-    <link rel="modulepreload" href="time.js?v=2">
+    <link rel="modulepreload" href="time.js?v=3">
     <link rel="modulepreload" href="axis.js?v=2">
     <link rel="modulepreload" href="summary.js?v=5">
     <link rel="modulepreload" href="current-time.js">
@@ -31,7 +31,7 @@
     <link rel="modulepreload" href="remaining-time.js?v=1">
     <script defer src="vendor/astronomy.browser.min.js"></script>
     <script defer src="vendor/uPlot.iife.min.js"></script>
-    <script type="module" src="app.js?v=7"></script>
+    <script type="module" src="app.js?v=8"></script>
     <script type="module" src="../stars.js" fetchpriority="low"></script>
 </head>
 <body class="targetplotter-page targetplotter-js">
@@ -65,7 +65,18 @@
                     <label class="timezone-mode">Timezone
                         <select id="timezone_mode">
                             <option value="local">Local time</option>
-                            <option value="utc">UTC</option>
+                            <option value="UTC">UTC</option>
+                            <option value="HST">HST (UTC−10)</option>
+                            <option value="AKST">AKST (UTC−9)</option>
+                            <option value="AKDT">AKDT (UTC−8)</option>
+                            <option value="PST">PST (UTC−8)</option>
+                            <option value="PDT">PDT (UTC−7)</option>
+                            <option value="MST">MST (UTC−7)</option>
+                            <option value="MDT">MDT (UTC−6)</option>
+                            <option value="CST">CST (UTC−6)</option>
+                            <option value="CDT">CDT (UTC−5)</option>
+                            <option value="EST">EST (UTC−5)</option>
+                            <option value="EDT">EDT (UTC−4)</option>
                         </select>
                     </label>
                 </div>
