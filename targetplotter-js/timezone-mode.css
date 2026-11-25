@@ -1,0 +1,17 @@
+/* LST axis toggle in the plot and the page timezone selector below it. */
+.targetplotter-js .axis-mode { cursor: pointer; }
+.targetplotter-js .axis-mode input { width: 15px; height: 15px; accent-color: #28699c; cursor: pointer; }
+
+.targetplotter-js #timezone_mode {
+    min-height: 32px;
+    padding-inline: 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink);
+    background: rgba(4, 12, 24, 0.55);
+    color-scheme: dark;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.targetplotter-js #timezone_mode option { background: var(--panel); color: var(--ink); }

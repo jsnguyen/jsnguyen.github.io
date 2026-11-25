@@ -231,17 +231,6 @@ body.targetplotter-js {
     font: 200 16px/1.6 "Stack Sans Text", system-ui, sans-serif;
 }
 
-.targetplotter-js #axis_mode {
-    min-height: 32px;
-    padding-inline: 8px;
-    border: 1px solid #bfccd7;
-    border-radius: 6px;
-    color: #24384a;
-    background: #f3f6f8;
-    font-family: inherit;
-    cursor: pointer;
-}
-
 .targetplotter-js .chart-tools :focus-visible { outline-color: #286494; }
 
 .targetplotter-js .chart-options, .targetplotter-js .chart-options label {

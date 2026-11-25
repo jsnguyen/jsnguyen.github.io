@@ -7,8 +7,9 @@
 
     <!-- Google Fonts' Stack Sans variable subsets, licensed under fonts/OFL.txt. -->
     <link rel="stylesheet" href="vendor/uPlot.min.css">
-    <link rel="stylesheet" href="plot.css?v=7">
+    <link rel="stylesheet" href="plot.css?v=8">
     <link rel="stylesheet" href="empty-plot.css?v=1">
+    <link rel="stylesheet" href="timezone-mode.css?v=1">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
     <link rel="manifest" href="/site.webmanifest">
@@ -30,7 +31,7 @@
     <link rel="modulepreload" href="remaining-time.js?v=1">
     <script defer src="vendor/astronomy.browser.min.js"></script>
     <script defer src="vendor/uPlot.iife.min.js"></script>
-    <script type="module" src="app.js?v=6"></script>
+    <script type="module" src="app.js?v=7"></script>
     <script type="module" src="../stars.js" fetchpriority="low"></script>
 </head>
 <body class="targetplotter-page targetplotter-js">
@@ -54,19 +55,19 @@
                                 <path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/>
                             </svg>
                         </button>
-                        <label class="axis-mode">X-axis
-                            <select id="axis_mode">
-                                <option value="local">Local time</option>
-                                <option value="utc">UTC</option>
-                                <option value="lst">LST</option>
-                            </select>
-                        </label>
+                        <label class="axis-mode"><input type="checkbox" id="lst_axis"> LST</label>
                     </div>
                 </div>
                 <div class="chart-options">
                     <label><input type="checkbox" id="show_current_time"> Show current time</label>
                     <label><input type="checkbox" id="show_dates"> Show dates</label>
                     <label><input type="checkbox" id="use_12_hour"> 12-hour clock</label>
+                    <label class="timezone-mode">Timezone
+                        <select id="timezone_mode">
+                            <option value="local">Local time</option>
+                            <option value="utc">UTC</option>
+                        </select>
+                    </label>
                 </div>
                 <p id="now_status" role="status"></p>
                 <div id="plot-details"></div>

@@ -8,7 +8,8 @@ const raInput = document.querySelector('#ra_input');
 const decInput = document.querySelector('#dec_input');
 const dateInput = document.querySelector('#date_input');
 const dateToday = document.querySelector('#date_today');
-const axisMode = document.querySelector('#axis_mode');
+const timezoneMode = document.querySelector('#timezone_mode');
+const lstAxis = document.querySelector('#lst_axis');
 const showDates = document.querySelector('#show_dates');
 const use12Hour = document.querySelector('#use_12_hour');
 const nowToggle = document.querySelector('#show_current_time');
@@ -80,7 +81,12 @@ const targetHistory = createTargetHistory(document.querySelector('#target_histor
 });
 
 function displayTimeZone() {
+    if (timezoneMode.value === 'utc') return 'UTC';
     return timeZoneInput.value === 'auto' ? browserZone : timeZoneInput.value;
+}
+
+function axisMode() {
+    return lstAxis.checked ? 'lst' : 'local';
 }
 
 function updateDateStatus() {
@@ -118,7 +124,7 @@ function showEmptyPlot() {
     } catch {
         // The blank plot then has no times or sky.
     }
-    const settings = {axisMode: axisMode.value, zone: displayTimeZone(), showDates: showDates.checked, use12Hour: use12Hour.checked};
+    const settings = {axisMode: axisMode(), zone: displayTimeZone(), showDates: showDates.checked, use12Hour: use12Hour.checked};
     placeholder = renderEmptyPlot(chart, night, isKeckSite(Number(latInput.value), Number(lonInput.value)), settings, nowToggle);
 }
 
@@ -172,7 +178,7 @@ function makePlot(rememberTarget = true) {
         const night = computeNight(ra, dec, date, lat, lon);
         status.textContent = '';
         hideEmptyPlot();
-        const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode.value, showDates: showDates.checked, use12Hour: use12Hour.checked});
+        const view = renderPlot(chart, night, title, date, displayTimeZone(), nowToggle, {axisMode: axisMode(), showDates: showDates.checked, use12Hour: use12Hour.checked});
         plotted = {view, date, start: Math.ceil(night.samples[0].time), end: Math.floor(night.samples.at(-1).time), inputs: inputs.map(input => input.value.trim()), filename: `${base}_${date}.png`};
         if (name && rememberTarget) targetHistory.remember(name, identified.ra, identified.dec, true);
         saveButton.disabled = false;
@@ -286,11 +292,11 @@ for (const input of [raInput, decInput, dateInput, latInput, lonInput]) {
         plotTimer = setTimeout(makePlot, 350);
     });
 }
-timeZoneInput.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
-axisMode.addEventListener('change', () => plotted?.view.setAxisMode(axisMode.value));
+for (const input of [timeZoneInput, timezoneMode]) input.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
+lstAxis.addEventListener('change', () => plotted?.view.setAxisMode(axisMode()));
 showDates.addEventListener('change', () => plotted?.view.setShowDates(showDates.checked));
 use12Hour.addEventListener('change', () => plotted?.view.setUse12Hour(use12Hour.checked));
-for (const input of [timeZoneInput, axisMode, showDates, use12Hour]) input.addEventListener('change', () => { if (placeholder) showEmptyPlot(); });
+for (const input of [timeZoneInput, timezoneMode, lstAxis, showDates, use12Hour]) input.addEventListener('change', () => { if (placeholder) showEmptyPlot(); });
 nowToggle.addEventListener('change', updateDateStatus);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateDateStatus(); });
 targetName.addEventListener('keydown', event => {
