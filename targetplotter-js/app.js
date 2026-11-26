@@ -2,6 +2,7 @@ import {computeNight, isKeckSite} from './observing.js';
 import {renderPlot} from './plot.js';
 import {renderEmptyPlot} from './empty-plot.js';
 import {createTargetHistory} from './history.js';
+import {createStarlist} from './starlist.js';
 
 const targetName = document.querySelector('#target_name_input');
 const raInput = document.querySelector('#ra_input');
@@ -76,6 +77,11 @@ let placeholder = null;
 let dateStatusTimer;
 const targetHistory = createTargetHistory(document.querySelector('#target_history'), ({name}) => {
     targetName.value = name;
+    changeTargetName(true);
+});
+createStarlist(document.querySelector('#target_history'), target => {
+    coordinateCache.set(target.name, target);
+    targetName.value = target.name;
     changeTargetName(true);
 });
 

@@ -1,0 +1,97 @@
+/* Starlist tab beside the recent targets from starlist.js. Remove this file, starlist.js and its hook in app.js to restore the plain list. */
+.input-container .target-list-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+}
+
+.input-container .target-tabs {
+    display: flex;
+    gap: 14px;
+    margin-right: auto;
+}
+
+.input-container .target-list-header button {
+    margin: 0;
+    padding: 0 0 2px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+    font-size: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.input-container .target-list-header button:is(:hover, :active) { transform: none; box-shadow: none; }
+
+.input-container .target-tabs button {
+    color: var(--muted);
+    font-family: "Stack Sans Headline", system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.input-container .target-tabs button:hover { color: var(--ink); }
+.input-container .target-tabs [aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+.input-container .target-list-header .starlist-action {
+    color: var(--accent);
+    font-family: "Stack Sans Text", system-ui, sans-serif;
+    font-size: 0.875rem;
+}
+
+.input-container .target-list-header .starlist-action:hover { text-decoration: underline; }
+
+/* Matches the recent targets list in plot.css. */
+.input-container #starlist {
+    --row-height: 2rem;
+    width: 100%;
+    height: calc(5 * var(--row-height) + 2px);
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgba(4, 12, 24, 0.55);
+    color: var(--ink);
+    list-style: none;
+}
+
+.input-container #starlist:empty::before {
+    content: attr(data-empty);
+    display: block;
+    padding: 6px 10px;
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.input-container #starlist li {
+    display: grid;
+    height: var(--row-height);
+}
+
+.input-container #starlist li + li { border-top: 1px solid var(--line); }
+
+.input-container #starlist button {
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.input-container #starlist button:is(:hover, :focus-visible, :active) {
+    background: rgba(200, 214, 231, 0.09);
+    transform: none;
+    box-shadow: none;
+    outline-offset: -2px;
+}
