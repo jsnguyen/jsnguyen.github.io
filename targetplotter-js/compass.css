@@ -1,0 +1,27 @@
+/* Compass rose in the readout from compass.js. Remove this file, compass.js and their hooks to restore the plain readout. */
+.targetplotter-js .plot-readout { align-items: center; }
+
+.targetplotter-js .plot-compass {
+    width: 64px;
+    height: 64px;
+    margin-block: -8px;
+    overflow: visible;
+}
+
+.targetplotter-js .plot-compass-ring { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.targetplotter-js .plot-compass-tick { stroke: var(--muted); stroke-width: 1.5; }
+.targetplotter-js .plot-compass-hub { fill: var(--ink); }
+
+.targetplotter-js .plot-compass-letter {
+    fill: var(--muted);
+    font: 15px ui-monospace, Menlo, Consolas, monospace;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+.targetplotter-js .plot-compass-needle {
+    fill: var(--accent);
+    stroke: var(--accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}

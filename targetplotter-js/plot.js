@@ -4,6 +4,7 @@ import {createObservingSummary} from './summary.js';
 import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
 import {createRemainingTime} from './remaining-time.js';
+import {createCompass} from './compass.js';
 
 export const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
 export const skyColors = ['#e6f2fc', '#c9c9c9'];
@@ -248,6 +249,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     readout.setAttribute('aria-label', 'Coordinates at the selected time');
     const clockGroup = add(readout, 'span', 'plot-readout-group plot-readout-clocks');
     const coordinateGroup = add(readout, 'span', 'plot-readout-group plot-readout-coordinates');
+    const compass = createCompass(coordinateGroup);
     function addField(group, key, label) {
         const field = add(group, 'span', 'plot-readout-cell plot-readout-' + key);
         add(field, 'span', 'plot-readout-label', label);
@@ -288,6 +290,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     function showRow(row, live = false) {
         const clock = row ? formatClock(row.time, zone) : null;
         clockHeading.textContent = (live ? 'Now' : 'Time') + ' (' + (clock?.zone || initialClockZone) + ')';
+        compass.show(row);
         for (let i = 0; i < plots.length; i++) {
             const cursor = cursors[i];
             cursor.hidden = !row;

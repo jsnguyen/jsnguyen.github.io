@@ -5,6 +5,7 @@ import {addFact} from './summary.js';
 import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
 import {panels, visibilityColors, skyColors, backgroundBands, makePanel} from './plot.js';
+import {createCompass} from './compass.js';
 
 const summaryLabels = ['Time visible', 'Min Moon sep.', 'Sunset', 'Sunrise', 'Transit', 'Transit LST', 'Rise', 'Set'];
 const blankAxis = {splits: () => [], labels: () => [], uses12Hour: () => false, caption: () => ' '};
@@ -51,6 +52,7 @@ export function renderEmptyPlot(container, night, isKeck, settings, nowToggle) {
             add(field, 'span', 'plot-readout-value', '—');
         }
     }
+    createCompass(readout.querySelector('.plot-readout-coordinates'));
     readout.querySelector('.plot-readout-date').hidden = !settings.showDates;
     readout.querySelector('.plot-readout-clocks').style.setProperty('--clock-width', Math.max(timeLabel.length, settings.use12Hour ? 11 : 8) + 'ch');
 
