@@ -4,7 +4,7 @@ import {createObservingSummary} from './summary.js';
 import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
 import {createRemainingTime} from './remaining-time.js';
-import {createCompass} from './compass.js';
+import {createPosition} from './position.js';
 
 export const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
 export const skyColors = ['#e6f2fc', '#c9c9c9'];
@@ -275,7 +275,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const altValue = addField(coordinateGroup, 'angle', 'Alt');
     const rateValue = addField(coordinateGroup, 'rate', 'Field rotation');
     const moonValue = addField(coordinateGroup, 'moon', 'Moon sep.');
-    const compass = createCompass(details);
+    const position = createPosition(details, samples);
     const footer = add(details, 'div', 'plot-summary');
     add(footer, 'h2', 'details-heading plot-text', 'Observing summary');
     const eventTime = time => formatEventTime(time, zone, options.showDates, options.use12Hour);
@@ -290,7 +290,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     function showRow(row, live = false) {
         const clock = row ? formatClock(row.time, zone) : null;
         clockHeading.textContent = (live ? 'Now' : 'Time') + ' (' + (clock?.zone || initialClockZone) + ')';
-        compass.show(row);
+        position.show(row);
         for (let i = 0; i < plots.length; i++) {
             const cursor = cursors[i];
             cursor.hidden = !row;
@@ -396,7 +396,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
             remaining.destroy();
             currentTime.destroy();
             interval.destroy();
-            compass.destroy();
+            position.destroy();
             plots.forEach(plot => plot.destroy());
             figure.remove();
             readout.remove();

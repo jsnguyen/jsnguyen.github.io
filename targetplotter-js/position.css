@@ -1,0 +1,54 @@
+/* Target position section below the readout from position.js. Remove this file, position.js and their hooks to restore the plain details. */
+.targetplotter-js .plot-position {
+    padding: 16px var(--detail-padding);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+}
+
+.targetplotter-js .plot-position-diagrams {
+    container-type: inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 32px;
+}
+
+.targetplotter-js .plot-dial {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 4px;
+    margin: 0;
+}
+
+.targetplotter-js .plot-dial svg {
+    width: 144px;
+    height: 144px;
+    overflow: visible;
+}
+
+.targetplotter-js .plot-dial figcaption {
+    color: var(--ink);
+    font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace;
+}
+
+.targetplotter-js .plot-dial-name { color: var(--muted); }
+.targetplotter-js .plot-dial-visible { fill: #27a963; fill-opacity: 0.25; }
+.targetplotter-js .plot-dial-ring { fill: none; stroke: var(--muted); stroke-width: 1; }
+.targetplotter-js .plot-dial-tick { stroke: var(--muted); stroke-width: 1; }
+.targetplotter-js .plot-dial-hub { fill: var(--ink); }
+
+.targetplotter-js .plot-dial-label {
+    fill: var(--ink);
+    font: 10px ui-monospace, Menlo, Consolas, monospace;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+.targetplotter-js .plot-dial-arrow {
+    fill: var(--accent);
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}

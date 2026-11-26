@@ -1,0 +1,11 @@
+/* Cartoon telescope from telescope.js. Remove this file and its import in position.js to hide it. */
+.targetplotter-js .plot-telescope-ground { stroke: var(--muted); stroke-width: 1; }
+.targetplotter-js .plot-telescope-mount { fill: var(--muted); opacity: 0.6; }
+.targetplotter-js .plot-telescope-tube { fill: var(--accent); }
+.targetplotter-js .plot-telescope-aperture { fill: var(--ink); }
+.targetplotter-js .plot-telescope-pivot { fill: var(--panel); }
+
+/* Only shown where it fits beside both dials. */
+@container (width < 496px) {
+    .targetplotter-js .plot-telescope { display: none; }
+}
