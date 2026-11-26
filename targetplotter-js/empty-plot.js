@@ -52,7 +52,7 @@ export function renderEmptyPlot(container, night, isKeck, settings, nowToggle) {
             add(field, 'span', 'plot-readout-value', '—');
         }
     }
-    createCompass(readout.querySelector('.plot-readout-coordinates'));
+    const compass = createCompass(details);
     readout.querySelector('.plot-readout-date').hidden = !settings.showDates;
     readout.querySelector('.plot-readout-clocks').style.setProperty('--clock-width', Math.max(timeLabel.length, settings.use12Hour ? 11 : 8) + 'ch');
 
@@ -72,6 +72,7 @@ export function renderEmptyPlot(container, night, isKeck, settings, nowToggle) {
             observer.disconnect();
             currentTime?.destroy();
             interval.destroy();
+            compass.destroy();
             plots.forEach(plot => plot.destroy());
             figure.remove();
             readout.remove();

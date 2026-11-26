@@ -249,7 +249,6 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     readout.setAttribute('aria-label', 'Coordinates at the selected time');
     const clockGroup = add(readout, 'span', 'plot-readout-group plot-readout-clocks');
     const coordinateGroup = add(readout, 'span', 'plot-readout-group plot-readout-coordinates');
-    const compass = createCompass(coordinateGroup);
     function addField(group, key, label) {
         const field = add(group, 'span', 'plot-readout-cell plot-readout-' + key);
         add(field, 'span', 'plot-readout-label', label);
@@ -276,6 +275,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const altValue = addField(coordinateGroup, 'angle', 'Alt');
     const rateValue = addField(coordinateGroup, 'rate', 'Field rotation');
     const moonValue = addField(coordinateGroup, 'moon', 'Moon sep.');
+    const compass = createCompass(details);
     const footer = add(details, 'div', 'plot-summary');
     add(footer, 'h2', 'details-heading plot-text', 'Observing summary');
     const eventTime = time => formatEventTime(time, zone, options.showDates, options.use12Hour);
@@ -396,6 +396,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
             remaining.destroy();
             currentTime.destroy();
             interval.destroy();
+            compass.destroy();
             plots.forEach(plot => plot.destroy());
             figure.remove();
             readout.remove();

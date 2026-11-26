@@ -1,20 +1,27 @@
-/* Compass rose in the readout from compass.js. Remove this file, compass.js and their hooks to restore the plain readout. */
-.targetplotter-js .plot-readout { align-items: center; }
+/* Compass rose section below the readout from compass.js. Remove this file, compass.js and their hooks to restore the plain details. */
+.targetplotter-js .plot-compass-section {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding: 16px var(--detail-padding);
+    border-bottom: 1px solid var(--line);
+}
+
+.targetplotter-js .plot-compass-section .details-heading { justify-self: stretch; text-align: left; }
 
 .targetplotter-js .plot-compass {
-    width: 64px;
-    height: 64px;
-    margin-block: -8px;
+    width: 144px;
+    height: 144px;
     overflow: visible;
 }
 
-.targetplotter-js .plot-compass-ring { fill: none; stroke: var(--line); stroke-width: 1.5; }
-.targetplotter-js .plot-compass-tick { stroke: var(--muted); stroke-width: 1.5; }
+.targetplotter-js .plot-compass-ring { fill: none; stroke: var(--muted); stroke-width: 1; }
+.targetplotter-js .plot-compass-tick { stroke: var(--muted); stroke-width: 1; }
 .targetplotter-js .plot-compass-hub { fill: var(--ink); }
 
 .targetplotter-js .plot-compass-letter {
-    fill: var(--muted);
-    font: 15px ui-monospace, Menlo, Consolas, monospace;
+    fill: var(--ink);
+    font: 10px ui-monospace, Menlo, Consolas, monospace;
     text-anchor: middle;
     dominant-baseline: central;
 }
@@ -22,6 +29,11 @@
 .targetplotter-js .plot-compass-needle {
     fill: var(--accent);
     stroke: var(--accent);
-    stroke-width: 2.5;
+    stroke-width: 2;
     stroke-linecap: round;
+}
+
+.targetplotter-js .plot-compass-angle {
+    color: var(--ink);
+    font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace;
 }
