@@ -22,6 +22,7 @@ export const DEFAULT_CONFIG = {
   backgroundStarCount: 160,
   backgroundStarOpacity: 0.45,
   nebulaOpacity: 0.36,
+  nebulaSpin: 0.000015,
   orbitalArcCount: 5,
   orbitalArcOpacity: 0.18,
   wormholeTwist: 0.65,
@@ -79,7 +80,7 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
       const size = maxTravel * 2.2;
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.rotate(elapsed * 0.000015);
+      ctx.rotate(elapsed * config.nebulaSpin);
       ctx.globalAlpha = config.nebulaOpacity;
       ctx.drawImage(nebulaCanvas, -size / 2, -size / 2, size, size);
       ctx.restore();

@@ -1,8 +1,11 @@
 import { DEFAULT_CONFIG, createStarfieldEngine } from "./starfieldEngine.js";
+import { PERF_CONFIG, FRAME_MS } from "./perf.js";
 
 let engine = null;
 let running = false;
 let lastTime = 0;
+let paused = false;
+let generation = 0;
 
 self.addEventListener("message", event => {
   const data = event.data || {};
@@ -12,6 +15,9 @@ self.addEventListener("message", event => {
       break;
     case "resize":
       handleResize(data);
+      break;
+    case "pause":
+      handlePause(data.paused);
       break;
     default:
       break;
@@ -23,7 +29,7 @@ function handleInit({ canvas, config }) {
   if (!ctx) {
     return;
   }
-  engine = createStarfieldEngine(ctx, { ...DEFAULT_CONFIG, ...(config || {}) });
+  engine = createStarfieldEngine(ctx, { ...DEFAULT_CONFIG, ...PERF_CONFIG, ...(config || {}) });
 }
 
 function handleResize({ width, height, dpr = 1 }) {
@@ -31,27 +37,43 @@ function handleResize({ width, height, dpr = 1 }) {
     return;
   }
   engine.resize(width, height, dpr);
-  if (!running) {
-    running = true;
-    lastTime = performance.now();
-    loop(lastTime);
+  if (!running && !paused) {
+    start();
   }
 }
 
-function loop(now = performance.now()) {
-  if (!running || !engine) {
+function handlePause(value) {
+  paused = value;
+  if (paused) {
+    running = false;
+  } else if (engine && !running) {
+    start();
+  }
+}
+
+function start() {
+  running = true;
+  generation++;
+  lastTime = performance.now();
+  loop(lastTime, generation);
+}
+
+function loop(now, id) {
+  if (!running || !engine || id !== generation) {
     return;
   }
-  const dt = Math.min(now - lastTime, 60);
-  lastTime = now;
-  engine.frame(dt);
-  scheduleNextFrame();
+  if (now - lastTime >= FRAME_MS) {
+    const dt = Math.min(now - lastTime, 60);
+    lastTime = now;
+    engine.frame(dt);
+  }
+  scheduleNextFrame(id);
 }
 
-function scheduleNextFrame() {
+function scheduleNextFrame(id) {
   if (typeof self.requestAnimationFrame === "function") {
-    self.requestAnimationFrame(loop);
+    self.requestAnimationFrame(now => loop(now, id));
   } else {
-    setTimeout(() => loop(performance.now()), 16);
+    setTimeout(() => loop(performance.now(), id), 16);
   }
 }

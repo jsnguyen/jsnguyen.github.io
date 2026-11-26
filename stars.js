@@ -1,3 +1,5 @@
+import { PERF_CONFIG, FRAME_MS, isPaused, watchPaused } from "./perf.js";
+
 const RESIZE_DEBOUNCE_MS = 150;
 const MIN_VIEW_DELTA = 2;
 
@@ -31,6 +33,8 @@ function setupWorkerStarfield(canvas) {
     });
 
     worker.postMessage({ type: "init", canvas: offscreen }, [offscreen]);
+    worker.postMessage({ type: "pause", paused: isPaused() });
+    watchPaused(paused => worker.postMessage({ type: "pause", paused }));
     dispatcher.flush();
     window.addEventListener("resize", dispatcher.queue, { passive: true });
     window.addEventListener("orientationchange", dispatcher.resetAndQueue, { passive: true });
@@ -49,7 +53,7 @@ async function startInlineStarfield(canvas) {
   }
 
   const { createStarfieldEngine } = await import("./starfieldEngine.js");
-  const engine = createStarfieldEngine(ctx);
+  const engine = createStarfieldEngine(ctx, PERF_CONFIG);
 
   const dispatcher = createResizeDispatcher(view => {
     engine.resize(view.width, view.height, view.dpr);
@@ -60,14 +64,32 @@ async function startInlineStarfield(canvas) {
   dispatcher.flush();
 
   let lastTime = performance.now();
-  function animate(now) {
-    const dt = Math.min(now - lastTime, 60);
-    lastTime = now;
-    engine.frame(dt);
-    requestAnimationFrame(animate);
+  let running = false;
+  let generation = 0;
+  function animate(now, id) {
+    if (!running || id !== generation) {
+      return;
+    }
+    if (now - lastTime >= FRAME_MS) {
+      const dt = Math.min(now - lastTime, 60);
+      lastTime = now;
+      engine.frame(dt);
+    }
+    requestAnimationFrame(time => animate(time, id));
   }
 
-  requestAnimationFrame(animate);
+  function setPaused(paused) {
+    running = !paused;
+    generation++;
+    if (running) {
+      lastTime = performance.now();
+      const id = generation;
+      requestAnimationFrame(time => animate(time, id));
+    }
+  }
+
+  setPaused(isPaused());
+  watchPaused(setPaused);
 }
 
 function readViewport() {
