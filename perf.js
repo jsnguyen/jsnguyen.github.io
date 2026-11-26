@@ -6,7 +6,7 @@ export const PERF_CONFIG = {
 
 export const FRAME_MS = 1000 / 30 - 4;
 
-const reducedMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+const reducedMotion = typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
 
 export function isPaused() {
   return document.hidden || Boolean(reducedMotion && reducedMotion.matches);
