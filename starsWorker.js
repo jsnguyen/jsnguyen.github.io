@@ -1,5 +1,5 @@
-import { DEFAULT_CONFIG, createStarfieldEngine } from "./starfieldEngine.js";
-import { PERF_CONFIG, FRAME_MS } from "./perf.js";
+import { DEFAULT_CONFIG, createStarfieldEngine } from "./starfieldEngine.js?v=2";
+import { PERF_CONFIG, FRAME_MS } from "./perf.js?v=2";
 
 let engine = null;
 let running = false;
