@@ -27,7 +27,7 @@ class NightStrip extends HTMLElement {
             this.hidden = true;
             return;
         }
-        this.motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.motion = false;
         this.elapsed = 0;
         this.halfWidth = view.hfov / 2;
         this.build();
@@ -40,7 +40,7 @@ class NightStrip extends HTMLElement {
             this.loop();
         }).observe(this);
         document.addEventListener('visibilitychange', () => this.loop());
-        setInterval(() => this.update(), 20000);
+        setInterval(() => this.update(), 60000);
     }
 
     attributeChangedCallback() {

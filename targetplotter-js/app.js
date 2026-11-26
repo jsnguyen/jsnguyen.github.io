@@ -14,9 +14,8 @@ const showDates = document.querySelector('#show_dates');
 const use12Hour = document.querySelector('#use_12_hour');
 const nowToggle = document.querySelector('#show_current_time');
 const nowStatus = document.querySelector('#now_status');
-const timeZoneInput = document.querySelector('#timezone_input');
 const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-timeZoneInput.querySelector('[value="auto"]').title = browserZone;
+timezoneMode.querySelector('[value="local"]').title = browserZone;
 const latInput = document.querySelector('#lat_input');
 const lonInput = document.querySelector('#lon_input');
 const saveButton = document.querySelector('#save_button');
@@ -81,8 +80,7 @@ const targetHistory = createTargetHistory(document.querySelector('#target_histor
 });
 
 function displayTimeZone() {
-    if (timezoneMode.value !== 'local') return timezoneMode.value;
-    return timeZoneInput.value === 'auto' ? browserZone : timeZoneInput.value;
+    return timezoneMode.value === 'local' ? browserZone : timezoneMode.value;
 }
 
 function axisMode() {
@@ -292,11 +290,11 @@ for (const input of [raInput, decInput, dateInput, latInput, lonInput]) {
         plotTimer = setTimeout(makePlot, 350);
     });
 }
-for (const input of [timeZoneInput, timezoneMode]) input.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
+timezoneMode.addEventListener('change', () => plotted?.view.setTimeZone(displayTimeZone()));
 lstAxis.addEventListener('change', () => plotted?.view.setAxisMode(axisMode()));
 showDates.addEventListener('change', () => plotted?.view.setShowDates(showDates.checked));
 use12Hour.addEventListener('change', () => plotted?.view.setUse12Hour(use12Hour.checked));
-for (const input of [timeZoneInput, timezoneMode, lstAxis, showDates, use12Hour]) input.addEventListener('change', () => { if (placeholder) showEmptyPlot(); });
+for (const input of [timezoneMode, lstAxis, showDates, use12Hour]) input.addEventListener('change', () => { if (placeholder) showEmptyPlot(); });
 nowToggle.addEventListener('change', updateDateStatus);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateDateStatus(); });
 targetName.addEventListener('keydown', event => {

@@ -7,7 +7,7 @@
 
     <!-- Google Fonts' Stack Sans variable subsets, licensed under fonts/OFL.txt. -->
     <link rel="stylesheet" href="vendor/uPlot.min.css">
-    <link rel="stylesheet" href="plot.css?v=8">
+    <link rel="stylesheet" href="plot.css?v=9">
     <link rel="stylesheet" href="empty-plot.css?v=1">
     <link rel="stylesheet" href="timezone-mode.css?v=1">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -31,7 +31,7 @@
     <link rel="modulepreload" href="remaining-time.js?v=1">
     <script defer src="vendor/astronomy.browser.min.js"></script>
     <script defer src="vendor/uPlot.iife.min.js"></script>
-    <script type="module" src="app.js?v=8"></script>
+    <script type="module" src="app.js?v=9"></script>
     <script type="module" src="../stars.js" fetchpriority="low"></script>
 </head>
 <body class="targetplotter-page targetplotter-js">
@@ -104,21 +104,9 @@
                 </div>
 
                 <div class="observing-fields">
-                    <div class="field-pair">
-                        <div class="plot-field">
-                            <label id="date_label" for="date_input">Date (UTC) <span id="date_today" hidden>(Today)</span></label>
-                            <input type="date" id="date_input" required>
-                        </div>
-                        <div class="plot-field">
-                            <label for="timezone_input">Display Time</label>
-                            <select id="timezone_input">
-                                <option value="auto" selected>Browser time</option>
-                                <option value="PST">PST (UTC−8)</option>
-                                <option value="PDT">PDT (UTC−7)</option>
-                                <option value="HST">HST (UTC−10)</option>
-                                <option value="UTC">UTC</option>
-                            </select>
-                        </div>
+                    <div class="plot-field">
+                        <label id="date_label" for="date_input">Date (UTC) <span id="date_today" hidden>(Today)</span></label>
+                        <input type="date" id="date_input" required>
                     </div>
                     <div class="field-pair">
                         <div class="plot-field">

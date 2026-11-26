@@ -10,6 +10,7 @@ const BEAM_LENGTH = 5200;
 const SLEW_RATE = 6;
 const SPIN_RATE = 2;
 const BEAM_TIME = 1.3;
+const MIN_FRAME_MS = 1000 / 30 - 1; // 30 fps, with 1 ms of slack for frame timing jitter
 const CAMERA = { radius: 235, yaw: 202, pitch: 9, aim: [0, 40, 0], hfov: 64 };
 const SODIUM = new THREE.Color("#ffc23d");
 
@@ -140,9 +141,11 @@ class KeckScene extends HTMLElement {
     if (running && !this.frame) {
       let last = performance.now();
       const tick = (now) => {
-        this.step(Math.max(0, Math.min(0.5, (now - last) / 1000)));
-        last = now;
-        this.render();
+        if (now - last >= MIN_FRAME_MS) {
+          this.step(Math.max(0, Math.min(0.5, (now - last) / 1000)));
+          last = now;
+          this.render();
+        }
         this.frame = this.visible && !document.hidden ? requestAnimationFrame(tick) : null;
       };
       this.frame = requestAnimationFrame(tick);

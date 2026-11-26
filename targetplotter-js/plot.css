@@ -541,14 +541,13 @@ body.targetplotter-js {
     color: var(--ink);
 }
 
-.plot-field input, .plot-field #timezone_input {
+.plot-field input {
     height: 38px;
     margin: 0;
     padding: 6px 8px;
 }
 
 .plot-field select { font-family: inherit; text-overflow: ellipsis; }
-.input-container #timezone_input option { background: var(--panel); color: var(--ink); }
 .input-container #date_today { white-space: nowrap; font-size: 0.8em; text-transform: none; letter-spacing: normal; }
 
 .input-container #target_history {
