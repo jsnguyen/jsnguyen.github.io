@@ -1,4 +1,5 @@
 import {findCity} from './cities.js';
+import {handoff} from './handoff.js';
 
 const banner = document.querySelector('.sun-banner');
 const places = new Map();
@@ -7,7 +8,7 @@ function hm(seconds, hour12) {
     const hour = Math.floor(seconds / 3600);
     const minutes = String(Math.floor(seconds / 60) % 60).padStart(2, '0');
     if (!hour12) return String(hour).padStart(2, '0') + ':' + minutes;
-    return String(hour % 12 || 12).padStart(2, '0') + ':' + minutes + (hour < 12 ? ' AM' : ' PM');
+    return String(hour % 12 || 12).padStart(2, '0') + ':' + minutes + (hour < 12 ? '\u00a0AM' : '\u00a0PM');
 }
 
 function duration(seconds) {
@@ -40,7 +41,8 @@ function placeOf(tile, site) {
 export function showSunTimes(tiles, now, site, hour12, clockSeconds) {
     const siteEvent = nextEvent(site, now);
     banner.hidden = !siteEvent;
-    if (siteEvent) banner.textContent = siteEvent.name + ' in ' + duration((siteEvent.date - now) / 1000);
+    const siteHandoff = siteEvent && handoff(site, siteEvent, now);
+    if (siteEvent) banner.textContent = (siteHandoff ? 'Handoff in ' + duration((siteHandoff - now) / 1000) + ' · ' : '') + siteEvent.name + ' in ' + duration((siteEvent.date - now) / 1000);
     for (const tile of tiles) {
         if (!tile.sun) {
             tile.sun = document.createElement('p');
@@ -50,6 +52,7 @@ export function showSunTimes(tiles, now, site, hour12, clockSeconds) {
         const place = placeOf(tile, site);
         const event = place && nextEvent(place, now);
         tile.sun.hidden = !event;
-        if (event) tile.sun.textContent = event.name + ' ' + hm(clockSeconds(tile.zone, event.date), hour12);
+        const split = event && handoff(place, event, now);
+        if (event) tile.sun.textContent = (split ? 'Handoff\u00a0' + hm(clockSeconds(tile.zone, split), hour12) + ' · ' : '') + event.name + '\u00a0' + hm(clockSeconds(tile.zone, event.date), hour12);
     }
 }
