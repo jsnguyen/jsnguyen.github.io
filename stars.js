@@ -20,7 +20,7 @@ function setupWorkerStarfield(canvas) {
   }
 
   try {
-    const worker = new Worker(new URL("./starsWorker.js?v=2", import.meta.url), { type: "module" });
+    const worker = new Worker(new URL("./starsWorker.js?v=3", import.meta.url), { type: "module" });
     const offscreen = canvas.transferControlToOffscreen();
 
     const dispatcher = createResizeDispatcher(view => {
@@ -52,7 +52,7 @@ async function startInlineStarfield(canvas) {
     return;
   }
 
-  const { createStarfieldEngine } = await import("./starfieldEngine.js?v=2");
+  const { createStarfieldEngine } = await import("./starfieldEngine.js?v=3");
   const engine = createStarfieldEngine(ctx, PERF_CONFIG);
 
   const dispatcher = createResizeDispatcher(view => {

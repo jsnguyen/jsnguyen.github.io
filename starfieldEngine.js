@@ -59,6 +59,7 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
     twinkleSpeed: 0.0006 + Math.random() * 0.0004
   }));
   let backgroundSprite = null;
+  let backdropCanvas = null;
   let nebulaCanvas = null;
   let orbitalArcs = null;
   let maskCanvas = null;
@@ -69,26 +70,14 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
   const renderFrame = (dt = 0) => {
     dt = Math.min(Math.max(dt, 0), 60);
     elapsed += dt;
-    if (config.backgroundFillStyle) {
-      ctx.fillStyle = config.backgroundFillStyle;
-      ctx.fillRect(0, 0, width, height);
-    } else {
-      ctx.clearRect(0, 0, width, height);
-    }
-    ctx.globalCompositeOperation = "lighter";
-    if (nebulaCanvas && config.nebulaOpacity > 0) {
-      const size = maxTravel * 2.2;
+    if (backdropCanvas) {
       ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(elapsed * config.nebulaSpin);
-      ctx.globalAlpha = config.nebulaOpacity;
-      ctx.drawImage(nebulaCanvas, -size / 2, -size / 2, size, size);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(backdropCanvas, 0, 0);
       ctx.restore();
-    }
-    if (orbitalArcs) {
-      ctx.strokeStyle = `rgba(208,218,235,${config.orbitalArcOpacity})`;
-      ctx.lineWidth = 0.65;
-      ctx.stroke(orbitalArcs);
+      ctx.globalCompositeOperation = "lighter";
+    } else {
+      drawBackdrop(ctx);
     }
     if (backgroundSprite) {
       for (const star of backgroundStars) {
@@ -261,6 +250,7 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
         nebulaCanvas = createNebulaTexture();
       }
       orbitalArcs = createOrbitalArcs();
+      backdropCanvas = renderBackdrop(dpr);
       renderCenterMask();
 
       rescaleStars(prevMaxTravel);
@@ -439,6 +429,49 @@ export function createStarfieldEngine(ctx, customConfig = {}) {
       nebulaCtx.filter = "none";
     }
     return nebula;
+  }
+
+  function drawBackdrop(target) {
+    if (config.backgroundFillStyle) {
+      target.fillStyle = config.backgroundFillStyle;
+      target.fillRect(0, 0, width, height);
+    } else {
+      target.clearRect(0, 0, width, height);
+    }
+    target.globalCompositeOperation = "lighter";
+    if (nebulaCanvas && config.nebulaOpacity > 0) {
+      const size = maxTravel * 2.2;
+      target.save();
+      target.translate(cx, cy);
+      target.rotate(elapsed * config.nebulaSpin);
+      target.globalAlpha = config.nebulaOpacity;
+      target.drawImage(nebulaCanvas, -size / 2, -size / 2, size, size);
+      target.restore();
+    }
+    if (orbitalArcs) {
+      target.strokeStyle = `rgba(208,218,235,${config.orbitalArcOpacity})`;
+      target.lineWidth = 0.65;
+      target.stroke(orbitalArcs);
+    }
+  }
+
+  function renderBackdrop(dpr) {
+    // A still nebula over an opaque fill looks the same every frame, so draw it once per resize.
+    if (config.nebulaSpin || !config.backgroundFillStyle || !ctx.canvas) {
+      return null;
+    }
+    const backdrop = createCanvasSurface();
+    const backdropCtx = backdrop ? backdrop.getContext("2d") : null;
+    if (!backdropCtx) {
+      return null;
+    }
+    backdrop.width = ctx.canvas.width;
+    backdrop.height = ctx.canvas.height;
+    backdropCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    backdropCtx.lineCap = "round";
+    backdropCtx.lineJoin = "round";
+    drawBackdrop(backdropCtx);
+    return backdrop;
   }
 
   function renderCenterMask() {
