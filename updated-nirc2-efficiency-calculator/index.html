@@ -19,7 +19,7 @@
 
     <!-- uPlot is distributed with its MIT license in vendor/. -->
     <script type="importmap">
-        {"imports": {"./efficiency.js": "./efficiency.js?v=1", "./plots.js": "./plots.js?v=1", "./equation.js": "./equation.js?v=1", "./contour.js": "./contour.js?v=1", "./sliders.js": "./sliders.js?v=1"}}
+        {"imports": {"./efficiency.js": "./efficiency.js?v=1", "./plots.js": "./plots.js?v=2", "./equation.js": "./equation.js?v=1", "./contour.js": "./contour.js?v=1", "./sliders.js": "./sliders.js?v=1"}}
     </script>
     <script defer src="vendor/uPlot.iife.min.js"></script>
     <script type="module" src="app.js?v=2"></script>
@@ -126,6 +126,7 @@
                         <legend>Reads</legend>
                         <div class="segments">
                             <label title="Correlated double sampling"><input type="radio" name="reads" value="2" checked><span>2</span></label>
+                            <label title="Multiple CDS"><input type="radio" name="reads" value="4"><span>4</span></label>
                             <label title="Multiple CDS"><input type="radio" name="reads" value="8"><span>8</span></label>
                             <label title="Multiple CDS"><input type="radio" name="reads" value="16"><span>16</span></label>
                             <label title="Multiple CDS"><input type="radio" name="reads" value="32"><span>32</span></label>

@@ -1,6 +1,6 @@
 import {minimumTint, observingTime, formatSeconds, subcPresets} from './efficiency.js';
 
-export const readsColors = {2: '#2a78d6', 8: '#eb6834', 16: '#1baf7a', 32: '#eda100', 64: '#e87ba4', 128: '#008300'};
+export const readsColors = {2: '#2a78d6', 4: '#6250d6', 8: '#eb6834', 16: '#1baf7a', 32: '#eda100', 64: '#e87ba4', 128: '#008300'};
 export const subcColors = {1024: '#2a78d6', 768: '#6250d6', 512: '#eb6834', 256: '#1baf7a', 128: '#eda100', 64: '#e87ba4'};
 export const subcDashes = {1024: [], 768: [8, 3, 2, 3, 2, 3], 512: [8, 4], 256: [2, 3], 128: [8, 3, 2, 3], 64: [4, 3]};
 const customColor = '#008300';
