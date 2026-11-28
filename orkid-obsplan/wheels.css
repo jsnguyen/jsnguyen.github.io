@@ -1,0 +1,25 @@
+/* Filter and pupil wheel visualizer (wheels.js). Uses the plan page's colour tokens. */
+.wheels { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; display: grid; gap: 8px; }
+.wh-head { font-size: 0.92rem; color: var(--muted); }
+.wh-head strong { color: var(--fg); }
+.wh-pair { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.wh { margin: 0; display: grid; justify-items: center; gap: 2px; }
+.wh svg { width: 150px; height: auto; overflow: visible; }
+.wh figcaption { display: grid; justify-items: center; font-size: 0.78rem; color: var(--muted); }
+.wh figcaption code { font: 0.78rem var(--mono); color: var(--fg); }
+.wh-rot, .wh-lbl { transform-box: fill-box; transform-origin: center; transition: transform 0.9s cubic-bezier(0.45, 0, 0.2, 1); }
+.wh-disc { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+.wh-hub { fill: var(--line); }
+.wh-glass { fill: var(--setup-fill); stroke: var(--setup); stroke-width: 1; transition: fill 0.4s, stroke 0.4s; }
+.wh-slot.open .wh-glass { fill: var(--surface); stroke-dasharray: 3 2; }
+.wh-slot.on .wh-glass { fill: var(--ao-fill); stroke: var(--now); stroke-width: 2; }
+.wh-lbl { font: 600 8px var(--sans); fill: var(--fg); text-anchor: middle; dominant-baseline: central; }
+.wh-hole { fill: var(--fg); }
+.wh-beam { fill: var(--now); }
+.wh-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wh-chips button { font: 500 0.82rem var(--sans); padding: 3px 9px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; cursor: pointer; }
+.wh-chips button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.wh-note { font-size: 0.75rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .wh-rot, .wh-lbl, .wh-glass { transition: none; }
+}
