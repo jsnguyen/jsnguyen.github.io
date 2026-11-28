@@ -132,7 +132,7 @@
         var head = '<thead><tr><th>Position</th><th>Filter</th><th>Centre</th><th>Range</th><th>T</th><th>PyAO λ</th><th>SR</th><th>λ/D</th></tr></thead><tbody>';
         document.getElementById('ref-table').innerHTML = head + ORDER.map(function (k) {
             var f = F[k];
-            return '<tr data-key="' + k + '" tabindex="0"' + (f.bad ? ' class="bad"' : '') + '><td><code>' + f.pos + '</code></td><td><span class="swatch" style="background:' + f.color + '"></span>' + esc(f.name) + '</td><td>' + esc(f.centre) + '</td><td>' + esc(f.range) + '</td><td>' + esc(f.trans) + '</td><td>' + Math.round(f.tool * 1000) + '</td><td>' + f.sr + '</td><td>' + lambda_d(f.tool * 1000).toFixed(1) + '</td></tr>';
+            return '<tr data-key="' + k + '" tabindex="0"' + (f.bad ? ' class="bad"' : '') + '><td><code>' + f.pos + '</code></td><td><span class="swatch" style="background:' + f.color + '"></span>' + esc(f.name) + (f.bad ? '<span class="bad-tag">bad</span>' : '') + '</td><td>' + esc(f.centre) + '</td><td>' + esc(f.range) + '</td><td>' + esc(f.trans) + '</td><td>' + Math.round(f.tool * 1000) + '</td><td>' + f.sr + '</td><td>' + lambda_d(f.tool * 1000).toFixed(1) + '</td></tr>';
         }).join('') + '</tbody>';
     }
     function highlight_rows() {
