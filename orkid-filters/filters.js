@@ -72,7 +72,9 @@
     function build_chart() {
         var s = '<rect class="cut" x="' + x(LO) + '" y="' + M.t + '" width="' + (x(595) - x(LO)) + '" height="' + (y(0) - M.t) + '"/>' +
             '<rect class="cut" x="' + x(962) + '" y="' + M.t + '" width="' + (x(HI) - x(962)) + '" height="' + (y(0) - M.t) + '"/>' +
-            '<text class="cut-lbl" x="' + (x(LO) + 4) + '" y="' + (y(1) + 14) + '">to ACAM</text><text class="cut-lbl" x="' + (x(HI) - 4) + '" y="' + (y(1) + 14) + '" text-anchor="end">dichroic</text>';
+            '<line class="cut-edge" x1="' + x(595) + '" x2="' + x(595) + '" y1="' + M.t + '" y2="' + y(0) + '"/><line class="cut-edge" x1="' + x(962) + '" x2="' + x(962) + '" y1="' + M.t + '" y2="' + y(0) + '"/>' +
+            '<text class="cut-lbl" x="' + (x(595) - 4) + '" y="' + (y(0.62)) + '" text-anchor="end">ACAM</text><text class="cut-nm" x="' + (x(595) - 4) + '" y="' + (y(0.62) + 12) + '" text-anchor="end">&lt; 595 nm</text>' +
+            '<text class="cut-lbl" x="' + (x(HI) - 4) + '" y="' + (y(0.62)) + '" text-anchor="end">dichroic</text><text class="cut-nm" x="' + (x(HI) - 4) + '" y="' + (y(0.62) + 12) + '" text-anchor="end">&gt; 960 nm</text>';
         [0, 0.25, 0.5, 0.75, 1].forEach(function (t) { s += '<line class="grid" x1="' + M.l + '" x2="' + (W - M.r) + '" y1="' + y(t) + '" y2="' + y(t) + '"/><text class="tick" x="' + (M.l - 6) + '" y="' + y(t) + '" text-anchor="end">' + t * 100 + '</text>'; });
         for (var l = 550; l < HI; l += 50) s += '<text class="tick" x="' + x(l) + '" y="' + (H - M.b + 16) + '" text-anchor="middle">' + l + '</text>';
         s += '<text class="axis-lbl" x="' + (W - M.r) + '" y="' + (H - 2) + '" text-anchor="end">wavelength (nm)</text><text class="axis-lbl" x="4" y="' + (M.t - 8) + '">T (%)</text>';

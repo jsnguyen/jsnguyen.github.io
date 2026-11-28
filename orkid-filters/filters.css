@@ -32,8 +32,11 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.85em; }
 
 .chart { width: 100%; height: auto; touch-action: pan-y; }
 .chart text { font-family: "Stack Sans Text", system-ui, sans-serif; }
-.cut { fill: rgba(10, 8, 24, 0.45); }
-.cut-lbl, .tick, .axis-lbl { font-size: 10px; fill: var(--glass-muted); }
+.cut { fill: rgba(255, 207, 138, 0.08); }
+.cut-edge { stroke: #ffcf8a; stroke-width: 1.2; stroke-dasharray: 4 3; }
+.cut-lbl { font-size: 10px; font-weight: 500; fill: #ffcf8a; }
+.cut-nm { font-size: 9px; fill: #ffcf8a; opacity: 0.8; }
+.tick, .axis-lbl { font-size: 10px; fill: var(--glass-muted); }
 .tick { dominant-baseline: central; }
 .grid { stroke: var(--glass-line); stroke-width: 0.6; }
 .beam-area { fill: var(--glass-accent); fill-opacity: 0.22; stroke: var(--glass-accent); stroke-width: 1; transform-box: fill-box; transform-origin: bottom; }
