@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>ORKID Night 28 Nov</title>
+<title>ORKID Night 27 Nov</title>
 <link rel="icon" href="../favicon.ico">
 <style>
 /* Layout: clock bar, timeline with now/next, one chronological colour-coded list with expandable rows, then collapsible reference sections. */
@@ -179,7 +179,7 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
 <header class="bar">
   <div class="bar-in">
     <div>
-      <h1>ORKID · Sat 28 Nov 2026 · first half</h1>
+      <h1>ORKID · Fri 27 Nov 2026 · first half</h1>
       <span class="muted"><span class="tz" data-t="18:35"></span>–<span class="tz" data-t="00:10"></span> <span class="zname">HST</span> · goals: AO performance, NRM</span>
     </div>
     <div class="clock"><span id="clock">--:--</span><small id="clock-sub">HST</small></div>
@@ -244,81 +244,81 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
         <tbody id="targets"></tbody>
       </table></div>
       <p class="note">Plan targets in observing order, then backups. J2000, proper motion applied to epoch 2026.9. Solar-system positions are for 21:30 HST (Uranus 21:15); track with the ephemeris. <button type="button" class="btn" id="copy">Copy starlist</button> <span id="copy-status"></span></p>
-      <pre id="starlist" hidden># ORKID, Keck II, first half Sat 28 Nov 2026 HST (18:35-00:10 HST = 04:35-10:10 UT 29 Nov)
+      <pre id="starlist" hidden># ORKID, Keck II, first half Fri 27 Nov 2026 HST (18:35-00:10 HST = 04:35-10:10 UT 28 Nov)
 # Coordinates: equinox J2000, proper motion applied to epoch 2026.9. Vertical angle all night.
 
 # ===== Plan, in observing order =====
 # 18:35 setup, 19:00 NRM calibrator, revisit 19:18 (NRM + WFS pair). SB1, unresolved | 40-85 deg: 18:35-00:10 HST
 alf_Tri         01 53 04.93 +29 34 37.5 2000 rmag=3.00
-# 19:09 NRM vetting, NASA target. 7 mas disc | 40-85 deg: 18:35-00:10 HST, &gt;85 deg 21:45-22:10
+# 19:09 NRM vetting, NASA target. 7 mas disc | 40-85 deg: 18:35-00:10 HST, &gt;85 deg 21:50-22:15
 alf_Ari         02 07 10.77 +23 27 40.7 2000 rmag=1.15
-# 19:32 F&amp;F, WFS pair, Strehl + throughput sweeps SOD then BS. Single | 40-85 deg: 19:00-00:10 HST
+# 19:32 F&amp;F, WFS pair, Strehl + throughput sweeps SOD then BS. Single | 40-85 deg: 19:05-00:10 HST
 ksi2_Cet        02 28 09.60 +08 27 36.1 2000 rmag=4.29
-# 20:40 BS ladder; 21:28 Uranus PSF; 21:40 SOD 29x29; 22:22 SOD 57x57. 0.1" occultation pair unconfirmed | 40-85 deg: 20:00-00:10 HST
+# 20:40 BS ladder; 21:28 Uranus PSF; 21:40 SOD 29x29; 22:22 SOD 57x57. 0.1" occultation pair unconfirmed | 40-85 deg: 20:05-00:10 HST
 18_Tau          03 45 09.78 +24 50 20.1 2000 rmag=5.65
-# 20:46 BS ladder; 22:16 SOD 57x57 | 40-85 deg: 20:05-00:10 HST, &gt;85 deg 23:30-23:50
+# 20:46 BS ladder; 22:16 SOD 57x57 | 40-85 deg: 20:10-00:10 HST, &gt;85 deg 23:30-23:50
 HD23632         03 47 21.01 +23 48 10.8 2000 rmag=6.85
-# 20:52 BS ladder; 21:46 SOD 29x29; 22:10 SOD 57x57 | 40-85 deg: 20:05-00:10 HST, &gt;85 deg 23:30-23:50
+# 20:52 BS ladder; 21:46 SOD 29x29; 22:10 SOD 57x57 | 40-85 deg: 20:10-00:10 HST, &gt;85 deg 23:30-23:55
 HD23924         03 49 40.96 +23 20 28.4 2000 rmag=7.75
-# 20:58 BS ladder; 21:52 SOD 29x29; 22:04 SOD 57x57 | 40-85 deg: 20:10-00:10 HST, &gt;85 deg 23:30-23:55
+# 20:58 BS ladder; 21:52 SOD 29x29; 22:04 SOD 57x57 | 40-85 deg: 20:15-00:10 HST, &gt;85 deg 23:35-23:55
 HD24088         03 51 02.75 +23 25 41.6 2000 rmag=9.03
-# 21:04 BS ladder; 21:58 SOD 29x29 | 40-85 deg: 20:05-00:10 HST, &gt;85 deg 23:25-23:50
+# 21:04 BS ladder; 21:58 SOD 29x29 | 40-85 deg: 20:10-00:10 HST, &gt;85 deg 23:30-23:55
 HII1360         03 47 16.20 +22 55 27.8 2000 rmag=10.32
 # 21:14 Uranus, BS 57x57. Non-sidereal: use the TCS ephemeris. Position for 07:15 UT; V 5.6, 3.8"
 # rates dRA*cosDec -6.3"/h, dDec -1.1"/h
-Uranus          04 04 34.37 +20 38 20.6 2000 vmag=5.60
-# 22:38 NRM calibrator, revisit 22:58 (+ open PSF). Haedus II, NOT zet Aur (Haedus I, eclipsing binary, 05 02 28.7 +41 04 33) | 40-85 deg: 21:25-00:10 HST
+Uranus          04 04 44.95 +20 38 49.0 2000 vmag=5.60
+# 22:38 NRM calibrator, revisit 22:58 (+ open PSF). Haedus II, NOT zet Aur (Haedus I, eclipsing binary, 05 02 28.7 +41 04 33) | 40-85 deg: 21:30-00:10 HST
 eta_Aur         05 06 30.97 +41 14 02.3 2000 rmag=3.23
-# 22:48 NRM binary, expect 51.6 mas at PA 12 deg | 40-85 deg: 21:40-00:10 HST
+# 22:48 NRM binary, expect 52.4 mas at PA 15 deg | 40-85 deg: 21:45-00:10 HST
 Capella         05 16 41.55 +45 59 41.3 2000 rmag=-0.52
-# 23:12 NRM calibrator, revisit 23:33 (+ open PSF). Single | 40-85 deg: 22:00-00:10 HST
+# 23:12 NRM calibrator, revisit 23:33 (+ open PSF). Single | 40-85 deg: 22:05-00:10 HST
 gam_Ori         05 25 07.85 +06 20 58.6 2000 rmag=1.73
 # 23:21 NRM + open-pupil narrowband. 42 mas disc | 40-85 deg: 22:30-00:10 HST
 Betelgeuse      05 55 10.36 +07 24 25.7 2000 rmag=-1.17
 
 # ===== Backups: resolved stars (need a single-star calibrator nearby) =====
-# Scheat, M2.5 II-III, UD_R 18.7 mas (JSDC). Early: set by 22:25 | 40-85 deg: 18:35-22:30 HST
+# Scheat, M2.5 II-III, UD_R 18.7 mas (JSDC). Early: set by 22:25 | 40-85 deg: 18:35-22:35 HST
 bet_Peg         23 03 46.84 +28 05 01.7 2000 rmag=0.92
 # Mirach, M0 III, UD_R 13.5 mas (JSDC) | 40-85 deg: 18:35-00:10 HST
 bet_And         01 09 44.31 +35 37 11.0 2000 rmag=0.81
 # M4 II, UD_R 15.3 mas (JSDC), semi-regular variable | 40-85 deg: 19:25-00:10 HST
 rho_Per         03 05 10.89 +38 50 22.1 2000 rmag=1.59
-# o Cet, Mira variable: tens of mas in the visible, brightness depends on phase (check AAVSO) | 40-85 deg: 19:10-00:10 HST
+# o Cet, Mira variable: tens of mas in the visible, brightness depends on phase (check AAVSO) | 40-85 deg: 19:15-00:10 HST
 Mira            02 19 20.81 -02 58 45.9 2000 rmag=5.03
 # K5 III, UD_R 21.4 mas (JSDC) | 40-85 deg: 21:00-00:10 HST
 Aldebaran       04 35 55.36 +16 30 28.4 2000 rmag=-0.37
-# M3 III, UD_R 14.6 mas (JSDC). Late | 40-85 deg: 22:40-00:10 HST
+# M3 III, UD_R 14.6 mas (JSDC). Late | 40-85 deg: 22:45-00:10 HST
 mu_Gem          06 22 57.74 +22 30 45.9 2000 rmag=1.30
 
 # ===== Backups: binaries (ORB6 predictions for 07:30 UT, grade 1 best) =====
-# kap Peg BU 989AB, V 4.94/5.04, 185 mas PA 282, grade 1. Early: set by 21:05 | 40-85 deg: 18:35-21:10 HST
+# kap Peg BU 989AB, V 4.94/5.04, 185 mas PA 282, grade 1. Early: set by 21:05 | 40-85 deg: 18:35-21:15 HST
 HD206901_kapPeg 21 44 38.83 +25 38 42.5 2000 vmag=4.13
 # 13 Cet HO 212AB, V 5.61/6.90, 268 mas PA 287, grade 1 | 40-85 deg: 18:35-23:25 HST
 HD3196_13Cet    00 35 15.61 -03 35 35.2 2000 vmag=5.21
 # MCA 7, V 5.68/5.78, 63 mas PA 343, grade 1 | 40-85 deg: 19:05-00:10 HST
 HD16234         02 36 38.43 +12 26 49.2 2000 rmag=5.30
-# BLA 1Aa,Ab, V 5.69/6.20, 49 mas PA 287, grade 2. Near alf Ari | 40-85 deg: 19:00-00:10 HST, &gt;85 deg 22:15-22:50
+# BLA 1Aa,Ab, V 5.69/6.20, 49 mas PA 287, grade 2. Near alf Ari | 40-85 deg: 19:05-00:10 HST, &gt;85 deg 22:20-22:55
 HD16811         02 42 21.99 +20 00 40.0 2000 vmag=5.74
-# WRH 29Aa,Ab, V 3.6/3.8, 249 mas PA 244, grade 2. Also eclipsing | 40-85 deg: 19:45-00:10 HST
+# WRH 29Aa,Ab, V 3.6/3.8, 249 mas PA 244, grade 2. Also eclipsing | 40-85 deg: 19:50-00:10 HST
 gam_Per         03 04 47.78 +53 30 23.0 2000 rmag=2.34
-# A 1938, V 5.70/6.70, 75 mas PA 128, grade 1 | 40-85 deg: 20:45-00:10 HST
+# A 1938, V 5.70/6.70, 75 mas PA 128, grade 1 | 40-85 deg: 20:50-00:10 HST
 HD26690         04 13 33.11 +07 42 57.8 2000 rmag=4.94
-# MCA 13Aa,Ab, V 5.47/5.50, 30 mas PA 179, grade 3 (orbit less certain). Near the Pleiades | 40-85 deg: 20:20-00:10 HST, &gt;85 deg 23:45-00:05
+# MCA 13Aa,Ab, V 5.47/5.50, 30 mas PA 179, grade 3 (orbit less certain). Near the Pleiades | 40-85 deg: 20:25-00:10 HST, &gt;85 deg 23:50-00:05
 HD25555         04 04 21.67 +24 06 21.3 2000 vmag=5.51
-# NOI 1Aa,Ab, V 2.0/4.0, 34 mas PA 116, grade 2. zet Ori B (V 3.7) sits 2.4" away | 40-85 deg: 22:30-00:10 HST
+# NOI 1Aa,Ab, V 2.0/4.0, 34 mas PA 116, grade 2. zet Ori B (V 3.7) sits 2.4" away | 40-85 deg: 22:35-00:10 HST
 zet_Ori_A       05 40 45.53 -01 56 33.2 2000 vmag=1.90
-# FIN 331Aa,Ab, V 6.1/6.1, 101 mas PA 293, grade 1. Late | 40-85 deg: 22:45-00:10 HST
+# FIN 331Aa,Ab, V 6.1/6.1, 101 mas PA 293, grade 1. Late | 40-85 deg: 22:50-00:10 HST
 HD43525         06 17 06.63 +09 56 31.0 2000 vmag=5.39
 
 # ===== Backups: solar system (non-sidereal: use the TCS ephemeris; positions for 07:30 UT = 21:30 HST, JPL Horizons) =====
-# diameter 0.435", rates -4.5 +10.0 "/h | 40-85 deg: 19:00-23:30 HST
-Vesta           01 00 01.35 -03 52 37.9 2000 vmag=7.29
-# diameter 0.80", 3.1' W of Saturn (V 0.6), rates -3.2 -1.0 "/h | 40-85 deg: 19:00-23:30 HST
-Titan           00 32 04.42 +00 39 49.6 2000 vmag=8.33
-# diameter 0.36", low (max 49 deg), rates -2.9 -0.6 "/h | 40-85 deg: 19:00-22:30 HST
-Pallas          00 52 15.78 -21 37 15.6 2000 vmag=8.94
+# diameter 0.44", rates -5.5 +9.6 "/h | 40-85 deg: 19:00-23:30 HST
+Vesta           01 00 07.53 -03 56 33.3 2000 vmag=7.27
+# diameter 0.80", ~3' from Saturn (V 0.6), rates -4.7 -1.1 "/h | 40-85 deg: 19:00-23:30 HST
+Titan           00 32 10.38 +00 40 15.0 2000 vmag=8.33
+# diameter 0.36", low (max 49 deg), rates -3.8 -1.2 "/h | 40-85 deg: 19:00-22:30 HST
+Pallas          00 52 19.78 -21 36 52.8 2000 vmag=8.93
 # diameter 2.3", rates -1.2 -0.4 "/h | 40-85 deg: 19:00-23:00 HST
-Neptune         00 06 56.63 -00 46 23.7 2000 vmag=7.72</pre>
+Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
     </div>
   </details>
 
@@ -338,7 +338,7 @@ Neptune         00 06 56.63 -00 46 23.7 2000 vmag=7.72</pre>
 
 <script>
 (function () {
-  var NIGHT0 = Date.UTC(2026, 10, 28, 10, 0, 0); // 2026-11-28 00:00 HST
+  var NIGHT0 = Date.UTC(2026, 10, 27, 10, 0, 0); // 2026-11-27 00:00 HST
   var T0 = 1110, T1 = 1455;
   function hm(s) { var p = s.split(':'); var h = +p[0]; return (h < 12 ? h + 24 : h) * 60 + +p[1]; }
   function fmt(m) { m = Math.floor(m + 1e-6); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(((m % 60) + 60) % 60).padStart(2, '0'); }
@@ -488,7 +488,7 @@ Neptune         00 06 56.63 -00 46 23.7 2000 vmag=7.72</pre>
     slew('22:28', '22:38', 'η Aur', 'SOD · 57×57', '~25° slew, acquire, reload the ORKID cog. η Aur is Haedus II (05 06 30.9 +41 14 04, single B3 V). Do not take ζ Aur (Haedus I, 05 02 28.7 +41 04 33), the eclipsing binary 0.8° away.'),
     nrmVisit('22:38', '22:41', 'nrm', 'η Aur', 'NRM calibrator', [], 'η Aur = Haedus II, not ζ Aur (Haedus I, eclipsing binary).'),
     slew('22:41', '22:47', 'Capella', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
-    nrmVisit('22:47', '22:52', 'nrm', 'Capella', 'Binary fit: scale + orientation', [['Ha', '1 ms', '2000', '2']], 'Expect 51.6 mas at PA 12°: checks pixel scale and orientation.'),
+    nrmVisit('22:47', '22:52', 'nrm', 'Capella', 'Binary fit: scale + orientation', [['Ha', '1 ms', '2000', '2']], 'Expect 52.4 mas at PA 15°: checks pixel scale and orientation.'),
     slew('22:52', '22:58', 'η Aur', 'SOD · 57×57', calMove),
     nrmVisit('22:58', '23:02', 'nrm', 'η Aur', 'NRM calibrator + open PSF', [['Ha', '1 ms', '2000', '2']], 'The open-pupil cubes are the single-star PSF for Capella: same settings as Capella.'),
 
@@ -618,7 +618,7 @@ Neptune         00 06 56.63 -00 46 23.7 2000 vmag=7.72</pre>
       nx.innerHTML = nsub ? 'Next <span class="mono">' + fmtZ(nsub.sm) + '</span> ' + esc(nsub.t) + ' (in ' + dur(nsub.sm - m) + ')'
         : (next ? 'Next <span class="mono">' + fmtZ(next.sm) + '</span> ' + esc(next.tg) + ' · ' + esc(next.t) + ' (in ' + dur(next.sm - m) + ')' : 'First half ends at ' + fmtZ(hm('00:10')) + ' ' + zone + '.');
     } else if (next) {
-      box.innerHTML = '<span class="muted">Before the night</span><span class="what">Starts in ' + dur(next.sm - m) + '</span><span class="muted">First block ' + fmtZ(blocks[0].sm) + ' ' + zone + ' (18:35 HST, Sat 28 Nov)</span>';
+      box.innerHTML = '<span class="muted">Before the night</span><span class="what">Starts in ' + dur(next.sm - m) + '</span><span class="muted">First block ' + fmtZ(blocks[0].sm) + ' ' + zone + ' (18:35 HST, Fri 27 Nov)</span>';
       nx.innerHTML = 'Next <span class="mono">' + fmtZ(next.sm) + '</span> ' + esc(next.tg) + ' · ' + esc(next.t);
     } else {
       box.innerHTML = '<span class="muted">Done</span><span class="what">First half finished</span><span class="muted">Copy the night off the ORKID disk.</span>';
