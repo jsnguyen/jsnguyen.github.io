@@ -254,7 +254,7 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
         <li>Get cog names and AFS positions for SOD 57×57, BS 57×57 and SOD 29×29.</li>
         <li>In-focus WFS pairs (main test): Hα open + NRM at baseline, then with known DM shapes (focus, astig, spherical, coma, trefoil, ±), a large mix, and single actuator pokes. Run orkid_sharpen.py once as a reference.</li>
         <li>Darks at the night's exposures (up to 30 s), including 1 ms in 512².</li>
-        <li>Dome flats, mask out: R, [O I], Hα, i, Jovian, z, CT940 on both feeds; R+ND2 and i+ND2 on SOD.</li>
+        <li>Dome flats, mask out: R, [O I], Hα, i, Jovian, z, CT940 on both feeds.</li>
         <li>WFS backgrounds for the faint ladder settings (both modes).</li>
       </ul>
     </div>
@@ -302,9 +302,9 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
   var POS = {
     R: ['FW_BESSELL_R', 'PW_OPEN'], OI: ['FW_O_I', 'PW_OPEN'], Ha: ['FW_H_A', 'PW_OPEN'], i: ['FW_SLOAN_I', 'PW_OPEN'],
     Jov: ['FW_OPEN', 'PW_JOVIAN'], z: ['FW_OPEN', 'PW_SLOAN_Z'], CT940: ['FW_OPEN', 'PW_CT940_20BP'],
-    NRM: ['FW_H_A', 'PW_NRM'], RND2: ['FW_BESSELL_R', 'PW_ND2'], iND2: ['FW_SLOAN_I', 'PW_ND2']
+    NRM: ['FW_H_A', 'PW_NRM']
   };
-  var SHORT = { FW_BESSELL_R: 'R', FW_O_I: '[O I]', FW_H_A: 'Hα', FW_SLOAN_I: 'i', FW_OPEN: 'open', PW_OPEN: 'open', PW_NRM: 'NRM', PW_ND2: 'ND2', PW_JOVIAN: 'Jovian', PW_SLOAN_Z: 'z', PW_CT940_20BP: 'CT940' };
+  var SHORT = { FW_BESSELL_R: 'R', FW_O_I: '[O I]', FW_H_A: 'Hα', FW_SLOAN_I: 'i', FW_OPEN: 'open', PW_OPEN: 'open', PW_NRM: 'NRM', PW_JOVIAN: 'Jovian', PW_SLOAN_Z: 'z', PW_CT940_20BP: 'CT940' };
   function wheel(keys, w) {
     var out = [];
     keys.forEach(function (k) { var s = SHORT[POS[k][w]]; if (out.indexOf(s) < 0) out.push(s); });
@@ -345,7 +345,7 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
   var calMove = 'Calibrator ↔ target move (~5–8°), acquire, reload the ORKID cog.';
   var ffRows = [['Before', 'Jov', '1 ms', '2000'], ['F&F low order (30 modes)', null, '', ''], ['After', 'Jov', '1 ms', '2000'], ['After', 'i', '1 ms', '2000']];
   var pairRows = [['1', 'Ha', '1 ms', '2000'], ['2', 'NRM', '1 ms', '10,000']];
-  var betelRows = ['Ha', 'OI', 'RND2', 'iND2', 'Jov', 'CT940'].map(function (k) { return [k, '1 ms', '2000', '1']; });
+  var betelRows = ['Ha', 'OI', 'Jov', 'CT940'].map(function (k) { return [k, '1 ms', '2000', '1']; });
 
   var TYPE = {
     'α Tri': 'Single (SB1, unresolved)', 'α Ari': 'Single, 7 mas disc', 'ξ² Cet': 'Single',
@@ -420,11 +420,11 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
     slew('23:02', '23:12', 'γ Ori', 'SOD · 57×57', '~40° slew, acquire, reload the ORKID cog.'),
     nrmVisit('23:12', '23:15', 'nrm', 'γ Ori', 'NRM calibrator', []),
     slew('23:15', '23:21', 'Betelgeuse', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
-    nrmVisit('23:21', '23:29', 'both', 'Betelgeuse', 'Disc: NRM + open-pupil AO', betelRows, '42 mas disc, 256² for the open-pupil set. z only if the peak stays under 60k.'),
-    slew('23:29', '23:35', 'γ Ori', 'SOD · 57×57', calMove),
-    nrmVisit('23:35', '23:43', 'nrm', 'γ Ori', 'NRM calibrator + open PSF', betelRows, 'The open-pupil set is the single-star PSF for Betelgeuse: same filters, ND2 and exposures, so counts are ~16× lower. 256².'),
+    nrmVisit('23:21', '23:27', 'both', 'Betelgeuse', 'Disc: NRM + open-pupil AO', betelRows, '42 mas disc, 256² for the open-pupil set. Narrowband only: R, i and z would saturate at 1 ms (scaled from 10 Lac), and ND2 is weak in the red and cannot pair with PW filters.'),
+    slew('23:27', '23:33', 'γ Ori', 'SOD · 57×57', calMove),
+    nrmVisit('23:33', '23:39', 'nrm', 'γ Ori', 'NRM calibrator + open PSF', betelRows, 'The open-pupil set is the single-star PSF for Betelgeuse: same filters and exposures. 256².'),
 
-    { s: '23:43', e: '00:10', k: 'setup', l: 'Buffer', tg: '–', t: 'Buffer', cfg: '', d: p('Absorbs overruns. If unused: HD 23632 on 29×29, or a second F&F run.') }
+    { s: '23:39', e: '00:10', k: 'setup', l: 'Buffer', tg: '–', t: 'Buffer', cfg: '', d: p('Absorbs overruns. If unused: HD 23632 on 29×29, or a second F&F run.') }
   ];
   blocks.forEach(function (b) {
     b.sm = hm(b.s); b.em = hm(b.e);
@@ -444,7 +444,7 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
     { s: '21:40', e: '22:00', t: 'Pleiades ladder · SOD 29×29' },
     { s: '22:08', e: '22:28', t: 'Pleiades ladder · SOD 57×57' },
     { s: '22:38', e: '23:02', t: 'Binary · Capella, calibrator η Aur' },
-    { s: '23:12', e: '23:43', t: 'Resolved star · Betelgeuse, calibrator γ Ori' }
+    { s: '23:12', e: '23:39', t: 'Resolved star · Betelgeuse, calibrator γ Ori' }
   ];
   groups.forEach(function (g) { g.sm = hm(g.s); g.em = hm(g.e); g.bs = []; });
   blocks.forEach(function (b) {
