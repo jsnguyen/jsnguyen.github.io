@@ -5,6 +5,7 @@ import {createIntervalSelection} from './interval.js';
 import {createCurrentTimeMarker} from './current-time.js';
 import {createRemainingTime} from './remaining-time.js';
 import {createPosition} from './position.js';
+import {createNowReadout} from './now-readout.js';
 
 export const visibilityColors = ['#d64242', '#d69f18', '#27a963'];
 export const skyColors = ['#e6f2fc', '#c9c9c9'];
@@ -287,14 +288,14 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
     const dots = cursors.map(cursor => add(cursor, 'i', 'plot-dot'));
     let selected = null;
 
-    function showRow(row, live = false) {
+    function showRow(row, live = false, marked = true) {
         const clock = row ? formatClock(row.time, zone) : null;
         clockHeading.textContent = (live ? 'Now' : 'Time') + ' (' + (clock?.zone || initialClockZone) + ')';
         position.show(row);
         for (let i = 0; i < plots.length; i++) {
             const cursor = cursors[i];
-            cursor.hidden = !row;
-            if (!row) continue;
+            cursor.hidden = !row || !marked;
+            if (cursor.hidden) continue;
             const plot = plots[i];
             const value = panelValue(row, panels[i][0]);
             cursor.style.left = plot.valToPos(row.time, 'x') + 'px';
@@ -316,15 +317,20 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
 
     function inspect(index) {
         selected = index;
-        showRow(samples[index]);
+        if (index === null) nowReadout.refresh();
+        else showRow(samples[index]);
     }
 
-    inspect(null);
     const currentTime = createCurrentTimeMarker(plots, times, nowToggle, time => {
         selected = null;
         const row = time == null ? null : night.sampleAt(time);
-        showRow(row, Boolean(row));
+        if (row) showRow(row, true);
+        else inspect(null);
     });
+    const nowReadout = createNowReadout(times, time => {
+        if (selected === null && !currentTime.isPinned()) showRow(time === null ? null : night.sampleAt(time), time !== null, false);
+    });
+    inspect(null);
     for (const plot of plots) {
         function inspectPointer(event) {
             if (event.target.closest('.plot-now-marker') && (event.type === 'pointerdown' || !event.buttons)) return;
@@ -394,6 +400,7 @@ export function renderPlot(container, night, title, dateISO, zone, nowToggle, op
         destroy() {
             observer.disconnect();
             remaining.destroy();
+            nowReadout.destroy();
             currentTime.destroy();
             interval.destroy();
             position.destroy();
