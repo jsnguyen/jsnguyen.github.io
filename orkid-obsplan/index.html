@@ -240,7 +240,7 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
     <summary>Targets and starlist</summary>
     <div>
       <div class="tablewrap"><table>
-        <thead><tr><th>Target</th><th>RA</th><th>Dec</th><th>Mag</th><th>40–85°</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Target</th><th>RA</th><th>Dec</th><th>V</th><th>R</th><th>40–85°</th><th>Notes</th></tr></thead>
         <tbody id="targets"></tbody>
       </table></div>
       <p class="note">Plan targets in observing order, then backups. J2000, proper motion applied to epoch 2026.9. Solar-system positions are for 21:30 HST; track with the ephemeris. <button type="button" class="btn" id="copy">Copy starlist</button> <span id="copy-status"></span></p>
@@ -667,16 +667,20 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
   var pre = document.getElementById('starlist');
   var starlist = pre.textContent;
   function withTimes(t) { return esc(t).replace(/ HST/g, '').replace(/(\d\d:\d\d)(?! UT)/g, function (x) { return tz(x); }); }
+  // V for stars listed in R, R for stars listed in V: SIMBAD (CfA mirror). Null: no value in SIMBAD.
+  var OTHER_V = {'alf_Tri': 3.42, 'alf_Ari': 2.01, 'ksi2_Cet': 4.3, '18_Tau': 5.64, 'HD23632': 7.02, 'HD23924': 8.13, 'HD24088': 9.4, 'HII1360': 11.12, 'eta_Aur': 3.18, 'Capella': 0.08, 'gam_Ori': 1.64, 'Betelgeuse': 0.42, 'bet_Peg': 2.42, 'bet_And': 2.05, 'rho_Per': 3.39, 'Mira': 6.53, 'Aldebaran': 0.86, 'mu_Gem': 2.87, 'HD16234': 5.64, 'gam_Per': 2.93, 'HD26690': 5.29};
+  var OTHER_R = {'HD16811': null, 'HD206901_kapPeg': null, 'HD3196_13Cet': null, 'HD25555': null, 'zet_Ori_A': null, 'HD43525': null};
   var targetRows = [], note = '';
   starlist.split('\n').forEach(function (l) {
     var sec = l.match(/^# =+ (.+?) =+$/);
-    if (sec) { targetRows.push('<tr class="sec"><th colspan="6">' + esc(sec[1]) + '</th></tr>'); note = ''; return; }
+    if (sec) { targetRows.push('<tr class="sec"><th colspan="7">' + esc(sec[1]) + '</th></tr>'); note = ''; return; }
     if (l.charAt(0) === '#') { note = note ? note + ' ' + l.slice(2) : l.slice(2); return; }
     var f = l.trim().split(/\s+/);
     if (f.length < 9) return;
     var parts = note.split(' | '), win = (parts[1] || '').replace('40-85 deg: ', '');
-    var m = f[8].split('=');
-    targetRows.push('<tr><td>' + esc(f[0].replace(/_/g, ' ')) + '</td><td class="n">' + f.slice(1, 4).join(' ') + '</td><td class="n">' + f.slice(4, 7).join(' ').replace('-', '−') + '</td><td class="n">' + m[0].charAt(0).toUpperCase() + ' ' + m[1] + '</td><td class="n">' + withTimes(win) + '</td><td>' + withTimes(parts[0]) + '</td></tr>');
+    var m = f[8].split('='), isv = m[0] === 'vmag', vm = isv ? m[1] : OTHER_V[f[0]], rm = isv ? OTHER_R[f[0]] : m[1];
+    function mag(x) { return x == null ? '–' : String(x).replace('-', '−'); }
+    targetRows.push('<tr><td>' + esc(f[0].replace(/_/g, ' ')) + '</td><td class="n">' + f.slice(1, 4).join(' ') + '</td><td class="n">' + f.slice(4, 7).join(' ').replace('-', '−') + '</td><td class="n">' + mag(vm) + '</td><td class="n">' + mag(rm) + '</td><td class="n">' + withTimes(win) + '</td><td>' + withTimes(parts[0]) + '</td></tr>');
     note = '';
   });
   document.getElementById('targets').innerHTML = targetRows.join('');
