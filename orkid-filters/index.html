@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>ORKID Filters</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../tools/tool-theme.css">
+    <link rel="stylesheet" href="filters.css?v=1">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <script type="module" src="../stars.js?v=3"></script>
+    <script defer src="filters.js?v=1"></script>
+</head>
+<body>
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
+    <main class="filters-page">
+        <header class="page-header">
+            <a href="../tools/" class="home-link" aria-label="Back to tools"><img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
+            <h1>ORKID Filters</h1>
+        </header>
+        <section class="panel wheels-panel">
+            <div class="wheel-pair" id="wheels"></div>
+            <p class="combo" id="combo" aria-live="polite"></p>
+        </section>
+        <section class="panel">
+            <h2>Transmission</h2>
+            <svg class="chart" id="chart" viewBox="0 0 640 290" role="img" aria-label="Approximate filter transmission curves"></svg>
+            <p class="note">Curves are approximate, drawn from the band edges and transmissions in the ORKID docs, not measured. The shaded beam is filter × filter × the AO bench dichroic band (595 to ≈ 960 nm), without detector QE. Click a curve or label to select it.</p>
+        </section>
+        <section class="panel" id="info" aria-live="polite"></section>
+        <section class="panel">
+            <h2>Reference</h2>
+            <div class="table-wrap"><table id="ref-table"></table></div>
+            <p class="note">Centre, range, transmission: Peretz et al. 2025, JATIS. PyAO λ: the wavelength the Strehl tool uses (orkid.ini). Bench SR: HAKA, 2026-10-16. λ/D for a 10 m aperture; 6.6 mas/pixel.</p>
+        </section>
+    </main>
+</body>
+</html>

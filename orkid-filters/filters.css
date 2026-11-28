@@ -1,0 +1,76 @@
+/* ORKID filter quick reference. Colours from tools/tool-theme.css. */
+.filters-page { width: min(760px, 100%); margin: clamp(16px, 3vw, 36px) auto 36px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.page-header { display: flex; align-items: center; gap: 12px; }
+h1 { font: 550 clamp(24px, 3vw, 32px)/1.2 "Stack Sans Headline", system-ui, sans-serif; }
+.panel { border: 1px solid var(--glass-edge); border-radius: 22px; background: var(--glass); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow); padding: 18px 20px; display: grid; gap: 10px; }
+.panel h2 { font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+.note { font-size: 0.78rem; color: var(--glass-muted); }
+code { font-family: ui-monospace, Menlo, monospace; font-size: 0.85em; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; flex: none; }
+
+.wheels-panel { justify-items: center; text-align: center; }
+.wheel-pair { display: flex; justify-content: center; gap: 8px 48px; }
+.wheel { display: grid; justify-items: center; gap: 2px; }
+.wheel svg { width: 210px; max-width: 42vw; height: auto; overflow: visible; }
+.wheel figcaption { display: grid; justify-items: center; font-size: 0.85rem; color: var(--glass-muted); }
+.wheel figcaption code { color: var(--glass-ink); }
+.rot, .lbl { transform-box: fill-box; transform-origin: center; transition: transform 0.8s cubic-bezier(0.45, 0, 0.2, 1); }
+.disc { fill: var(--glass-field); stroke: var(--glass-line); stroke-width: 1.5; }
+.hub { fill: var(--glass-line); }
+.slot { cursor: pointer; outline: none; --c: var(--glass-accent); }
+.glass { fill: rgba(255, 255, 255, 0.06); stroke: var(--c); stroke-opacity: 0.6; stroke-width: 1; transition: fill 0.4s, stroke-width 0.4s, stroke-opacity 0.4s; }
+.slot:hover .glass, .slot:focus-visible .glass { stroke-opacity: 1; stroke-width: 1.8; }
+.slot.open .glass { stroke-dasharray: 3 2; }
+.slot.bad .glass { stroke-dasharray: 1 2; }
+.slot.on .glass { fill: color-mix(in srgb, var(--c) 35%, transparent); stroke-opacity: 1; stroke-width: 2.2; }
+.lbl { font: 500 8px "Stack Sans Text", system-ui, sans-serif; fill: var(--glass-ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.hole { fill: var(--glass-ink); pointer-events: none; }
+.beam-mark { fill: var(--glass-accent); }
+.beam-lbl { font: 7px "Stack Sans Text", system-ui, sans-serif; fill: var(--glass-muted); text-anchor: middle; }
+.combo { font-size: 0.95rem; max-width: 60ch; }
+.combo.warn { color: #ffb4a8; }
+
+.chart { width: 100%; height: auto; touch-action: pan-y; }
+.chart text { font-family: "Stack Sans Text", system-ui, sans-serif; }
+.cut { fill: rgba(10, 8, 24, 0.45); }
+.cut-lbl, .tick, .axis-lbl { font-size: 10px; fill: var(--glass-muted); }
+.tick { dominant-baseline: central; }
+.grid { stroke: var(--glass-line); stroke-width: 0.6; }
+.beam-area { fill: var(--glass-accent); fill-opacity: 0.22; stroke: var(--glass-accent); stroke-width: 1; transform-box: fill-box; transform-origin: bottom; }
+.beam-area.grow { animation: grow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes grow { from { transform: scaleY(0); opacity: 0; } }
+.curve { cursor: pointer; outline: none; }
+.curve .line { fill: none; stroke: var(--c); stroke-width: 1.2; opacity: 0.35; transition: opacity 0.4s, stroke-width 0.4s; }
+.curve .hit { fill: none; stroke: transparent; stroke-width: 12; }
+.curve .lead { stroke: var(--c); stroke-width: 0.6; opacity: 0.3; transition: opacity 0.4s; }
+.curve-lbl { font-size: 10px; fill: var(--c); text-anchor: middle; opacity: 0.6; transition: opacity 0.4s; }
+.curve:hover .line, .curve:focus-visible .line { opacity: 0.8; }
+.curve:hover .curve-lbl, .curve:focus-visible .curve-lbl { opacity: 1; }
+.curve.on .line { opacity: 1; stroke-width: 2.4; }
+.curve.on .lead { opacity: 0.8; }
+.curve.on .curve-lbl { opacity: 1; font-weight: 500; }
+.cursor { stroke: var(--glass-ink); stroke-width: 0.6; stroke-dasharray: 2 2; opacity: 0; pointer-events: none; }
+.cursor-lbl { font-size: 10px; fill: var(--glass-ink); text-anchor: middle; opacity: 0; pointer-events: none; }
+
+#info dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 16px; font-size: 0.92rem; }
+#info dt { color: var(--glass-muted); }
+#info dd { font-weight: 300; }
+#info p { font-size: 0.88rem; color: var(--glass-muted); }
+#info .move { font-size: 0.8rem; }
+
+.table-wrap { overflow-x: auto; }
+#ref-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap; }
+#ref-table th { text-align: left; font-weight: 400; color: var(--glass-muted); padding: 4px 8px; border-bottom: 1px solid var(--glass-line); }
+#ref-table td { padding: 5px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+#ref-table tbody tr { cursor: pointer; transition: background 0.3s; outline: none; }
+#ref-table tbody tr:hover, #ref-table tbody tr:focus-visible { background: rgba(255, 255, 255, 0.06); }
+#ref-table tbody tr.on { background: var(--glass-pill); }
+#ref-table tr.bad td { color: var(--glass-muted); text-decoration: line-through rgba(255, 180, 168, 0.5); }
+
+@media (max-width: 520px) {
+    .wheel-pair { gap: 8px 12px; }
+    .panel { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rot, .lbl, .glass, .beam-area.grow { transition: none !important; animation: none !important; }
+}
