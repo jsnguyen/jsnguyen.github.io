@@ -208,7 +208,6 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
     <div class="legend"><span class="ao">AO performance</span><span class="nrm">NRM</span><span class="both">Both</span><span class="setup">Setup / switch</span></div>
     <div class="now" id="now" aria-live="polite"></div>
     <p class="next" id="next"></p>
-    <div class="wheels" id="wheels"></div>
   </section>
 
   <section>
@@ -216,6 +215,11 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
     <div class="cols" aria-hidden="true"><span>Time · <span class="zname">HST</span></span><span class="du-h">Length</span><span>Target</span><span>Type</span><span>Test</span><span>Feed · WFS</span><span>Filter wheel</span><span>Pupil wheel</span><span></span></div>
     <div class="plan" id="plan"></div>
     <p class="note" style="margin-top:8px">Click a group to see its tests, and a test for exposures, frames and notes. Thin setup lines are slews, acquisitions and switches; click one for its note. Overheads assumed: 10 min per big slew + acquisition, 6 min per calibrator move, 4 min per Pleiades star, 8 min per dichroic or lenslet switch. Exposures are scaled from 10 Lac (Oct 23) and the docs' predicted Strehl: check the first frame, aim for peaks of 2k–30k ADU, never over 60k. FW = filter wheel, PW = pupil wheel; FW filters need PW open, PW filters need FW open, NRM is PW_NRM + FW_H_A. Vertical angle all night.</p>
+  </section>
+
+  <section>
+    <h2>Filter and pupil wheels</h2>
+    <div class="wheels" id="wheels"></div>
   </section>
 
   <details class="ref">
@@ -338,7 +342,6 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
   </details>
 </main>
 
-<script src="wheels.js"></script>
 <script>
 (function () {
   var NIGHT0 = Date.UTC(2026, 10, 27, 10, 0, 0); // 2026-11-27 00:00 HST
@@ -578,7 +581,7 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
   });
   var line = document.createElement('div'); line.className = 'nowline'; tl.appendChild(line);
 
-  var mode = 'live', lastCur = null, lastFocus;
+  var mode = 'live', lastCur = null;
   var slider = document.getElementById('preview-time');
   function now() { return mode === 'live' ? (Date.now() - NIGHT0) / 60000 : +slider.value; }
 
@@ -599,11 +602,6 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
     });
     if (cur && cur !== lastCur) reveal(cur);
     lastCur = cur;
-    var focus = cur && cur.w ? cur : blocks.filter(function (b) { return b.w && b.sm > m; })[0] || null;
-    if (focus !== lastFocus) {
-      lastFocus = focus;
-      document.dispatchEvent(new CustomEvent('orkid:wheels', { detail: { block: focus, live: !!focus && focus === cur, POS: POS } }));
-    }
     line.hidden = m < T0 || m > T1;
     line.style.left = pct(m) + '%';
 
@@ -701,5 +699,6 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
   setInterval(render, 15000);
 })();
 </script>
+<script src="wheels.js"></script>
 </body>
 </html>
