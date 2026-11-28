@@ -248,9 +248,9 @@ tr.sec th { padding-top: 16px; font-size: 0.85rem; color: var(--fg); }
 # Coordinates: equinox J2000, proper motion applied to epoch 2026.9. Vertical angle all night.
 
 # ===== Plan, in observing order =====
-# 18:35 setup in twilight, 18:55 NRM binary, Ha only: expect 48.7 mas PA 287 (BLA 1Aa,Ab, V 5.69/6.20) | 40-85 deg: 19:05-00:10 HST, &gt;85 deg 22:20-22:55
+# 18:35 setup in twilight, 18:55 binary, Ha only: expect 48.7 mas PA 287 (BLA 1Aa,Ab, V 5.69/6.20) | 40-85 deg: 19:05-00:10 HST, &gt;85 deg 22:20-22:55
 HD16811         02 42 21.99 +20 00 40.0 2000 vmag=5.74
-# 19:08 NRM calibrator (+ 50 ms cube for HD16811), revisit 19:27 (NRM + WFS pair). SB1, unresolved | 40-85 deg: 18:35-00:10 HST
+# 19:08 NRM calibrator, revisit 19:27 (NRM + WFS pair). SB1, unresolved | 40-85 deg: 18:35-00:10 HST
 alf_Tri         01 53 04.93 +29 34 37.5 2000 rmag=3.00
 # 19:18 NRM vetting, NASA target. 7 mas disc | 40-85 deg: 18:35-00:10 HST, &gt;85 deg 21:50-22:15
 alf_Ari         02 07 10.77 +23 27 40.7 2000 rmag=1.15
@@ -432,10 +432,10 @@ Neptune         00 06 58.44 -00 46 14.4 2000 vmag=7.72</pre>
   var blocks = [
     { s: '18:35', e: '18:55', k: 'setup', l: 'Setup', tg: 'HD 16811', t: 'Start of night, acquire HD 16811 in twilight', cfg: 'SOD · 57×57',
       d: p('Start the AO software (KAON 1538), vertical angle, acquire HD 16811 (sun −13° to −17°, star 33–38° up), load the ORKID SOD 57×57 cog by hand, telemetry on.') },
-    { s: '18:55', e: '19:00', k: 'nrm', l: '', tg: 'HD 16811', t: 'Binary fit, Hα only', cfg: 'SOD · 57×57', w: ['NRM', 'Ha'],
-      d: wtbl([['NRM', '50 ms', '400', '3'], ['Ha', '20 ms', '1000', '1']], ['Exp.', 'Frames / cube', 'Cubes']) + p('BLA 1Aa,Ab, V 5.7/6.2: expect 48.7 mas at PA 287° (ORB6, grade 2). Hα only. At V 5.7 a 1 ms frame is too faint, so frames are longer: check the first peak and adjust. Low (≈ 39°) at the end of twilight. Calibrator: the matched 50 ms NRM cube on α Tri.') },
+    { s: '18:55', e: '19:00', k: 'ao', l: '', tg: 'HD 16811', t: 'Binary fit, Hα only', cfg: 'SOD · 57×57', w: ['Ha'],
+      d: wtbl([['Ha', '20 ms', '1000', '1']], ['Exp.', 'Frames / cube', 'Cubes']) + p('BLA 1Aa,Ab, V 5.7/6.2: expect 48.7 mas at PA 287° (ORB6, grade 2). Hα only. At V 5.7 a 1 ms frame is too faint, so frames are longer: check the first peak and adjust. Low (≈ 39°) at the end of twilight. No NRM on this star: the pair is about 4 λ/D, so the direct Hα cube gives the fit.') },
     slew('19:00', '19:08', 'α Tri', 'SOD · 57×57', '~15° move, acquire α Tri, reload the ORKID cog.'),
-    nrmVisit('19:08', '19:12', 'nrm', 'α Tri', 'NRM calibrator', [['NRM', '50 ms', '400', '1']], '128². Log peak levels. The 50 ms cube calibrates HD 16811.'),
+    nrmVisit('19:08', '19:12', 'nrm', 'α Tri', 'NRM calibrator', [], '128². Log peak levels.'),
     slew('19:12', '19:18', 'α Ari', 'SOD · 57×57', calMove),
     nrmVisit('19:18', '19:21', 'nrm', 'α Ari', 'NRM vetting (NASA target)', [], 'α Ari is 7.2 mas across. 128².'),
     slew('19:21', '19:27', 'α Tri', 'SOD · 57×57', calMove),
