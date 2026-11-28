@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ORKID Night 28 Nov</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+/* Layout: clock bar, timeline with now/next, one chronological colour-coded list with expandable rows, then collapsible reference sections. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --fg: #1a1f27;
+  --muted: #5f6b7a;
+  --line: #e1e5eb;
+  --ao: #b26a00;
+  --ao-fill: #fbecd6;
+  --nrm: #0a7285;
+  --nrm-fill: #d9eff3;
+  --setup: #8a94a3;
+  --setup-fill: #eceff3;
+  --now: #d12a50;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1218; --surface: #151b23; --fg: #e6eaf0; --muted: #98a3b3; --line: #29313d;
+    --ao: #f2a640; --ao-fill: #3a2b14; --nrm: #52c4d6; --nrm-fill: #11313a; --setup: #6d7888; --setup-fill: #222a35; --now: #ff6585;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1218; --surface: #151b23; --fg: #e6eaf0; --muted: #98a3b3; --line: #29313d;
+  --ao: #f2a640; --ao-fill: #3a2b14; --nrm: #52c4d6; --nrm-fill: #11313a; --setup: #6d7888; --setup-fill: #222a35; --now: #ff6585;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 40px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+main { max-width: 1040px; margin: 0 auto; display: grid; gap: 28px; }
+h1 { font-size: 1.15rem; margin: 0; }
+h2 { font-size: 1.15rem; margin: 0 0 10px; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 0.9em; font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--now); outline-offset: 2px; }
+
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 10px; background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.bar-in { max-width: 1040px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+.clock { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.clock small { font-size: 0.8rem; font-weight: 400; color: var(--muted); margin-left: 8px; }
+.toggle { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.toggle button { font: 500 0.85rem var(--sans); padding: 4px 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; cursor: pointer; }
+.toggle button:disabled { opacity: 0.45; cursor: default; }
+.toggle button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.toggle input { width: 180px; accent-color: var(--now); }
+
+.top { display: grid; gap: 14px; padding-top: 20px; }
+.tl-scroll { overflow-x: auto; }
+.tl { position: relative; min-width: 900px; height: 70px; }
+.blk { position: absolute; top: 0; height: 40px; border-radius: 4px; padding: 4px 6px; font-size: 0.75rem; line-height: 1.2; overflow: hidden; white-space: nowrap; color: var(--fg); cursor: pointer; }
+.blk.ao { background: var(--ao-fill); box-shadow: inset 0 -3px 0 var(--ao); }
+.blk.nrm { background: var(--nrm-fill); box-shadow: inset 0 -3px 0 var(--nrm); }
+.blk.both { background: linear-gradient(90deg, var(--nrm-fill), var(--ao-fill)); box-shadow: inset 0 -3px 0 var(--ao); }
+.blk.setup { background: var(--setup-fill); }
+.blk.done { opacity: 0.4; }
+.tick { position: absolute; top: 48px; transform: translateX(-50%); font: 0.72rem var(--mono); color: var(--muted); }
+.nowline { position: absolute; top: -4px; height: 48px; border-left: 2px solid var(--now); pointer-events: none; }
+.legend { display: flex; gap: 16px; font-size: 0.85rem; color: var(--muted); flex-wrap: wrap; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.legend .ao::before { background: var(--ao); }
+.legend .nrm::before { background: var(--nrm); }
+.legend .both::before { background: linear-gradient(90deg, var(--nrm) 50%, var(--ao) 50%); }
+.legend .setup::before { background: var(--setup); }
+
+.now { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--now); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; }
+.now .what { font-size: 1.35rem; font-weight: 600; }
+.now ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 2px; font-size: 0.92rem; }
+.now li { display: flex; gap: 12px; }
+.now li.cur { font-weight: 600; color: var(--now); }
+.now li.past { color: var(--muted); }
+.next { font-size: 0.95rem; }
+
+/* plan list: header, groups, tests and setup lines share one grid and one left inset, so every column lines up */
+:root { --tw: 6.6rem; }
+.plan { display: grid; gap: 8px; }
+.plan-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.plan-head h2 { margin: 0; }
+.cols, .row > summary, .grp > summary, .sep > summary {
+  display: grid; grid-template-columns: var(--tw) 4.2rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr) 7.4rem minmax(0, 0.9fr) minmax(0, 0.9fr) 1rem;
+  column-gap: 12px; row-gap: 2px; align-items: baseline; padding: 8px 12px;
+}
+.cols, .plan > .sep { border: 1px solid transparent; border-left-width: 5px; }
+.cols { padding-block: 0 2px; font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+.row > summary, .grp > summary, .sep > summary { cursor: pointer; list-style: none; }
+.row > summary::-webkit-details-marker, .grp > summary::-webkit-details-marker, .sep > summary::-webkit-details-marker { display: none; }
+.row > summary::after, .grp > summary::after { content: "+"; color: var(--muted); font-weight: 600; text-align: right; }
+.row[open] > summary::after, .grp[open] > summary::after { content: "−"; }
+
+.grp { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--setup); border-radius: 8px; overflow: hidden; }
+.grp.ao { border-left-color: var(--ao); }
+.grp.nrm { border-left-color: var(--nrm); }
+.grp.both { border-left-color: var(--ao); }
+.grp > summary { padding-block: 10px; }
+.grp > summary .gt { grid-column: span 3; font-weight: 600; }
+.grp.cur { outline: 2px solid var(--now); outline-offset: 1px; }
+.grp.done > summary { color: var(--muted); }
+.grp-body { border-top: 1px solid var(--line); background: var(--bg); }
+.grp-body > .row + .row, .grp-body > .sep + .row { border-top: 1px solid var(--line); }
+.grp-body > .row.ao { box-shadow: inset 3px 0 0 var(--ao); }
+.grp-body > .row.nrm { box-shadow: inset 3px 0 0 var(--nrm); }
+.grp-body > .row.both { box-shadow: inset 3px 0 0 var(--nrm), inset 6px 0 0 var(--ao); }
+.row.cur { box-shadow: inset 3px 0 0 var(--now); background: var(--surface); }
+.row.cur > summary .tg { color: var(--now); }
+.row.done > summary { color: var(--muted); }
+.row .tg { font-weight: 600; }
+.ty { font-size: 0.88rem; color: var(--muted); }
+
+.sep > summary { padding-block: 3px; font-size: 0.82rem; color: var(--muted); }
+.sep > summary .lbl { grid-column: 3 / -1; display: flex; align-items: center; gap: 10px; }
+.sep > summary .lbl::after { content: ""; flex: 1 1 0; border-top: 1px solid var(--line); }
+.sep.cur > summary { color: var(--now); font-weight: 600; }
+.sep.done > summary { opacity: 0.6; }
+.sep > .more { border-top: 0; padding-top: 0; }
+
+.tm { font-family: var(--mono); font-size: 0.86rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.du, .du-h { text-align: right; padding-right: 10px; border-right: 1px solid var(--line); }
+.du { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cfg { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+.fw, .pw { font-size: 0.9rem; color: var(--muted); }
+.more { padding: 4px 12px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.more p { font-size: 0.9rem; color: var(--muted); max-width: 80ch; }
+
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+td.n { white-space: nowrap; font-family: var(--mono); font-size: 0.86em; font-variant-numeric: tabular-nums; }
+
+.ref { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.ref > summary { padding: 10px 12px; cursor: pointer; font-weight: 600; }
+.ref > div { padding: 0 12px 12px; display: grid; gap: 10px; }
+ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 3px; }
+.btn { font: 500 0.85rem var(--sans); padding: 5px 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; cursor: pointer; }
+pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; font: 0.8rem/1.5 var(--mono); }
+.note { font-size: 0.88rem; color: var(--muted); }
+
+@media (max-width: 720px) {
+  .cols { display: none; }
+  .row > summary, .grp > summary { grid-template-columns: var(--tw) minmax(0, 1fr) 1rem; }
+  .row > summary .du, .grp > summary .du { grid-column: 1; grid-row: 2; text-align: left; border-right: 0; }
+  .row > summary .tg, .row > summary .ty, .row > summary .ts, .row > summary .cfg, .row > summary .fw, .row > summary .pw,
+  .grp > summary .gt, .grp > summary .cfg, .grp > summary .fw, .grp > summary .pw { grid-column: 2; }
+  .row > summary::after, .grp > summary::after { grid-column: 3; grid-row: 1; }
+  .fw:not(:empty)::before { content: "FW "; font-weight: 600; }
+  .pw:not(:empty)::before { content: "PW "; font-weight: 600; }
+  .sep > summary { grid-template-columns: var(--tw) minmax(0, 1fr); }
+  .sep > summary .du { grid-column: 1; grid-row: 2; border-right: 0; text-align: left; }
+  .sep > summary .lbl { grid-column: 2; grid-row: 1; }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <div>
+      <h1>ORKID · Sat 28 Nov 2026 · first half</h1>
+      <span class="muted"><span class="tz" data-t="18:35"></span>–<span class="tz" data-t="00:10"></span> <span class="zname">HST</span> · goals: AO performance, NRM</span>
+    </div>
+    <div class="clock"><span id="clock">--:--</span><small id="clock-sub">HST</small></div>
+    <div class="toggle" role="group" aria-label="Time zone" id="zones">
+      <button type="button" data-z="HST" aria-pressed="true">HST</button>
+      <button type="button" data-z="UTC" aria-pressed="false">UTC</button>
+      <button type="button" data-z="PST" aria-pressed="false">PST</button>
+      <button type="button" data-z="LST" aria-pressed="false">LST</button>
+    </div>
+    <div class="toggle" role="group" aria-label="Clock format" id="clockfmt">
+      <button type="button" data-h="24" aria-pressed="true">24 h</button>
+      <button type="button" data-h="12" aria-pressed="false">AM/PM</button>
+    </div>
+    <div class="toggle">
+      <button type="button" id="mode-live" aria-pressed="true">Live</button>
+      <button type="button" id="mode-preview" aria-pressed="false">Preview</button>
+      <input type="range" id="preview-time" min="1100" max="1460" step="1" value="1290" aria-label="Preview time" hidden>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="top">
+    <div class="tl-scroll"><div class="tl" id="timeline"></div></div>
+    <div class="legend"><span class="ao">AO performance</span><span class="nrm">NRM</span><span class="both">Both</span><span class="setup">Setup / switch</span></div>
+    <div class="now" id="now" aria-live="polite"></div>
+    <p class="next" id="next"></p>
+  </section>
+
+  <section>
+    <div class="plan-head"><h2>Plan</h2><button type="button" class="btn" id="expand-all">Expand all</button></div>
+    <div class="cols" aria-hidden="true"><span>Time · <span class="zname">HST</span></span><span class="du-h">Length</span><span>Target</span><span>Type</span><span>Test</span><span>Feed · WFS</span><span>Filter wheel</span><span>Pupil wheel</span><span></span></div>
+    <div class="plan" id="plan"></div>
+    <p class="note" style="margin-top:8px">Click a group to see its tests, and a test for exposures, frames and notes. Thin setup lines are slews, acquisitions and switches; click one for its note. Overheads assumed: 10 min per big slew + acquisition, 6 min per calibrator move, 4 min per Pleiades star, 8 min per dichroic or lenslet switch. Exposures are scaled from 10 Lac (Oct 23) and the docs' predicted Strehl: check the first frame, aim for peaks of 2k–30k ADU, never over 60k. FW = filter wheel, PW = pupil wheel; FW filters need PW open, PW filters need FW open, NRM is PW_NRM + FW_H_A. Vertical angle all night.</p>
+  </section>
+
+  <details class="ref">
+    <summary>Switches and OA notes</summary>
+    <div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Time</th><th>Change</th><th>Load by hand</th></tr></thead>
+        <tbody>
+          <tr><td class="n"><span class="tz" data-t="18:35"></span></td><td>Start: SOD, 57×57</td><td>SOD 57×57 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="20:06"></span></td><td>SOD → BS</td><td>BS 57×57 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="21:20"></span></td><td>57×57 → 29×29</td><td>BS 29×29 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="21:43"></span></td><td>BS → SOD</td><td>SOD 29×29 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="22:11"></span></td><td>29×29 → 57×57</td><td>SOD 57×57 cog</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="plain">
+        <li>Reload the ORKID cog after every acquisition (AOAcq loads the NIRC2 one).</li>
+        <li>OA: vertical angle all night; Uranus <span class="tz" data-t="21:06"></span>–<span class="tz" data-t="21:33"></span> needs non-sidereal tracking.</li>
+        <li>Telemetry (TRS) on. Log wfs_status at every acquisition and DIMM/MASS seeing for the ladders.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="ref">
+    <summary>Targets and starlist</summary>
+    <div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Target</th><th>Type</th><th>RA</th><th>Dec</th><th>Mag</th></tr></thead>
+        <tbody id="targets"></tbody>
+      </table></div>
+      <p class="note">Uranus position is for 07:30 UT; use the planet ephemeris. <button type="button" class="btn" id="copy">Copy starlist</button> <span id="copy-status"></span></p>
+      <pre id="starlist" hidden></pre>
+    </div>
+  </details>
+
+  <details class="ref">
+    <summary>Afternoon</summary>
+    <div>
+      <ul class="plain">
+        <li>Get cog names and AFS positions for SOD 57×57, BS 57×57, SOD 29×29 and BS 29×29.</li>
+        <li>In-focus WFS pairs (main test): Hα open + NRM at baseline, then with known DM shapes (focus, astig, spherical, coma, trefoil, ±), a large mix, and single actuator pokes. Run orkid_sharpen.py once as a reference.</li>
+        <li>Darks at the night's exposures (up to 30 s), including 1 ms in 512².</li>
+        <li>Dome flats, mask out: R, [O I], Hα, i, Jovian, z, CT940 on both feeds; R+ND2 and i+ND2 on SOD.</li>
+        <li>WFS backgrounds for the faint ladder settings (both modes).</li>
+      </ul>
+    </div>
+  </details>
+</main>
+
+<script>
+(function () {
+  var NIGHT0 = Date.UTC(2026, 10, 28, 10, 0, 0); // 2026-11-28 00:00 HST
+  var T0 = 1110, T1 = 1455;
+  function hm(s) { var p = s.split(':'); var h = +p[0]; return (h < 12 ? h + 24 : h) * 60 + +p[1]; }
+  function fmt(m) { m = Math.floor(m + 1e-6); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(((m % 60) + 60) % 60).padStart(2, '0'); }
+  var ZONES = { HST: -10, UTC: 0, PST: -8 };
+  var zone = 'HST';
+  try { var saved = localStorage.getItem('orkid-zone'); if (saved && (saved in ZONES || saved === 'LST')) zone = saved; } catch (e) {}
+  function lstHours(ms) {
+    var d = ms / 864e5 + 2440587.5 - 2451545.0;
+    var g = (18.697374558 + 24.06570982441908 * d) % 24;
+    return (((g - 155.4747 / 15) % 24) + 24) % 24;
+  }
+  var h12 = false;
+  try { h12 = localStorage.getItem('orkid-clock') === '12'; } catch (e) {}
+  function use12() { return h12 && zone !== 'LST'; }
+  function clockText(hh, mm) {
+    var m2 = String(mm).padStart(2, '0');
+    if (!use12()) return String(hh).padStart(2, '0') + ':' + m2;
+    return ((hh + 11) % 12 + 1) + ':' + m2 + (hh < 12 ? ' AM' : ' PM');
+  }
+  function fmtZ(m) {
+    var ms = NIGHT0 + m * 60000;
+    if (zone === 'LST') { var h = lstHours(ms); var hh = Math.floor(h); return clockText(hh, Math.floor((h - hh) * 60 + 1e-6)); }
+    var t = new Date(ms + ZONES[zone] * 36e5);
+    return clockText(t.getUTCHours(), t.getUTCMinutes());
+  }
+  function tz(s) { return '<span class="tz" data-t="' + s + '">' + fmtZ(hm(s)) + '</span>'; }
+  function dur(m) { m = Math.max(0, Math.round(m)); if (m >= 1440) return Math.floor(m / 1440) + 'd ' + Math.floor((m % 1440) / 60) + 'h'; if (m >= 60) return Math.floor(m / 60) + 'h ' + (m % 60) + 'm'; return m + ' min'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function tbl(head, rows, numCols) {
+    numCols = numCols || [];
+    return '<div class="tablewrap"><table><thead><tr>' + head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      rows.map(function (r) { return '<tr>' + r.map(function (c, i) { return '<td' + (numCols.indexOf(i) >= 0 ? ' class="n"' : '') + '>' + (/^\d\d:\d\d$/.test(c) ? '<span class="tz" data-t="' + c + '"></span>' : esc(c)) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+  }
+  function p(s) { return '<p>' + esc(s) + '</p>'; }
+
+  var POS = {
+    R: ['FW_BESSELL_R', 'PW_OPEN'], OI: ['FW_O_I', 'PW_OPEN'], Ha: ['FW_H_A', 'PW_OPEN'], i: ['FW_SLOAN_I', 'PW_OPEN'],
+    Jov: ['FW_OPEN', 'PW_JOVIAN'], z: ['FW_OPEN', 'PW_SLOAN_Z'], CT940: ['FW_OPEN', 'PW_CT940_20BP'],
+    NRM: ['FW_H_A', 'PW_NRM'], RND2: ['FW_BESSELL_R', 'PW_ND2'], iND2: ['FW_SLOAN_I', 'PW_ND2']
+  };
+  var SHORT = { FW_BESSELL_R: 'R', FW_O_I: '[O I]', FW_H_A: 'Hα', FW_SLOAN_I: 'i', FW_OPEN: 'open', PW_OPEN: 'open', PW_NRM: 'NRM', PW_ND2: 'ND2', PW_JOVIAN: 'Jovian', PW_SLOAN_Z: 'z', PW_CT940_20BP: 'CT940' };
+  function wheel(keys, w) {
+    var out = [];
+    keys.forEach(function (k) { var s = SHORT[POS[k][w]]; if (out.indexOf(s) < 0) out.push(s); });
+    return out.join(', ');
+  }
+  function wtbl(rows, head, lead) {
+    lead = lead || [];
+    var n = lead.length, cols = lead.concat(['FW', 'PW'], head), num = [];
+    for (var i = n; i < cols.length; i++) num.push(i);
+    return tbl(cols, rows.map(function (r) { return r.slice(0, n).concat(r[n] ? POS[r[n]] : ['–', '–'], r.slice(n + 1)); }), num);
+  }
+  function keysOf(rows, n) { return rows.map(function (r) { return r[n || 0]; }).filter(Boolean); }
+
+  var ladderSOD = { '18 Tau': ['5.65', '1 ms × 2000', '300 ms × 30'], 'HD 23632': ['6.85', '100 ms × 50', '1 s × 20'], 'HD 23924': ['7.75', '300 ms × 30', '3 s × 10'], 'HD 24088': ['9.03', '1 s × 20', '5 s × 6'], 'HII 1360': ['10.32', '5 s × 10', 'skip'] };
+  var ladderBS = { '18 Tau': ['5.65', '500 ms × 20', '5 s × 6'], 'HD 23632': ['6.85', '2 s × 10', '10 s × 5'], 'HD 23924': ['7.75', '4 s × 6', '20 s × 3'], 'HD 24088': ['9.03', '10 s × 5', 'skip'], 'HII 1360': ['10.32', '30 s × 3', 'skip'] };
+  var uranusRows = [['Ha', '5 s', '20'], ['Jov', '5 s', '20'], ['CT940', '3 s', '20']];
+  var uranusTbl = wtbl(uranusRows, ['Exp.', 'Frames / cube']);
+  var sweep = ['R', 'OI', 'Ha', 'i', 'Jov', 'z', 'CT940'];
+  var sweepBS = [['R', '250 ms', '20'], ['OI', '4 s', '5'], ['Ha', '5 s', '5'], ['i', '500 ms', '20'], ['Jov', '4 s', '5'], ['z', '1 s', '10'], ['CT940', '5 s', '5']];
+
+  var ladderNote = p('i, then Jovian, in 256². Log wfs_status and DIMM/MASS seeing.');
+  function star(s, e, name, feed, wfs, table, extra) {
+    var r = table[name];
+    var rows = [['i', r[1]]];
+    if (r[2] !== 'skip') rows.push(['Jov', r[2]]);
+    return { s: s, e: e, k: 'ao', l: '', tg: name + ' (R ' + r[0] + ')', t: 'Ladder · Strehl vs magnitude', cfg: feed + ' · ' + wfs, w: keysOf(rows),
+      d: wtbl(rows, ['Exp. × frames']) + ladderNote + (extra || '') };
+  }
+  function slew(s, e, name, cfg, note) {
+    return { s: s, e: e, k: 'setup', l: '', tg: '→ ' + name, t: 'Slew + acquire', cfg: cfg, d: p(note || 'Move ≤ 1°, acquire, set WFS rate and EM gain, run analyze_dtt/dm, reload the ORKID cog.') };
+  }
+  function nrmVisit(s, e, k, name, role, extraRows, note) {
+    var rows = [['NRM', '1 ms', '10,000', '3']].concat(extraRows || []);
+    return { s: s, e: e, k: k, l: '', tg: name, t: role, cfg: 'SOD · 57×57', w: keysOf(rows),
+      d: wtbl(rows, ['Exp.', 'Frames / cube', 'Cubes']) + (note ? p(note) : '') };
+  }
+  var calMove = 'Calibrator ↔ target move (~5–8°), acquire, reload the ORKID cog.';
+  var ffRows = [['Before', 'Jov', '1 ms', '2000'], ['F&F low order (30 modes)', null, '', ''], ['After', 'Jov', '1 ms', '2000'], ['After', 'i', '1 ms', '2000']];
+  var pairRows = [['1', 'Ha', '1 ms', '2000'], ['2', 'NRM', '1 ms', '10,000']];
+  var betelRows = ['Ha', 'OI', 'RND2', 'iND2', 'Jov', 'CT940'].map(function (k) { return [k, '1 ms', '2000', '1']; });
+
+  var TYPE = {
+    'α Tri': 'Single (SB1, unresolved)', 'α Ari': 'Single, 7 mas disc', 'ξ² Cet': 'Single',
+    '18 Tau': 'Single (0.1″ pair unconfirmed)', 'HD 23632': 'Single', 'HD 23924': 'Single', 'HD 24088': 'Single', 'HII 1360': 'Single',
+    'Uranus': 'Planet, 3.8″', 'η Aur': 'Single', 'Capella': 'Binary, 52 mas', 'γ Ori': 'Single', 'Betelgeuse': 'Resolved star, 42 mas'
+  };
+  function typeOf(name) { return TYPE[name.split(' (')[0]] || ''; }
+
+  var blocks = [
+    { s: '18:35', e: '19:00', k: 'setup', l: 'Setup', tg: 'α Tri', t: 'Start of night, acquire α Tri', cfg: 'SOD · 57×57',
+      d: p('Start the AO software (KAON 1538), vertical angle, acquire α Tri, load the ORKID SOD 57×57 cog by hand, telemetry on.') },
+    nrmVisit('19:00', '19:03', 'nrm', 'α Tri', 'NRM calibrator', [], '128². Log peak levels.'),
+    slew('19:03', '19:09', 'α Ari', 'SOD · 57×57', calMove),
+    nrmVisit('19:09', '19:12', 'nrm', 'α Ari', 'NRM vetting (NASA target)', [], 'α Ari is 7.2 mas across. 128².'),
+    slew('19:12', '19:18', 'α Tri', 'SOD · 57×57', calMove),
+    nrmVisit('19:18', '19:22', 'nrm', 'α Tri', 'NRM calibrator + WFS pair', [['Ha', '1 ms', '2000', '1']], 'The open-pupil Hα cube pairs with the NRM cubes for in-focus wavefront sensing.'),
+    slew('19:22', '19:32', 'ξ² Cet', 'SOD · 57×57', '~22° slew, acquire, reload the ORKID cog.'),
+    { s: '19:32', e: '19:40', k: 'ao', l: 'F&F', tg: 'ξ² Cet', t: 'Fast & Furious, low order', cfg: 'SOD · 57×57', w: keysOf(ffRows, 1),
+      d: wtbl(ffRows, ['Exp.', 'Frames / cube'], ['Step']) + p('256².') },
+    { s: '19:40', e: '19:46', k: 'nrm', l: '', tg: 'ξ² Cet', t: 'In-focus WFS pair', cfg: 'SOD · 57×57', w: keysOf(pairRows, 1),
+      d: wtbl(pairRows, ['Exp.', 'Frames / cube'], ['Order']) + p('256², back to back (Greenbaum & Sivaramakrishnan 2016).') },
+    { s: '19:46', e: '20:06', k: 'ao', l: 'ξ² SOD', tg: 'ξ² Cet', t: 'Strehl + throughput, every filter', cfg: 'SOD · 57×57', w: sweep,
+      d: wtbl(sweep.map(function (k) { return [k, '1 ms', '2000']; }), ['Exp.', 'Frames / cube']) +
+        p('512² for both Strehl and throughput, plus one 1 ms dark/sky cube in 512². Skip Hα-continuum.') },
+    { s: '20:06', e: '20:14', k: 'setup', l: '', tg: 'ξ² Cet', t: 'Switch SOD → BS', cfg: 'BS · 57×57', d: p('Load the BS 57×57 cog, set the BS AFS position, lower the WFS EM gain (the sensor gets 96%), re-close and optimise.') },
+    { s: '20:14', e: '20:30', k: 'ao', l: 'ξ² BS', tg: 'ξ² Cet', t: 'Strehl + throughput, every filter', cfg: 'BS · 57×57', w: sweep,
+      d: wtbl(sweepBS, ['Exp.', 'Frames / cube']) + p('512².') },
+
+    slew('20:30', '20:40', '18 Tau', 'BS · 57×57', '~25° slew from ξ² Cet to the Pleiades, acquire, set WFS rate and gain, run analyze_dtt/dm.'),
+    star('20:40', '20:42', '18 Tau', 'BS', '57×57', ladderBS, p('Also the single-star PSF for Uranus on 57×57.')),
+    slew('20:42', '20:46', 'HD 23632', 'BS · 57×57'),
+    star('20:46', '20:48', 'HD 23632', 'BS', '57×57', ladderBS),
+    slew('20:48', '20:52', 'HD 23924', 'BS · 57×57'),
+    star('20:52', '20:54', 'HD 23924', 'BS', '57×57', ladderBS),
+    slew('20:54', '20:58', 'HD 24088', 'BS · 57×57'),
+    star('20:58', '21:00', 'HD 24088', 'BS', '57×57', ladderBS),
+    slew('21:00', '21:04', 'HII 1360', 'BS · 57×57'),
+    star('21:04', '21:06', 'HII 1360', 'BS', '57×57', ladderBS),
+
+    slew('21:06', '21:14', 'Uranus', 'BS · 57×57', '~5° from the Pleiades. Start non-sidereal tracking, acquire on the disc.'),
+    { s: '21:14', e: '21:20', k: 'ao', l: 'Uranus', tg: 'Uranus', t: 'Planet, 3.8″', cfg: 'BS · 57×57', w: keysOf(uranusRows),
+      d: uranusTbl + p('V 5.6, near opposition. 1024². Note how the loop copes; compare limb sharpness with 29×29. Exposures are the 2022 settings × 25; bin 2×2 if thin.') },
+    { s: '21:20', e: '21:28', k: 'setup', l: '', tg: 'Uranus', t: 'Switch 57×57 → 29×29', cfg: 'BS · 29×29', d: p('Load the BS 29×29 cog, re-close and optimise.') },
+    { s: '21:28', e: '21:33', k: 'ao', l: '', tg: 'Uranus', t: 'Planet, 3.8″', cfg: 'BS · 29×29', w: keysOf(uranusRows), d: uranusTbl + p('Same sets as 57×57.') },
+
+    slew('21:33', '21:41', '18 Tau', 'BS · 29×29', '~5° back to the Pleiades, stop non-sidereal tracking, acquire 18 Tau. Stay on BS 29×29.'),
+    Object.assign(star('21:41', '21:43', '18 Tau', 'BS', '29×29', ladderBS, p('Pairs with 18 Tau on BS 57×57 at 20:40 HST, so both Uranus modes have a matching point source.')), { t: 'Single-star PSF for Uranus' }),
+    { s: '21:43', e: '21:51', k: 'setup', l: '', tg: '18 Tau', t: 'Switch BS → SOD', cfg: 'SOD · 29×29', d: p('Load the SOD 29×29 cog, set the SOD AFS position, raise the WFS EM gain, re-close and optimise.') },
+    star('21:51', '21:53', '18 Tau', 'SOD', '29×29', ladderSOD),
+    slew('21:53', '21:57', 'HD 23924', 'SOD · 29×29'),
+    star('21:57', '21:59', 'HD 23924', 'SOD', '29×29', ladderSOD),
+    slew('21:59', '22:03', 'HD 24088', 'SOD · 29×29'),
+    star('22:03', '22:05', 'HD 24088', 'SOD', '29×29', ladderSOD),
+    slew('22:05', '22:09', 'HII 1360', 'SOD · 29×29'),
+    star('22:09', '22:11', 'HII 1360', 'SOD', '29×29', ladderSOD, p('Record whether the loop locks.')),
+
+    Object.assign(slew('22:11', '22:19', 'HD 24088', 'SOD · 57×57', 'Switch 29×29 → 57×57, load the SOD 57×57 cog, move to HD 24088, acquire.'), { sl: '→ HD 24088, switch 29×29 → 57×57' }),
+    star('22:19', '22:21', 'HD 24088', 'SOD', '57×57', ladderSOD),
+    slew('22:21', '22:25', 'HD 23924', 'SOD · 57×57'),
+    star('22:25', '22:27', 'HD 23924', 'SOD', '57×57', ladderSOD),
+    slew('22:27', '22:31', 'HD 23632', 'SOD · 57×57'),
+    star('22:31', '22:33', 'HD 23632', 'SOD', '57×57', ladderSOD),
+    slew('22:33', '22:37', '18 Tau', 'SOD · 57×57'),
+    star('22:37', '22:39', '18 Tau', 'SOD', '57×57', ladderSOD),
+
+    slew('22:39', '22:49', 'η Aur', 'SOD · 57×57', '~25° slew, acquire, reload the ORKID cog. η Aur is Haedus II (05 06 30.9 +41 14 04, single B3 V). Do not take ζ Aur (Haedus I, 05 02 28.7 +41 04 33), the eclipsing binary 0.8° away.'),
+    nrmVisit('22:49', '22:52', 'nrm', 'η Aur', 'NRM calibrator', [], 'η Aur = Haedus II, not ζ Aur (Haedus I, eclipsing binary).'),
+    slew('22:52', '22:58', 'Capella', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
+    nrmVisit('22:58', '23:03', 'nrm', 'Capella', 'Binary fit: scale + orientation', [['Ha', '1 ms', '2000', '2']], 'Expect 51.6 mas at PA 12°: checks pixel scale and orientation.'),
+    slew('23:03', '23:09', 'η Aur', 'SOD · 57×57', calMove),
+    nrmVisit('23:09', '23:13', 'nrm', 'η Aur', 'NRM calibrator + open PSF', [['Ha', '1 ms', '2000', '2']], 'The open-pupil cubes are the single-star PSF for Capella: same settings as Capella.'),
+
+    slew('23:13', '23:23', 'γ Ori', 'SOD · 57×57', '~40° slew, acquire, reload the ORKID cog.'),
+    nrmVisit('23:23', '23:26', 'nrm', 'γ Ori', 'NRM calibrator', []),
+    slew('23:26', '23:32', 'Betelgeuse', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
+    nrmVisit('23:32', '23:40', 'both', 'Betelgeuse', 'Disc: NRM + open-pupil AO', betelRows, '42 mas disc, 256² for the open-pupil set. z only if the peak stays under 60k.'),
+    slew('23:40', '23:46', 'γ Ori', 'SOD · 57×57', calMove),
+    nrmVisit('23:46', '23:54', 'nrm', 'γ Ori', 'NRM calibrator + open PSF', betelRows, 'The open-pupil set is the single-star PSF for Betelgeuse: same filters, ND2 and exposures, so counts are ~16× lower. 256².'),
+
+    { s: '23:54', e: '00:10', k: 'setup', l: 'Buffer', tg: '–', t: 'Buffer', cfg: '', d: p('Absorbs overruns. If unused: HD 23632 on 29×29, or a second F&F run.') }
+  ];
+  blocks.forEach(function (b) {
+    b.sm = hm(b.s); b.em = hm(b.e);
+    b.fw = b.w ? wheel(b.w, 0) : ''; b.pw = b.w ? wheel(b.w, 1) : '';
+    b.ty = b.k === 'setup' ? '' : typeOf(b.tg);
+    b.u = (b.u || []).map(function (r) { return { s: r[0], e: r[1], t: r[2], sm: hm(r[0]), em: hm(r[1]) }; });
+  });
+
+  var KIND = { ao: 'AO', nrm: 'NRM', both: 'AO + NRM', setup: 'Setup' };
+  var plan = document.getElementById('plan');
+  function uniq(a) { return a.filter(function (x, i) { return x && a.indexOf(x) === i; }); }
+  var groups = [
+    { s: '19:00', e: '19:22', t: 'NRM vetting · α Ari (NASA), calibrator α Tri' },
+    { s: '19:32', e: '20:30', t: 'ξ² Cet · F&F, in-focus WFS, Strehl + throughput SOD vs BS' },
+    { s: '20:40', e: '21:06', t: 'Pleiades ladder · BS 57×57' },
+    { s: '21:14', e: '21:43', t: 'Uranus · BS 57×57 vs 29×29, 18 Tau PSF' },
+    { s: '21:51', e: '22:11', t: 'Pleiades ladder · SOD 29×29' },
+    { s: '22:19', e: '22:39', t: 'Pleiades ladder · SOD 57×57' },
+    { s: '22:49', e: '23:13', t: 'Binary · Capella, calibrator η Aur' },
+    { s: '23:23', e: '23:54', t: 'Resolved star · Betelgeuse, calibrator γ Ori' }
+  ];
+  groups.forEach(function (g) { g.sm = hm(g.s); g.em = hm(g.e); g.bs = []; });
+  blocks.forEach(function (b) {
+    b.g = groups.filter(function (g) { return b.sm >= g.sm && b.em <= g.em; })[0] || null;
+    if (b.g) b.g.bs.push(b);
+  });
+  groups.forEach(function (g) {
+    var kinds = uniq(g.bs.map(function (b) { return b.k === 'setup' ? '' : b.k; }));
+    g.k = kinds.length === 1 ? kinds[0] : 'both';
+    var keys = [].concat.apply([], g.bs.map(function (b) { return b.w || []; }));
+    var cfgs = uniq(g.bs.map(function (b) { return b.k === 'setup' ? '' : b.cfg; }));
+    var d = document.createElement('details');
+    d.className = 'grp ' + g.k;
+    d.innerHTML = '<summary><span class="tm">' + tz(g.s) + '–' + tz(g.e) + '</span><span class="du">' + dur(g.em - g.sm) + '</span><span class="gt">' + esc(g.t) + '</span><span class="cfg">' + cfgs.map(esc).join('<br>') + '</span><span class="fw">' + esc(wheel(keys, 0)) + '</span><span class="pw">' + esc(wheel(keys, 1)) + '</span></summary><div class="grp-body"></div>';
+    g.node = d; g.body = d.querySelector('.grp-body');
+  });
+  blocks.forEach(function (b) {
+    var d = document.createElement('details');
+    if (b.k === 'setup') {
+      var lbl = b.l === 'Buffer' ? 'buffer' : 'setup · ' + (b.sl || (b.t === 'Slew + acquire' ? b.tg : b.t));
+      d.className = 'sep';
+      d.innerHTML = '<summary><span class="tm">' + tz(b.s) + '</span><span class="du">' + dur(b.em - b.sm) + '</span><span class="lbl">' + esc(lbl) + '</span></summary><div class="more">' + b.d + '</div>';
+    } else {
+      d.className = 'row ' + b.k;
+      d.innerHTML = '<summary><span class="tm">' + tz(b.s) + '–' + tz(b.e) + '</span><span class="du">' + dur(b.em - b.sm) + '</span><span class="tg">' + esc(b.tg) + '</span><span class="ty">' + esc(b.ty) + '</span><span class="ts">' + esc(b.t) + '</span><span class="cfg">' + esc(b.cfg) + '</span><span class="fw">' + esc(b.fw) + '</span><span class="pw">' + esc(b.pw) + '</span></summary><div class="more">' + b.d + '</div>';
+    }
+    b.row = d;
+    if (!b.g) { plan.appendChild(d); return; }
+    if (!b.g.node.parentNode) plan.appendChild(b.g.node);
+    b.g.body.appendChild(d);
+  });
+  var expandBtn = document.getElementById('expand-all');
+  expandBtn.addEventListener('click', function () {
+    var open = expandBtn.textContent === 'Expand all';
+    groups.forEach(function (g) { g.node.open = open; });
+    expandBtn.textContent = open ? 'Collapse all' : 'Expand all';
+  });
+  function reveal(b) { if (b.g) b.g.node.open = true; b.row.open = true; }
+
+  var tl = document.getElementById('timeline');
+  function pct(m) { return (m - T0) / (T1 - T0) * 100; }
+  [1140, 1200, 1260, 1320, 1380, 1440].forEach(function (m) {
+    var t = document.createElement('span'); t.className = 'tick'; t.style.left = pct(m) + '%'; t.dataset.t = fmt(m); tl.appendChild(t);
+  });
+  blocks.forEach(function (b) {
+    var a = document.createElement('div');
+    a.className = 'blk ' + b.k;
+    a.style.left = pct(b.sm) + '%';
+    a.style.width = 'calc(' + (pct(b.em) - pct(b.sm)) + '% - 2px)';
+    a.textContent = b.l;
+    a.addEventListener('click', function () { reveal(b); b.row.scrollIntoView({ block: 'center' }); });
+    b.node = a; tl.appendChild(a);
+  });
+  var line = document.createElement('div'); line.className = 'nowline'; tl.appendChild(line);
+
+  var mode = 'live', lastCur = null;
+  var slider = document.getElementById('preview-time');
+  function now() { return mode === 'live' ? (Date.now() - NIGHT0) / 60000 : +slider.value; }
+
+  function render() {
+    var m = now(), cur = null, next = null;
+    for (var i = 0; i < blocks.length; i++) {
+      if (m >= blocks[i].sm && m < blocks[i].em) { cur = blocks[i]; next = blocks[i + 1] || null; break; }
+      if (m < blocks[i].sm) { next = blocks[i]; break; }
+    }
+    blocks.forEach(function (b) {
+      b.node.classList.toggle('done', m >= b.em);
+      b.row.classList.toggle('done', m >= b.em);
+      b.row.classList.toggle('cur', b === cur);
+    });
+    groups.forEach(function (g) {
+      g.node.classList.toggle('done', m >= g.em);
+      g.node.classList.toggle('cur', !!cur && cur.g === g);
+    });
+    if (cur && cur !== lastCur) reveal(cur);
+    lastCur = cur;
+    line.hidden = m < T0 || m > T1;
+    line.style.left = pct(m) + '%';
+
+    document.getElementById('clock').textContent = fmtZ(m);
+    var day = '';
+    if (zone !== 'LST') { var dz = new Date(NIGHT0 + m * 60000 + ZONES[zone] * 36e5); day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dz.getUTCDay()] + ' ' + dz.getUTCDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][dz.getUTCMonth()] + ' '; }
+    document.getElementById('clock-sub').textContent = day + zone + (zone === 'LST' ? ' (Keck)' : '') + (mode === 'preview' ? ' · preview' : '');
+
+    var box = document.getElementById('now'), nx = document.getElementById('next');
+    if (cur) {
+      var sub = cur.u.filter(function (u) { return m >= u.sm && m < u.em; })[0];
+      var list = cur.u.length ? '<ul>' + cur.u.map(function (u) {
+        var c = m >= u.sm && m < u.em ? 'cur' : (m >= u.em ? 'past' : '');
+        return '<li class="' + c + '"><span class="mono">' + fmtZ(u.sm) + '</span><span>' + esc(u.t) + '</span></li>';
+      }).join('') + '</ul>' : '';
+      box.innerHTML = '<span class="muted">Now · ' + KIND[cur.k] + ' · ' + dur(cur.em - m) + ' left in block</span>' +
+        '<span class="what">' + esc(sub ? sub.t : cur.tg + ' · ' + cur.t) + '</span>' +
+        '<span class="muted">' + esc(cur.t) + ' · ' + esc(cur.tg) + (cur.cfg ? ' · ' + esc(cur.cfg) : '') + ' · ' + fmtZ(cur.sm) + '–' + fmtZ(cur.em) + '</span>' + list;
+      var nsub = cur.u.filter(function (u) { return u.sm > m; })[0];
+      nx.innerHTML = nsub ? 'Next <span class="mono">' + fmtZ(nsub.sm) + '</span> ' + esc(nsub.t) + ' (in ' + dur(nsub.sm - m) + ')'
+        : (next ? 'Next <span class="mono">' + fmtZ(next.sm) + '</span> ' + esc(next.tg) + ' · ' + esc(next.t) + ' (in ' + dur(next.sm - m) + ')' : 'First half ends at ' + fmtZ(hm('00:10')) + ' ' + zone + '.');
+    } else if (next) {
+      box.innerHTML = '<span class="muted">Before the night</span><span class="what">Starts in ' + dur(next.sm - m) + '</span><span class="muted">First block ' + fmtZ(blocks[0].sm) + ' ' + zone + ' (18:35 HST, Sat 28 Nov)</span>';
+      nx.innerHTML = 'Next <span class="mono">' + fmtZ(next.sm) + '</span> ' + esc(next.tg) + ' · ' + esc(next.t);
+    } else {
+      box.innerHTML = '<span class="muted">Done</span><span class="what">First half finished</span><span class="muted">Copy the night off the ORKID disk.</span>';
+      nx.textContent = '';
+    }
+  }
+
+  function applyZone() {
+    document.documentElement.style.setProperty('--tw', use12() ? '9.4rem' : '6.6rem');
+    document.querySelectorAll('#clockfmt button').forEach(function (bt) {
+      bt.setAttribute('aria-pressed', String(bt.dataset.h === (use12() ? '12' : '24')));
+      bt.disabled = zone === 'LST';
+      bt.title = zone === 'LST' ? 'LST is always shown in 24 h' : '';
+    });
+    document.querySelectorAll('.tz').forEach(function (el) { el.textContent = fmtZ(hm(el.dataset.t)); });
+    document.querySelectorAll('.zname').forEach(function (el) { el.textContent = zone; });
+    tl.querySelectorAll('.tick').forEach(function (el) { el.textContent = fmtZ(hm(el.dataset.t)); });
+    blocks.forEach(function (b) { b.node.title = fmtZ(b.sm) + '–' + fmtZ(b.em) + ' ' + zone + ' · ' + b.t + ' · ' + b.tg; });
+    document.querySelectorAll('#zones button').forEach(function (bt) { bt.setAttribute('aria-pressed', String(bt.dataset.z === zone)); });
+    render();
+  }
+  document.querySelectorAll('#zones button').forEach(function (bt) {
+    bt.addEventListener('click', function () { zone = bt.dataset.z; try { localStorage.setItem('orkid-zone', zone); } catch (e) {} applyZone(); });
+  });
+
+  document.querySelectorAll('#clockfmt button').forEach(function (bt) {
+    bt.addEventListener('click', function () { h12 = bt.dataset.h === '12'; try { localStorage.setItem('orkid-clock', bt.dataset.h); } catch (e) {} applyZone(); });
+  });
+
+  var liveBtn = document.getElementById('mode-live'), prevBtn = document.getElementById('mode-preview');
+  function setMode(v) {
+    mode = v;
+    liveBtn.setAttribute('aria-pressed', String(v === 'live'));
+    prevBtn.setAttribute('aria-pressed', String(v === 'preview'));
+    slider.hidden = v !== 'preview';
+    render();
+  }
+  liveBtn.addEventListener('click', function () { setMode('live'); });
+  prevBtn.addEventListener('click', function () { setMode('preview'); });
+  slider.addEventListener('input', render);
+
+  var targets = [
+    ['α Tri', 'alf_Tri', '01 53 04.9', '+29 34 44', 'R 2.85', 'rmag=2.85'],
+    ['α Ari', 'alf_Ari', '02 07 10.4', '+23 27 45', 'R 1.16', 'rmag=1.16'],
+    ['ξ² Cet', 'ksi2_Cet', '02 28 09.5', '+08 27 36', 'R 4.32', 'rmag=4.32'],
+    ['18 Tau', '18_Tau', '03 45 09.7', '+24 50 21', 'R 5.65', 'rmag=5.65'],
+    ['HD 23632', 'HD23632', '03 47 21.0', '+23 48 12', 'R 6.85', 'rmag=6.85'],
+    ['HD 23924', 'HD23924', '03 49 40.9', '+23 20 30', 'R 7.75', 'rmag=7.75'],
+    ['HD 24088', 'HD24088', '03 51 02.7', '+23 25 42', 'R 9.03', 'rmag=9.03'],
+    ['HII 1360', 'HII1360', '03 47 16.2', '+22 55 28', 'R 10.32', 'rmag=10.32'],
+    ['Uranus (07:30 UT)', 'Uranus', '04 04 35.6', '+20 38 24', 'V 5.6, 3.8″', 'vmag=5.6'],
+    ['η Aur (Haedus II, not ζ Aur)', 'eta_Aur', '05 06 30.9', '+41 14 04', 'R 2.97', 'rmag=2.97'],
+    ['Capella', 'Capella', '05 16 41.4', '+45 59 53', 'V 0.08', 'vmag=0.08'],
+    ['γ Ori', 'gam_Ori', '05 25 07.9', '+06 20 59', 'R 1.71', 'rmag=1.71'],
+    ['Betelgeuse', 'Betelgeuse', '05 55 10.3', '+07 24 25', 'R −1.28', 'rmag=-1.28']
+  ];
+  document.getElementById('targets').innerHTML = targets.map(function (r) {
+    return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(typeOf(r[0])) + '</td><td class="n">' + r[2] + '</td><td class="n">' + r[3].replace('-', '−') + '</td><td>' + esc(r[4]) + '</td></tr>';
+  }).join('');
+  var starlist = targets.map(function (r) { return (r[1] + '                ').slice(0, 16) + r[2] + ' ' + r[3] + ' 2000 ' + r[5]; }).join('\n');
+  var pre = document.getElementById('starlist');
+  pre.textContent = starlist;
+  document.getElementById('copy').addEventListener('click', function () {
+    var st = document.getElementById('copy-status');
+    function fallback() {
+      pre.hidden = false;
+      var r = document.createRange(); r.selectNodeContents(pre);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      st.textContent = 'Selected below. Press Ctrl/Cmd+C.';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(starlist).then(function () { st.textContent = 'Copied.'; }, fallback);
+    else fallback();
+  });
+
+  setMode('live');
+  applyZone();
+  setInterval(render, 15000);
+})();
+</script>
+</body>
+</html>
