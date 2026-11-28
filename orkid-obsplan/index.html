@@ -223,14 +223,13 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
         <tbody>
           <tr><td class="n"><span class="tz" data-t="18:35"></span></td><td>Start: SOD, 57×57</td><td>SOD 57×57 cog</td></tr>
           <tr><td class="n"><span class="tz" data-t="20:06"></span></td><td>SOD → BS</td><td>BS 57×57 cog</td></tr>
-          <tr><td class="n"><span class="tz" data-t="21:20"></span></td><td>57×57 → 29×29</td><td>BS 29×29 cog</td></tr>
-          <tr><td class="n"><span class="tz" data-t="21:43"></span></td><td>BS → SOD</td><td>SOD 29×29 cog</td></tr>
-          <tr><td class="n"><span class="tz" data-t="22:11"></span></td><td>29×29 → 57×57</td><td>SOD 57×57 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="21:28"></span></td><td>BS → SOD, 57×57 → 29×29</td><td>SOD 29×29 cog</td></tr>
+          <tr><td class="n"><span class="tz" data-t="21:56"></span></td><td>29×29 → 57×57</td><td>SOD 57×57 cog</td></tr>
         </tbody>
       </table></div>
       <ul class="plain">
         <li>Reload the ORKID cog after every acquisition (AOAcq loads the NIRC2 one).</li>
-        <li>OA: vertical angle all night; Uranus <span class="tz" data-t="21:06"></span>–<span class="tz" data-t="21:33"></span> needs non-sidereal tracking.</li>
+        <li>OA: vertical angle all night; Uranus <span class="tz" data-t="21:06"></span>–<span class="tz" data-t="21:20"></span> needs non-sidereal tracking.</li>
         <li>Telemetry (TRS) on. Log wfs_status at every acquisition and DIMM/MASS seeing for the ladders.</li>
       </ul>
     </div>
@@ -252,7 +251,7 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
     <summary>Afternoon</summary>
     <div>
       <ul class="plain">
-        <li>Get cog names and AFS positions for SOD 57×57, BS 57×57, SOD 29×29 and BS 29×29.</li>
+        <li>Get cog names and AFS positions for SOD 57×57, BS 57×57 and SOD 29×29.</li>
         <li>In-focus WFS pairs (main test): Hα open + NRM at baseline, then with known DM shapes (focus, astig, spherical, coma, trefoil, ±), a large mix, and single actuator pokes. Run orkid_sharpen.py once as a reference.</li>
         <li>Darks at the night's exposures (up to 30 s), including 1 ms in 512².</li>
         <li>Dome flats, mask out: R, [O I], Hα, i, Jovian, z, CT940 on both feeds; R+ND2 and i+ND2 on SOD.</li>
@@ -386,46 +385,43 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
     star('21:04', '21:06', 'HII 1360', 'BS', '57×57', ladderBS),
 
     slew('21:06', '21:14', 'Uranus', 'BS · 57×57', '~5° from the Pleiades. Start non-sidereal tracking, acquire on the disc.'),
-    { s: '21:14', e: '21:20', k: 'ao', l: 'Uranus', tg: 'Uranus', t: 'Planet, 3.8″', cfg: 'BS · 57×57', w: keysOf(uranusRows),
-      d: uranusTbl + p('V 5.6, near opposition. 1024². Note how the loop copes; compare limb sharpness with 29×29. Exposures are the 2022 settings × 25; bin 2×2 if thin.') },
-    { s: '21:20', e: '21:28', k: 'setup', l: '', tg: 'Uranus', t: 'Switch 57×57 → 29×29', cfg: 'BS · 29×29', d: p('Load the BS 29×29 cog, re-close and optimise.') },
-    { s: '21:28', e: '21:33', k: 'ao', l: '', tg: 'Uranus', t: 'Planet, 3.8″', cfg: 'BS · 29×29', w: keysOf(uranusRows), d: uranusTbl + p('Same sets as 57×57.') },
+    { s: '21:14', e: '21:20', k: 'ao', l: 'Uranus', tg: 'Uranus', t: 'Disc imaging, narrowband', cfg: 'BS · 57×57', w: keysOf(uranusRows),
+      d: uranusTbl + p('V 5.6, near opposition. 1024². Note how the loop copes and how sharp the limb is. Exposures are the 2022 settings × 25; bin 2×2 if thin.') },
 
-    slew('21:33', '21:41', '18 Tau', 'BS · 29×29', '~5° back to the Pleiades, stop non-sidereal tracking, acquire 18 Tau. Stay on BS 29×29.'),
-    Object.assign(star('21:41', '21:43', '18 Tau', 'BS', '29×29', ladderBS, p('Pairs with 18 Tau on BS 57×57 at 20:40 HST, so both Uranus modes have a matching point source.')), { t: 'Single-star PSF for Uranus' }),
-    { s: '21:43', e: '21:51', k: 'setup', l: '', tg: '18 Tau', t: 'Switch BS → SOD', cfg: 'SOD · 29×29', d: p('Load the SOD 29×29 cog, set the SOD AFS position, raise the WFS EM gain, re-close and optimise.') },
-    star('21:51', '21:53', '18 Tau', 'SOD', '29×29', ladderSOD),
-    slew('21:53', '21:57', 'HD 23924', 'SOD · 29×29'),
-    star('21:57', '21:59', 'HD 23924', 'SOD', '29×29', ladderSOD),
-    slew('21:59', '22:03', 'HD 24088', 'SOD · 29×29'),
-    star('22:03', '22:05', 'HD 24088', 'SOD', '29×29', ladderSOD),
-    slew('22:05', '22:09', 'HII 1360', 'SOD · 29×29'),
-    star('22:09', '22:11', 'HII 1360', 'SOD', '29×29', ladderSOD, p('Record whether the loop locks.')),
+    slew('21:20', '21:28', '18 Tau', 'BS · 57×57', '~5° back to the Pleiades, stop non-sidereal tracking, acquire 18 Tau.'),
+    { s: '21:28', e: '21:36', k: 'setup', l: '', tg: '18 Tau', t: 'Switch BS → SOD, 57×57 → 29×29', cfg: 'SOD · 29×29', d: p('Load the SOD 29×29 cog, set the SOD AFS position, raise the WFS EM gain, re-close and optimise.') },
+    star('21:36', '21:38', '18 Tau', 'SOD', '29×29', ladderSOD),
+    slew('21:38', '21:42', 'HD 23924', 'SOD · 29×29'),
+    star('21:42', '21:44', 'HD 23924', 'SOD', '29×29', ladderSOD),
+    slew('21:44', '21:48', 'HD 24088', 'SOD · 29×29'),
+    star('21:48', '21:50', 'HD 24088', 'SOD', '29×29', ladderSOD),
+    slew('21:50', '21:54', 'HII 1360', 'SOD · 29×29'),
+    star('21:54', '21:56', 'HII 1360', 'SOD', '29×29', ladderSOD, p('Record whether the loop locks.')),
 
-    Object.assign(slew('22:11', '22:19', 'HD 24088', 'SOD · 57×57', 'Switch 29×29 → 57×57, load the SOD 57×57 cog, move to HD 24088, acquire.'), { sl: '→ HD 24088, switch 29×29 → 57×57' }),
-    star('22:19', '22:21', 'HD 24088', 'SOD', '57×57', ladderSOD),
-    slew('22:21', '22:25', 'HD 23924', 'SOD · 57×57'),
-    star('22:25', '22:27', 'HD 23924', 'SOD', '57×57', ladderSOD),
-    slew('22:27', '22:31', 'HD 23632', 'SOD · 57×57'),
-    star('22:31', '22:33', 'HD 23632', 'SOD', '57×57', ladderSOD),
-    slew('22:33', '22:37', '18 Tau', 'SOD · 57×57'),
-    star('22:37', '22:39', '18 Tau', 'SOD', '57×57', ladderSOD),
+    Object.assign(slew('21:56', '22:04', 'HD 24088', 'SOD · 57×57', 'Switch 29×29 → 57×57, load the SOD 57×57 cog, move to HD 24088, acquire.'), { sl: '→ HD 24088, switch 29×29 → 57×57' }),
+    star('22:04', '22:06', 'HD 24088', 'SOD', '57×57', ladderSOD),
+    slew('22:06', '22:10', 'HD 23924', 'SOD · 57×57'),
+    star('22:10', '22:12', 'HD 23924', 'SOD', '57×57', ladderSOD),
+    slew('22:12', '22:16', 'HD 23632', 'SOD · 57×57'),
+    star('22:16', '22:18', 'HD 23632', 'SOD', '57×57', ladderSOD),
+    slew('22:18', '22:22', '18 Tau', 'SOD · 57×57'),
+    star('22:22', '22:24', '18 Tau', 'SOD', '57×57', ladderSOD),
 
-    slew('22:39', '22:49', 'η Aur', 'SOD · 57×57', '~25° slew, acquire, reload the ORKID cog. η Aur is Haedus II (05 06 30.9 +41 14 04, single B3 V). Do not take ζ Aur (Haedus I, 05 02 28.7 +41 04 33), the eclipsing binary 0.8° away.'),
-    nrmVisit('22:49', '22:52', 'nrm', 'η Aur', 'NRM calibrator', [], 'η Aur = Haedus II, not ζ Aur (Haedus I, eclipsing binary).'),
-    slew('22:52', '22:58', 'Capella', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
-    nrmVisit('22:58', '23:03', 'nrm', 'Capella', 'Binary fit: scale + orientation', [['Ha', '1 ms', '2000', '2']], 'Expect 51.6 mas at PA 12°: checks pixel scale and orientation.'),
-    slew('23:03', '23:09', 'η Aur', 'SOD · 57×57', calMove),
-    nrmVisit('23:09', '23:13', 'nrm', 'η Aur', 'NRM calibrator + open PSF', [['Ha', '1 ms', '2000', '2']], 'The open-pupil cubes are the single-star PSF for Capella: same settings as Capella.'),
+    slew('22:24', '22:34', 'η Aur', 'SOD · 57×57', '~25° slew, acquire, reload the ORKID cog. η Aur is Haedus II (05 06 30.9 +41 14 04, single B3 V). Do not take ζ Aur (Haedus I, 05 02 28.7 +41 04 33), the eclipsing binary 0.8° away.'),
+    nrmVisit('22:34', '22:37', 'nrm', 'η Aur', 'NRM calibrator', [], 'η Aur = Haedus II, not ζ Aur (Haedus I, eclipsing binary).'),
+    slew('22:37', '22:43', 'Capella', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
+    nrmVisit('22:43', '22:48', 'nrm', 'Capella', 'Binary fit: scale + orientation', [['Ha', '1 ms', '2000', '2']], 'Expect 51.6 mas at PA 12°: checks pixel scale and orientation.'),
+    slew('22:48', '22:54', 'η Aur', 'SOD · 57×57', calMove),
+    nrmVisit('22:54', '22:58', 'nrm', 'η Aur', 'NRM calibrator + open PSF', [['Ha', '1 ms', '2000', '2']], 'The open-pupil cubes are the single-star PSF for Capella: same settings as Capella.'),
 
-    slew('23:13', '23:23', 'γ Ori', 'SOD · 57×57', '~40° slew, acquire, reload the ORKID cog.'),
-    nrmVisit('23:23', '23:26', 'nrm', 'γ Ori', 'NRM calibrator', []),
-    slew('23:26', '23:32', 'Betelgeuse', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
-    nrmVisit('23:32', '23:40', 'both', 'Betelgeuse', 'Disc: NRM + open-pupil AO', betelRows, '42 mas disc, 256² for the open-pupil set. z only if the peak stays under 60k.'),
-    slew('23:40', '23:46', 'γ Ori', 'SOD · 57×57', calMove),
-    nrmVisit('23:46', '23:54', 'nrm', 'γ Ori', 'NRM calibrator + open PSF', betelRows, 'The open-pupil set is the single-star PSF for Betelgeuse: same filters, ND2 and exposures, so counts are ~16× lower. 256².'),
+    slew('22:58', '23:08', 'γ Ori', 'SOD · 57×57', '~40° slew, acquire, reload the ORKID cog.'),
+    nrmVisit('23:08', '23:11', 'nrm', 'γ Ori', 'NRM calibrator', []),
+    slew('23:11', '23:17', 'Betelgeuse', 'SOD · 57×57', calMove + ' Lower the WFS EM gain.'),
+    nrmVisit('23:17', '23:25', 'both', 'Betelgeuse', 'Disc: NRM + open-pupil AO', betelRows, '42 mas disc, 256² for the open-pupil set. z only if the peak stays under 60k.'),
+    slew('23:25', '23:31', 'γ Ori', 'SOD · 57×57', calMove),
+    nrmVisit('23:31', '23:39', 'nrm', 'γ Ori', 'NRM calibrator + open PSF', betelRows, 'The open-pupil set is the single-star PSF for Betelgeuse: same filters, ND2 and exposures, so counts are ~16× lower. 256².'),
 
-    { s: '23:54', e: '00:10', k: 'setup', l: 'Buffer', tg: '–', t: 'Buffer', cfg: '', d: p('Absorbs overruns. If unused: HD 23632 on 29×29, or a second F&F run.') }
+    { s: '23:39', e: '00:10', k: 'setup', l: 'Buffer', tg: '–', t: 'Buffer', cfg: '', d: p('Absorbs overruns. If unused: HD 23632 on 29×29, or a second F&F run.') }
   ];
   blocks.forEach(function (b) {
     b.sm = hm(b.s); b.em = hm(b.e);
@@ -441,11 +437,11 @@ pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--l
     { s: '19:00', e: '19:22', t: 'NRM vetting · α Ari (NASA), calibrator α Tri' },
     { s: '19:32', e: '20:30', t: 'ξ² Cet · F&F, in-focus WFS, Strehl + throughput SOD vs BS' },
     { s: '20:40', e: '21:06', t: 'Pleiades ladder · BS 57×57' },
-    { s: '21:14', e: '21:43', t: 'Uranus · BS 57×57 vs 29×29, 18 Tau PSF' },
-    { s: '21:51', e: '22:11', t: 'Pleiades ladder · SOD 29×29' },
-    { s: '22:19', e: '22:39', t: 'Pleiades ladder · SOD 57×57' },
-    { s: '22:49', e: '23:13', t: 'Binary · Capella, calibrator η Aur' },
-    { s: '23:23', e: '23:54', t: 'Resolved star · Betelgeuse, calibrator γ Ori' }
+    { s: '21:14', e: '21:20', t: 'Uranus · BS 57×57' },
+    { s: '21:36', e: '21:56', t: 'Pleiades ladder · SOD 29×29' },
+    { s: '22:04', e: '22:24', t: 'Pleiades ladder · SOD 57×57' },
+    { s: '22:34', e: '22:58', t: 'Binary · Capella, calibrator η Aur' },
+    { s: '23:08', e: '23:39', t: 'Resolved star · Betelgeuse, calibrator γ Ori' }
   ];
   groups.forEach(function (g) { g.sm = hm(g.s); g.em = hm(g.e); g.bs = []; });
   blocks.forEach(function (b) {
