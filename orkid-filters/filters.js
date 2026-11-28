@@ -17,7 +17,7 @@
         fw: { title: 'Filter wheel', note: 'Thorlabs FW102C, tilted ≈ 4° to kill ghosts between the wheels.', slots: [{ pos: 'FW_OPEN', short: 'open', open: true, name: 'Open' }, F.bessell_r, F.sloan_i, F.o_i, F.h_a, F.h_a_cont] },
         pw: { title: 'Pupil wheel', note: 'Thorlabs FW102C, at the pupil. Usable with any filter-wheel filter.', slots: [{ pos: 'PW_OPEN', short: 'open', open: true, name: 'Open' }, { pos: 'PW_NRM', short: 'NRM', nrm: true, name: 'Non-redundant mask', note: '9 holes (0.8 m each, projected) on a 3 mm AR window. Use with a filter-wheel filter; frames short enough to freeze the residuals.' }, { pos: 'PW_ND2', short: 'ND2', nd: true, name: 'Neutral density 2', trans: '1 % nominal', note: 'Bright targets, bench source. On 10 Lac it cut Sloan i by only ≈ 17×, so it is weaker in the red.' }, F.sloan_z, F.ct940, F.jovian] }
     };
-    var LO = 560, HI = 1000, PX = 6.6;
+    var LO = 540, HI = 1000, PX = 6.6;
     var state = { fw: { i: 4, angle: 0 }, pw: { i: 0, angle: 0 }, dur: 0 };
 
     ORDER.forEach(function (k, n) { F[k].key = k; F[k].color = 'hsl(' + ((10 - n * 13 + 360) % 360) + ' 85% 70%)'; });
@@ -74,7 +74,7 @@
             '<rect class="cut" x="' + x(962) + '" y="' + M.t + '" width="' + (x(HI) - x(962)) + '" height="' + (y(0) - M.t) + '"/>' +
             '<text class="cut-lbl" x="' + (x(LO) + 4) + '" y="' + (y(1) + 14) + '">to ACAM</text><text class="cut-lbl" x="' + (x(HI) - 4) + '" y="' + (y(1) + 14) + '" text-anchor="end">dichroic</text>';
         [0, 0.25, 0.5, 0.75, 1].forEach(function (t) { s += '<line class="grid" x1="' + M.l + '" x2="' + (W - M.r) + '" y1="' + y(t) + '" y2="' + y(t) + '"/><text class="tick" x="' + (M.l - 6) + '" y="' + y(t) + '" text-anchor="end">' + t * 100 + '</text>'; });
-        for (var l = 600; l < HI; l += 50) s += '<text class="tick" x="' + x(l) + '" y="' + (H - M.b + 16) + '" text-anchor="middle">' + l + '</text>';
+        for (var l = 550; l < HI; l += 50) s += '<text class="tick" x="' + x(l) + '" y="' + (H - M.b + 16) + '" text-anchor="middle">' + l + '</text>';
         s += '<text class="axis-lbl" x="' + (W - M.r) + '" y="' + (H - 2) + '" text-anchor="end">wavelength (nm)</text><text class="axis-lbl" x="4" y="' + (M.t - 8) + '">T (%)</text>';
         s += '<path class="beam-area" id="beam-area"/>';
         ORDER.forEach(function (k) {
