@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Star Chart</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../tools/tool-theme.css">
+    <link rel="stylesheet" href="starchart.css?v=6">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <script type="module" src="../stars.js?v=3"></script>
+    <script defer src="starchart.js?v=7"></script>
+</head>
+<body>
+    <canvas id="warp-canvas" aria-hidden="true"></canvas>
+    <main class="chart-page">
+        <header class="page-header">
+            <a href="../tools/" class="home-link" aria-label="Back to tools"><img src="../icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt=""></a>
+            <h1>Star Chart</h1>
+        </header>
+        <section class="panel">
+            <canvas id="chart" class="chart" aria-label="Star chart"></canvas>
+            <p class="readout" id="hover" aria-live="polite">Hover a star for details.</p>
+            <div class="actions"><span class="status" id="status" aria-live="polite"></span><button type="button" id="save">Save PNG</button></div>
+            <p class="note">Gaia DR3 via VizieR, positions moved by proper motion to the chosen date. Colours follow BP−RP, roughly the spectral type. East is left (sky view). Alt/az ignore refraction.</p>
+        </section>
+        <section class="panel">
+            <form class="controls" id="controls">
+                <label class="wide">Target<span class="row"><input id="target" value="HD 189733" autocomplete="off"><button type="button" id="resolve">Resolve</button></span></label>
+                <label>RA<input id="ra" value="20 00 43.71" placeholder="hh mm ss or deg"></label>
+                <label>Dec<input id="dec" value="+22 42 39.1" placeholder="dd mm ss or deg"></label>
+                <label title="Target proper motion from its J2000 position, mas/yr">PM RA, Dec<span class="row"><input id="pmra" type="number" value="-3.208" step="any"><input id="pmdec" type="number" value="-250.323" step="any"></span></label>
+                <label>Field<span class="row"><input id="size" type="number" value="10" min="1" step="any"><select id="unit"><option value="60" selected>arcmin</option><option value="1">arcsec</option></select></span></label>
+                <div class="wide field">Field presets<span class="segments" id="presets"><button type="button" data-size="2">2</button><button type="button" data-size="5">5</button><button type="button" data-size="10">10</button><button type="button" data-size="20">20</button></span></div>
+                <label>G limit<input id="maglim" type="number" value="18" min="5" max="21" step="0.5"></label>
+                <div class="wide field">Orientation<span class="segments" role="radiogroup" aria-label="Orientation"><label><input type="radio" name="orient" value="north" checked><span>North up, East left</span></label><label><input type="radio" name="orient" value="zenith"><span>Alt-az, zenith up</span></label></span></div>
+                <label>Site<select id="site"><option value="keck">Keck, Maunakea</option><option value="custom">Custom</option></select></label>
+                <label>Latitude<input id="lat" type="number" value="19.8286" step="any"></label>
+                <label>Longitude<input id="lon" type="number" value="-155.4742" step="any"></label>
+                <label class="wide">Time (UTC)<span class="row"><input id="time" type="datetime-local" step="60"><button type="button" id="now">Now</button></span></label>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
