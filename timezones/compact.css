@@ -6,5 +6,6 @@ night-strip:not([hidden]) + .sun-banner { position: relative; width: fit-content
 #clocks { gap: 10px; }
 .clock-tile, .clock-tile:has(.sun-time:not([hidden])) { grid-template-rows: minmax(26px, auto); grid-auto-rows: auto; row-gap: 2px; padding: 10px 14px; }
 .clock-tile .readout { padding: 4px 0; line-height: 1; }
+.remove-zone { margin: -6px -10px 0 auto; border-top-right-radius: 17px; }
 .zone-controls, .site-controls { margin: 12px 0; }
 .search-status:empty { display: none; }
